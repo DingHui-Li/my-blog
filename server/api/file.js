@@ -1,6 +1,7 @@
 import BaseResponse from "../base/baseResponse";
 import OSS from "ali-oss";
 import crypto from "crypto";
+import ossKey from "~/.osskey.json";
 
 export let uploadFile = defineEventHandler(async (event) => {
   const rawBody = await readMultipartFormData(event);
@@ -9,11 +10,10 @@ export let uploadFile = defineEventHandler(async (event) => {
   // let filename = new Date().getTime() + "." + imgType;
   let dir = getDir(rawBody);
   let filename = getFileHash(file.data) + "." + imgType;
-
   const store = new OSS({
     region: "oss-cn-guangzhou",
-    accessKeyId: "LTAI5tPcTSDVrpQstm3AuaTh",
-    accessKeySecret: "n9rpwydh3LREdhoPos54TdnZat5JAa",
+    accessKeyId: ossKey?.accessKeyId,
+    accessKeySecret: ossKey?.accessKeySecret,
     bucket: "blog465467",
   });
   let res = await store.put(dir + filename, file.data);
