@@ -1,0 +1,113 @@
+<template lang="pug">
+.topic-list-page
+  .filter-container
+    el-form
+      el-form-item(label='文章标题')
+        el-input(v-model="filter.title")
+      el-form-item(label='文章内容')
+        el-input(v-model="filter.content")
+    el-button(@click='reset') 重置
+    el-button(type='primary' @click='pagation.page=1;_getList()') 搜索
+  .actions
+    el-button.btn(type='primary' @click="router.push('/admin/article/new')") 写文章
+  el-table(:data='list' stripe :loading='pagation.loading' @row-click='handleRowClick' :row-key='row=>row.id')  
+    //- el-table-column(type="selection" width="55")
+    el-table-column(v-for="col in cols"  :prop='col.key' :label='col.label')
+      template(#default="{row}")
+        span(v-if="col.key=='createTime'") {{ moment(row.createTime).format('YYYY-MM-DD HH:mm') }}
+        span(v-if="col.key=='updateTime'") {{ moment(row.updateTime).format('YYYY-MM-DD HH:mm') }}
+        span(v-else-if="col.key=='legalPerson'") {{ row.authentication?.legalPerson?.name }}
+        span(v-else) {{ row[col.key] }}
+    el-table-column
+      template(#default="{row}")
+        el-button(type="primary" text @click='router.push({path:"/admin/article/new",query:{id:row._id}})') 编辑
+  .pagination
+    el-pagination(background 
+      layout="sizes,prev, pager, next" 
+      :total="pagation.total"  
+      v-model:page-size='pagation.size' 
+      v-model:current-page='pagation.page' 
+      @current-change='getList' 
+      @size-change="pagation.page=1;_getList()")
+  </template>
+<script setup>
+definePageMeta({
+  middleware: ["auth"],
+});
+import moment from "moment";
+import useList from "../hooks/useList.js";
+
+const router = useRouter();
+let { pagation, list, getList } = useList("/api/article");
+
+class Filter {
+  title = null;
+  content = null;
+}
+const cols = [
+  {
+    label: "ID",
+    key: "_id",
+  },
+  {
+    label: "标题",
+    key: "title",
+  },
+  {
+    label: "创建时间",
+    key: "createTime",
+  },
+  {
+    label: "更新时间",
+    key: "updateTime",
+  },
+];
+let filter = ref(new Filter());
+_getList();
+
+function reset() {
+  pagation.value.page = 1;
+  filter.value = new Filter();
+  _getList();
+}
+function _getList() {
+  let filterParams = {
+    ...filter.value,
+  };
+  getList(filterParams);
+}
+</script>
+<style lang="scss" scoped>
+.topic-list-page {
+  .actions {
+    margin-bottom: 15px;
+    text-align: right;
+    .btn {
+      width: 100px;
+    }
+  }
+  .filter-container {
+    background-color: #fff;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    &:deep(.el-form-item) {
+      width: 400px;
+      margin-right: 15px;
+      .el-form-item__label {
+        font-size: 12px;
+        color: #333;
+        font-weight: bold;
+        width: 100px;
+      }
+    }
+  }
+  .pagination {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+  }
+}
+</style>
