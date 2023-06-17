@@ -1,5 +1,5 @@
 import BaseResponse from "../base/baseResponse";
-import OSS from "ali-oss";
+import OSS from "~/server/utils/aliyun-oss-sdk.js";
 import crypto from "crypto";
 import ossKey from "~/.osskey.json";
 

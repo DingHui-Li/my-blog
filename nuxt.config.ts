@@ -5,4 +5,7 @@ export default defineNuxtConfig({
   routeRules: {
     "/admin/*": { ssr: false },
   },
+  build: {
+    transpile: ["ali-oss"],
+  },
 });
