@@ -1,5 +1,5 @@
 import BaseResponse from "../base/baseResponse";
-import OSS from "~/server/utils/aliyun-oss-sdk.js";
+import OSS from "ali-oss";
 import crypto from "crypto";
 import ossKey from "~/.osskey.json";
 
@@ -10,6 +10,7 @@ export let uploadFile = defineEventHandler(async (event) => {
   // let filename = new Date().getTime() + "." + imgType;
   let dir = getDir(rawBody);
   let filename = getFileHash(file.data) + "." + imgType;
+
   const store = new OSS({
     region: "oss-cn-guangzhou",
     accessKeyId: ossKey?.accessKeyId,
