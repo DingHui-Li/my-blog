@@ -1,5 +1,5 @@
 <template lang="pug">
-NuxtLayout(:name="route.name.includes('admin')?'admin':'default'")
+NuxtLayout(:name="route.name.includes('admin')?'admin':route.name.includes('inappwebview')?'none':'default'")
   NuxtPage
 </template>
 <script setup>

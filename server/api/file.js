@@ -1,5 +1,5 @@
 import BaseResponse from "../base/baseResponse";
-import OSS from "ali-oss";
+// import OSS from "ali-oss";
 import crypto from "crypto";
 import ossKey from "~/.osskey.json";
 
@@ -11,13 +11,14 @@ export let uploadFile = defineEventHandler(async (event) => {
   let dir = getDir(rawBody);
   let filename = getFileHash(file.data) + "." + imgType;
 
-  const store = new OSS({
-    region: "oss-cn-guangzhou",
-    accessKeyId: ossKey?.accessKeyId,
-    accessKeySecret: ossKey?.accessKeySecret,
-    bucket: "blog465467",
-  });
-  let res = await store.put(dir + filename, file.data);
+  // const store = new OSS({
+  //   debugger: false,
+  //   region: "oss-cn-guangzhou",
+  //   accessKeyId: ossKey?.accessKeyId,
+  //   accessKeySecret: ossKey?.accessKeySecret,
+  //   bucket: "blog465467",
+  // });
+  // let res = await store.put(dir + filename, file.data);
 
   return new BaseResponse({ data: res?.url });
 });

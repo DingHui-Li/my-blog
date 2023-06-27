@@ -1,11 +1,12 @@
 <template lang="pug">
 .layout
   .topbar-container
-    .host(@click="router.replace('/')") vvcx.xyz
-    .search(@click="router.push('/search')" v-if="route.name!='search'")
-      .placeholder 搜索
-      el-icon.icon
-        Search
+    .tabbar
+      .host(@click="router.replace('/')") vvcx.xyz
+      .search(@click="router.push('/search')" v-if="route.name!='search'")
+        .placeholder 搜索
+        el-icon.icon
+          Search
   .content-container
     slot
   .footer-container
@@ -32,45 +33,50 @@ $max-width: 1088px;
     z-index: 9;
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(5px);
-    height: 50px;
     width: 100%;
     border-bottom: 1px solid #eee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 15px;
-    box-sizing: border-box;
-    .host {
-      font-size: 20px;
-      font-weight: bold;
-      color: #263238;
-      cursor: pointer;
-    }
-    .search {
-      margin-left: 30px;
-      width: 100%;
-      max-width: 150px;
-      overflow: hidden;
-      padding: 7px 10px;
-      border-radius: 30px;
-      background: orangered;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      .placeholder {
-        flex: 1;
-        text-align: center;
-        font-size: 14px;
-        color: #fff;
-      }
 
-      .icon {
+    .tabbar {
+      max-width: $max-width;
+      height: 50px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 15px;
+      box-sizing: border-box;
+      .host {
         font-size: 20px;
         font-weight: bold;
-        color: #fff;
+        color: #263238;
+        cursor: pointer;
       }
-      &:active {
-        filter: brightness(90%);
+      .search {
+        margin-left: 30px;
+        width: 100%;
+        max-width: 150px;
+        overflow: hidden;
+        padding: 7px 10px;
+        border-radius: 30px;
+        background: orangered;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        .placeholder {
+          flex: 1;
+          text-align: center;
+          font-size: 14px;
+          color: #fff;
+        }
+
+        .icon {
+          font-size: 20px;
+          font-weight: bold;
+          color: #fff;
+        }
+        &:active {
+          filter: brightness(90%);
+        }
       }
     }
   }
