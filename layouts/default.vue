@@ -8,25 +8,31 @@
         el-icon.icon
           Search
   .content-container
-    slot
+    .side
+      comSideMenu(v-model='type')
+    .content 
+      slot
   .footer-container
     .footer
-      .tech prowerd by 
-        a(href='https://www.nuxt.com.cn/' target="_blank") nuxt3
-      .tech design by 
-        a(href="https://dribbble.com//" target="_blank") dribbble
+      a(href='https://github.com/DingHui-Li/my-blog' target="_blank") github
+
 </template>
 <script setup>
 import { Search } from "@element-plus/icons-vue";
+import comSideMenu from '@/pages/components/sideMenu.vue'
 const router = useRouter();
 const route = useRoute();
+
+let type = ref('')
 </script>
 <style lang="scss" scoped>
-$max-width: 1088px;
+$max-width: 900px;
+
 .layout {
   width: 100%;
   min-height: 100vh;
   background: #dee0ed;
+
   .topbar-container {
     position: sticky;
     top: 0;
@@ -43,14 +49,16 @@ $max-width: 1088px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 15px;
+      padding: 0 10px;
       box-sizing: border-box;
+
       .host {
         font-size: 20px;
         font-weight: bold;
         color: #263238;
         cursor: pointer;
       }
+
       .search {
         margin-left: 30px;
         width: 100%;
@@ -62,6 +70,7 @@ $max-width: 1088px;
         display: flex;
         align-items: center;
         cursor: pointer;
+
         .placeholder {
           flex: 1;
           text-align: center;
@@ -74,22 +83,40 @@ $max-width: 1088px;
           font-weight: bold;
           color: #fff;
         }
+
         &:active {
           filter: brightness(90%);
         }
       }
     }
   }
+
   .content-container {
     width: 100%;
     max-width: $max-width;
     min-height: 100vh;
     margin: 0 auto;
+    display: flex;
+
+    .side {
+      background-color: #fff;
+      padding-right: 5px;
+      padding-top: 15px;
+    }
+
+    .content {
+      flex: 1;
+    }
   }
+
   .footer-container {
-    border-top: 1px solid #000;
-    background: #ecf0f3;
+    // border-top: 1px solid #000;
+    // background: #ecf0f3;
     min-height: 100px;
+    max-width: $max-width;
+    background-color: #fff;
+    margin: 0 auto;
+
     .footer {
       margin: 0 auto;
       max-width: $max-width;
@@ -97,6 +124,7 @@ $max-width: 1088px;
       padding: 15px;
       box-sizing: border-box;
       text-align: center;
+
       a {
         color: var(--primary-color);
         text-decoration: none;

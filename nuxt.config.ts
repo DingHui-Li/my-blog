@@ -2,25 +2,15 @@
 // import nodeResolve from "@rollup/plugin-node-resolve";
 
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   modules: ["@element-plus/nuxt"],
+  // ssr: true,
   routeRules: {
     "/admin/*": { ssr: false },
     "/inappwebview/*": { ssr: false },
   },
-  nitro: {
-    rollupConfig: {
-      // plugins: [
-      //   nodeResolve({
-      //     extensions: [".mjs", ".js", ".json", ".node", ".ts"],
-      //   }),
-      // ],
-    },
-  },
-  // build: {
-  //   transpile: ["ali-oss"],
-  // },
   app: {
+    pageTransition: { name: 'page', mode: 'out-in' },
     head: {
       script: [
         {

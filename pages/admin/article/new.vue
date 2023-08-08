@@ -1,19 +1,36 @@
 <template lang="pug">
 .new-article
   .container
-    .cover(@click="chooseImage")
+    .form-item
+      .label 类型
+      .topics
+        .topic(v-for='item in typeList' @click='form.type=item.key' :class='`${form.type==item.key&&"active"}`') {{ item.label }}
+    .cover(@click="chooseImage" v-if='form.type=="article"')
       el-icon(size='35')
         PictureFilled
       img( v-if='form.cover' :src='form.cover')
       input(type='file' ref="inputEl" accept="image/*" @change="onInputChange" style="display:none")
-    .topics
-      .topic(v-for="item in topics" 
-        :class="selectedTopicsMap[item._id]&&'active'" 
-        @click="handleTopicClick(item)")  {{ item.name }}
-    .title
+    .form-item
+      .label 主题
+      .topics
+        .topic(v-for="item in topics" 
+          :class="selectedTopicsMap[item._id]&&'active'" 
+          @click="handleTopicClick(item)")  {{ item.name }}
+    .title(v-if='form.type=="article"')
       el-input.input(placeholder="请输入文章标题" v-model="form.title" :maxlength='100' show-word-limit)
+    .title(v-if='form.type=="photo"')
+      el-input.input(placeholder="相册名称" v-model="form.title" :maxlength='10' show-word-limit)
     .content
-      Editor(v-model="form.htmlContent" :init='editorInit' ref='editorEl')
+      div(v-if='form.type=="article"')
+        Editor( v-model="form.htmlContent" :init='editorInit' ref='editorEl')
+      textarea.textarea(v-if='form.type=="moment"' v-model='form.htmlContent' placeholder="内容" maxlength='800')
+    .imgs(v-if='form.type!="article"')
+      .item(v-for='item in form.imgs')
+        img(:src='item')
+      .item
+        input.input(type='file' multiple accept="image/*" @change="onChooseImg")
+        el-icon(size='20')
+          PictureFilled
   .actions
     el-button(type='primary' @click="save" :loading='loading') {{form._id?'保存':'发布'}}
 </template>
@@ -43,6 +60,8 @@ let form = ref({
   htmlContent: "",
   textContent: "",
   topics: [],
+  type: "moment",
+  imgs: []
 });
 let editorInit = ref({
   language_url: "/zh-Hans.js",
@@ -58,6 +77,20 @@ let editorInit = ref({
 let editorEl = ref();
 let inputEl = ref();
 let topics = ref([]);
+let typeList = [
+  {
+    label: "动态",
+    key: "moment"
+  },
+  {
+    label: "文章",
+    key: "article"
+  },
+  {
+    label: "相册",
+    key: "photo"
+  },
+]
 getTopicList();
 
 let selectedTopicsMap = computed(() => {
@@ -67,6 +100,9 @@ let selectedTopicsMap = computed(() => {
   });
   return _t;
 });
+let maxImgs = computed(() => {
+  return form.value.type == "photo" ? 99 : 9
+})
 
 function getTopicList() {
   $http.get("/api/topic").then((res) => {
@@ -81,6 +117,7 @@ function handleTopicClick(topic) {
     form.value.topics.push(topic);
   }
 }
+//选择封面
 function chooseImage() {
   inputEl.value.click();
 }
@@ -90,6 +127,22 @@ function onInputChange(e) {
     uploadImage(files[0], "article/cover").then((url) => {
       form.value.cover = url;
     });
+  }
+}
+//上传图片
+async function onChooseImg(e) {
+  let folder = "photo"
+  if (form.value.type == 'photo') {
+    folder += `/${form.value.title}`
+  }
+  for (let index = 0; index < e.target.files.length; index++) {
+    if (form.value.imgs.length > maxImgs.value) {
+      break;
+    }
+    const file = e.target.files[index];
+    let url = await uploadImage(file, folder)
+    console.log('url==', url)
+    form.value.imgs.push(url)
   }
 }
 function save() {
@@ -130,6 +183,7 @@ function save() {
     margin-bottom: 100px;
     background: #fff;
   }
+
   .cover {
     position: relative;
     width: 100%;
@@ -139,6 +193,8 @@ function save() {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 10px;
+
     img {
       position: absolute;
       z-index: 2;
@@ -149,23 +205,36 @@ function save() {
       object-fit: cover;
     }
   }
+
+  .form-item {
+    .label {
+      font-size: 12px;
+      color: #333;
+      margin-bottom: 5px;
+    }
+  }
+
   .topics {
-    margin-top: 15px;
+
     .topic {
       display: inline-block;
       width: fit-content;
       font-size: 15px;
-      border-radius: 30px;
-      border: 1px solid #999;
+      border-radius: 8px;
+      background: #f5f5f5;
       padding: 4px 15px;
       margin-right: 10px;
       margin-bottom: 10px;
+      color: #333;
       transition: all 0.3s;
+      user-select: none;
       cursor: pointer;
+
       &:hover {
         border-color: orangered;
         color: orangered;
       }
+
       &.active {
         background: orangered;
         border-color: orangered;
@@ -173,12 +242,15 @@ function save() {
       }
     }
   }
+
   .title {
     margin-top: 20px;
     padding-bottom: 10px;
+
     .input {
       font-size: 25px;
     }
+
     &:deep(.el-input) {
       .el-input__wrapper {
         box-shadow: none;
@@ -187,6 +259,7 @@ function save() {
         &.is-focus {
           box-shadow: none;
         }
+
         .el-input__inner {
           color: #000;
           font-weight: bold;
@@ -194,6 +267,54 @@ function save() {
       }
     }
   }
+
+  .content {
+    box-sizing: border-box;
+
+    .textarea {
+      width: calc(100% - 30px);
+      border: none;
+      background: #f5f5f5;
+      outline: none;
+      padding: 15px;
+      font-size: 15px;
+      height: 200px;
+    }
+  }
+
+  .imgs {
+    .item {
+      position: relative;
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      border-radius: 8px;
+      background: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+
+      &:active {
+        opacity: 0.8;
+      }
+
+      .input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        opacity: 0;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+
   .actions {
     position: fixed;
     width: 100%;

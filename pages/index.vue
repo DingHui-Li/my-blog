@@ -1,19 +1,18 @@
 <template lang="pug">
 .home
-  .cover  hello,
-    //- img(:src='')
-  .divider
-  TopicList(:topics='topics')
-  .divider
-  RecentList(:list='list')
+  //- .cover  hello,
+  //- img(:src='')
+  comArticleItem(v-for="item in list" :data='item' )
 </template>
 <script setup>
 import $http from "@/utils/http.js";
 import TopicList from "./components/topicList.vue";
 import RecentList from "./components/recent.vue";
+import comArticleItem from './components/articleItem'
 
 let topics = ref([]);
 let list = ref([]);
+let type = ref('')
 getArticleList();
 getTopicList();
 
@@ -31,24 +30,8 @@ function getArticleList() {
 </script>
 <style lang="scss" scoped>
 .home {
-  background: #fff;
-  .cover {
-    min-height: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 60px;
-
-    img {
-      width: 100%;
-      height: auto;
-    }
-  }
-  .divider {
-    // margin: 20px 0;
-    width: 100%;
-    height: 1px;
-    background: #eee;
-  }
+  background: #f9f9f9;
+  padding: 15px;
+  min-height: 100vh;
 }
 </style>

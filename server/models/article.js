@@ -15,10 +15,18 @@ const articleSchema = new Schema({
     type: Array,
     ref: "Topic",
   },
+  type: {
+    type: String,
+    default: "article"
+  },//article/moment/photo
   cover: String,
   htmlContent: String,
   textContent: String,
   desc: String,
+  imgs: {
+    type: Array,
+    default: []
+  }
 });
 articleSchema.index({ "$**": "text" });
 export default mongoose.model("Article", articleSchema);

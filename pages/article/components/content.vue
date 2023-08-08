@@ -47,37 +47,43 @@ function addContentImgEvent() {
 </script>
 <style lang="scss" scoped>
 $topbar-height: 50px;
+
 .content-container {
   height: 100%;
+
   .cover {
-    position: sticky;
-    top: 0;
     width: 100%;
-    border-radius: 20px 20px 0 0;
     overflow: hidden;
+    max-height: 60vh;
     height: auto;
+
     img {
       width: 100%;
       height: auto;
       object-fit: cover;
     }
   }
+
   .title-box {
     position: sticky;
     z-index: 9;
-    top: $topbar-height;
-    background: #fff;
+    top: -60px;
     padding: 30px;
+    padding-bottom: 5px;
     border-radius: 20px 20px 0 0;
+    background-color: #f9f9f9;
+
     .subtitle {
       display: flex;
       align-items: center;
       margin-bottom: 15px;
+
       .date {
         font-size: 12px;
         color: #999;
       }
     }
+
     .title {
       position: sticky;
       top: 0;
@@ -85,30 +91,23 @@ $topbar-height: 50px;
       font-weight: bold;
     }
   }
+
   .container {
     position: relative;
     z-index: 1;
     padding: 30px;
-    padding-top: 0;
-    background: #fff;
-    border-radius: 0 0 20px 20px;
+    // padding-top: 0;
+    background: #f9f9f9;
     min-height: 500px;
     overflow: hidden;
 
     .content {
       // margin-top: 15px;
-    }
-  }
-  &.has-cover {
-    .title-box {
-      transform: translateY(-20px);
-      top: calc($topbar-height + 20px);
-    }
-    .container {
-      transform: translateY(-20px);
+      padding: 0 15px;
     }
   }
 }
+
 .img-preview {
   position: fixed;
   top: 0;
@@ -123,23 +122,10 @@ $topbar-height: 50px;
   justify-content: center;
   backdrop-filter: blur(5px);
   padding: 50px;
+
   img {
     width: 70%;
     height: auto;
-  }
-}
-
-@media screen and (max-width: 1080px) {
-  .cover {
-    border-radius: 0 !important;
-    position: relative !important;
-  }
-  .title-box {
-    padding: 15px !important;
-    top: -20px !important;
-  }
-  .container {
-    padding: 15px !important;
   }
 }
 </style>

@@ -25,7 +25,7 @@
     "@element-plus/icons-vue": "^2.1.0",
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@tinymce/tinymce-vue": "^5.1.0",
-    "ali-oss": "^4.16.0",
+    "ali-oss": "^6.18.0",
     "crypto": "^1.0.1",
     "echarts": "^5.4.2",
     "moment": "^2.29.4",
