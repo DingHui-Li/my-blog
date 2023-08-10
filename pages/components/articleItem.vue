@@ -1,5 +1,6 @@
 <template lang="pug">
 .item(@click="jumpArticle(data._id)")
+  .avatar
   .content-box
     .title {{ data.title }}
     .subtitle
@@ -25,10 +26,9 @@ function jumpArticle(id) {
 <style lang='scss' scoped>
 .item {
   display: flex;
-  align-items: center;
   // border-bottom: 1px solid #99999920;
   padding-bottom: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 80px;
   cursor: pointer;
 
   &:last-child {
@@ -43,6 +43,14 @@ function jumpArticle(id) {
     }
   }
 
+  .avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 8px;
+    background-color: var(--primary-color);
+    margin-right: 10px;
+  }
+
   .content-box {
     flex: 1;
     overflow: hidden;
@@ -51,7 +59,7 @@ function jumpArticle(id) {
     .subtitle {
       display: flex;
       align-items: center;
-      padding: 10px 0;
+      padding: 5px 0;
 
       .date {
         font-size: 12px;

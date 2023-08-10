@@ -11,11 +11,15 @@
       img( v-if='form.cover' :src='form.cover')
       input(type='file' ref="inputEl" accept="image/*" @change="onInputChange" style="display:none")
     .form-item
-      .label 主题
+      .label 标签
       .topics
         .topic(v-for="item in topics" 
           :class="selectedTopicsMap[item._id]&&'active'" 
           @click="handleTopicClick(item)")  {{ item.name }}
+        comAddTopic(@confirm='getTopicList')
+          .topic 
+            el-icon(size='15')
+              Plus
     .title(v-if='form.type=="article"')
       el-input.input(placeholder="请输入文章标题" v-model="form.title" :maxlength='100' show-word-limit)
     .title(v-if='form.type=="photo"')
@@ -27,7 +31,7 @@
     .imgs(v-if='form.type!="article"')
       .item(v-for='item in form.imgs')
         img(:src='item')
-      .item
+      .item(v-if="form.imgs.length<maxImgs")
         input.input(type='file' multiple accept="image/*" @change="onChooseImg")
         el-icon(size='20')
           PictureFilled
@@ -39,10 +43,11 @@ definePageMeta({
   middleware: ["auth"],
 });
 import $http from "@/utils/http.js";
-import { PictureFilled } from "@element-plus/icons-vue";
+import { PictureFilled, Plus } from "@element-plus/icons-vue";
 import Editor from "@tinymce/tinymce-vue";
 import { uploadImage } from "@/utils/upload.js";
 import { ElMessage, ElMessageBox } from "element-plus";
+import comAddTopic from '../__com__/addTopic'
 
 const route = useRoute();
 const router = useRouter();
@@ -147,10 +152,16 @@ async function onChooseImg(e) {
 }
 function save() {
   loading.value = true;
+  let pureContentText;
+  if (form.value.type == 'article') {
+    pureContentText = editorEl.value.getEditor().getContent({ format: "text" })
+  } else {
+    pureContentText = form.value.htmlContent
+  }
   let payload = {
     ...form.value,
     topics: form.value.topics.map((item) => item._id),
-    textContent: editorEl.value.getEditor().getContent({ format: "text" }),
+    textContent: pureContentText,
   };
   let req;
   if (form.value._id) {
@@ -283,11 +294,17 @@ function save() {
   }
 
   .imgs {
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
     .item {
       position: relative;
       display: inline-block;
-      width: 100px;
-      height: 100px;
+      width: 33.333%;
+      aspect-ratio: 1;
       border-radius: 8px;
       background: #f5f5f5;
       display: flex;

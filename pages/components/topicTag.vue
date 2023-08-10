@@ -1,5 +1,5 @@
 <template lang="pug">
-.topic-tag(@click.stop="handleClick") {{ data.name }}
+.topic-tag(@click.stop="handleClick") \#{{ data.name }}
 </template>
 <script setup>
 const props = defineProps({
@@ -25,13 +25,17 @@ function handleClick() {
 </script>
 <style lang="scss" scoped>
 .topic-tag {
-  font-size: 12px;
-  border-radius: 30px;
-  padding: 4px 10px;
+  display: inline-block;
+  // padding: 4px 10px;
   margin-right: 10px;
-  transition: all 0.3s;
-  background: #000;
-  color: #fff;
+  // background: #000;
   cursor: pointer;
+  color: #3f51b5;
+  font-weight: bold;
+  font-size: 14px;
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
 </style>

@@ -12,9 +12,9 @@
       comSideMenu(v-model='type')
     .content 
       slot
-  .footer-container
-    .footer
-      a(href='https://github.com/DingHui-Li/my-blog' target="_blank") github
+  //- .footer-container
+  //-   .footer
+  //-     a(href='https://github.com/DingHui-Li/my-blog' target="_blank") github
 
 </template>
 <script setup>
@@ -99,13 +99,15 @@ $max-width: 900px;
     display: flex;
 
     .side {
-      background-color: #fff;
+      background-color: #f5f5f5;
       padding-right: 5px;
+      padding-left: 5px;
       padding-top: 15px;
     }
 
     .content {
       flex: 1;
+      overflow: hidden;
     }
   }
 

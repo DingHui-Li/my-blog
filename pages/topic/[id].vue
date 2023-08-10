@@ -2,7 +2,7 @@
 .topic
   .cover
     img(:src='topicDetail.cover')
-    .bg
+    .mask
     .name {{ topicDetail.name }}
   .container
     //- .left
@@ -28,20 +28,20 @@ function getTopic() {
 <style lang="scss" scoped>
 .topic {
   // display: flex;
-  margin-top: 30px;
   position: relative;
+
   .cover {
     position: relative;
     width: 100%;
-    margin-bottom: 15px;
-    border-radius: 10px;
     overflow: hidden;
     min-height: 200px;
+
     img {
       width: 100%;
       height: auto;
     }
-    .bg {
+
+    .mask {
       position: absolute;
       z-index: 1;
       top: 0;
@@ -50,6 +50,7 @@ function getTopic() {
       height: 100%;
       background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
     }
+
     .name {
       position: absolute;
       bottom: 0;
@@ -64,8 +65,10 @@ function getTopic() {
       box-sizing: border-box;
     }
   }
+
   .container {
     position: relative;
+
     .left {
       position: absolute;
       height: 100%;
@@ -73,29 +76,11 @@ function getTopic() {
       left: 0;
       width: 300px;
     }
+
     .content {
       overflow: hidden;
       padding-bottom: 15px;
       // margin-left: 315px;
-    }
-  }
-}
-@media screen and (max-width: 1080px) {
-  .topic {
-    margin-top: 0;
-    .cover {
-      position: sticky;
-      top: 0;
-      border-radius: 0;
-      margin: 0;
-      .name {
-        padding-bottom: 60px;
-      }
-    }
-    .container {
-      position: relative;
-      z-index: 1;
-      transform: translateY(-30px);
     }
   }
 }

@@ -22,6 +22,7 @@ export let addTopic = defineEventHandler(async (event) => {
   if (await checkTopicExist(body?.name)) {
     return new BaseResponse({ code: 100, msg: "该主题已存在" });
   }
+  delete body._id
   let topic = await Topic.create({
     ...body,
   });

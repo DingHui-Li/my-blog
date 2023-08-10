@@ -11,12 +11,12 @@ export let getArticleList = defineEventHandler(async (event) => {
     delete filter.topic;
   }
   let res = await Article.find(filter)
-    .select({ htmlContent: 0, textContent: 0 })
+    .select({ htmlContent: 0, })
     .skip((pagation.page - 1) * pagation.size)
     .limit(pagation.size)
     .sort({ updateTime: -1 })
     .populate("topics");
-  let total = await Article.count();
+  let total = await Article.find(filter).count();
   return new BaseResponse({
     data: {
       list: res,
@@ -66,14 +66,9 @@ export let searchArticleList = defineEventHandler(async (event) => {
 //添加
 export let addArticle = defineEventHandler(async (event) => {
   const body = await readBody(event);
-  if (!body.title?.trim().length) {
-    return new BaseResponse({ code: 100, msg: "标题不能为空" });
-  }
-  if (!body.htmlContent?.trim().length) {
-    return new BaseResponse({ code: 100, msg: "内容不能为空" });
-  }
-  if (!body.topics?.length) {
-    return new BaseResponse({ code: 100, msg: "请选择至少一个主题" });
+  let validRes = validContent(body)
+  if (validRes !== true) {
+    return validRes
   }
   let res = await Article.create({
     ...body,
@@ -85,14 +80,9 @@ export let addArticle = defineEventHandler(async (event) => {
 //编辑
 export let editArticle = defineEventHandler(async (event) => {
   let body = await readBody(event);
-  if (!body.title?.trim().length) {
-    return new BaseResponse({ code: 100, msg: "标题不能为空" });
-  }
-  if (!body.htmlContent?.trim().length) {
-    return new BaseResponse({ code: 100, msg: "内容不能为空" });
-  }
-  if (!body.topics?.length) {
-    return new BaseResponse({ code: 100, msg: "请选择至少一个主题" });
+  let validRes = validContent(body)
+  if (validRes !== true) {
+    return validRes
   }
   let res = await Article.updateOne(
     { _id: body._id },
@@ -104,3 +94,16 @@ export let editArticle = defineEventHandler(async (event) => {
   );
   return new BaseResponse({ data: res });
 });
+
+function validContent(body) {
+  if (!body.title?.trim().length && body.type == 'article') {
+    return new BaseResponse({ code: 100, msg: "标题不能为空" });
+  }
+  if (!body.htmlContent?.trim().length && body.type != 'photo') {
+    return new BaseResponse({ code: 100, msg: "内容不能为空" });
+  }
+  if (!body.topics?.length && body.type == 'articlw') {
+    return new BaseResponse({ code: 100, msg: "请选择至少一个标签" });
+  }
+  return true
+}

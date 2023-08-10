@@ -49,6 +49,7 @@ function addContentImgEvent() {
 $topbar-height: 50px;
 
 .content-container {
+  background: #f9f9f9;
   height: 100%;
 
   .cover {

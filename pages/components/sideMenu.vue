@@ -3,6 +3,8 @@
   .active-box(:style="`transform:translateY(${activeIndex*50}px)`")
   .item(v-for='item in menuList' @click="eimts('update:modelValue',item.key)" :class="item.key==modelValue&&'active'")
     .label {{ item.label }}
+  .website-info
+    a(href='https://github.com/DingHui-Li/my-blog' target="_blank") github
 </template>
 <script setup>
 const props = defineProps({
@@ -14,12 +16,8 @@ const props = defineProps({
 const eimts = defineEmits(['update:modelValue'])
 const menuList = [
   {
-    label: "home",
-    key: ""
-  },
-  {
     label: "动态",
-    key: "moment"
+    key: ""
   },
   {
     label: "文章",
@@ -68,6 +66,19 @@ let activeIndex = computed(() => {
     &.active {
       color: #fff;
     }
+  }
+}
+
+.website-info {
+  border-top: 1px solid #eeeeee;
+  padding-top: 15px;
+  margin-top: 100px;
+  text-align: center;
+
+  a {
+    font-weight: bold;
+    color: var(--primary-color);
+    text-decoration: none;
   }
 }
 </style>

@@ -1,12 +1,13 @@
 <template lang="pug">
 .article
   .content
-    Content(:data='detail')
+    comPhotoAlbum(v-if='detail.type=="photo"' :data='detail')
+    comContent(v-else :data='detail')
 </template>
 
 <script setup>
-import Content from "./components/content.vue";
-import RightSide from "./components/rightSide.vue";
+import comContent from "./components/content.vue";
+import comPhotoAlbum from './components/photoAlbum.vue'
 import $http from "@/utils/http.js";
 
 const route = useRoute();
@@ -26,6 +27,5 @@ function getArticle() {
 <style lang="scss" scoped>
 .article {
   position: relative;
-  background: #f9f9f9;
 }
 </style>

@@ -56,7 +56,7 @@ function getList(page = 1) {
 .content-container {
   padding: 15px;
   background: #fff;
-  border-radius: 10px;
+
   .list {
     .item {
       display: flex;
@@ -64,11 +64,13 @@ function getList(page = 1) {
       padding-bottom: 15px;
       margin-bottom: 15px;
       border-bottom: 1px solid #99999950;
+
       &:last-child {
         border: none;
         margin-bottom: 0;
         padding-bottom: 0;
       }
+
       &:hover {
         .right {
           .subtitle {
@@ -77,11 +79,13 @@ function getList(page = 1) {
               color: orangered;
             }
           }
+
           .title {
             color: orangered;
           }
         }
       }
+
       .cover {
         width: 250px;
         height: 160px;
@@ -89,14 +93,17 @@ function getList(page = 1) {
         object-fit: cover;
         margin-right: 20px;
       }
+
       .right {
         flex: 1;
         overflow: hidden;
         word-break: break-all;
+
         .subtitle {
           display: flex;
           align-items: center;
           margin: 15px 0;
+
           .topic {
             font-size: 12px;
             border-radius: 30px;
@@ -105,11 +112,13 @@ function getList(page = 1) {
             margin-right: 10px;
             transition: all 0.3s;
           }
+
           .date {
             font-size: 12px;
             color: #999;
           }
         }
+
         .title {
           font-size: 18px;
           font-weight: bold;
@@ -117,6 +126,7 @@ function getList(page = 1) {
           margin-bottom: 10px;
           transition: all 0.3s;
         }
+
         .desc {
           font-size: 14px;
           color: #777;
@@ -124,26 +134,12 @@ function getList(page = 1) {
       }
     }
   }
+
   .empty {
     text-align: center;
     font-size: 15px;
     color: #999;
     margin: 100px 0;
-  }
-}
-@media screen and (max-width: 1080px) {
-  .list {
-    .item {
-      // display: block !important;
-      align-items: center;
-      .cover {
-        width: 80px !important;
-        height: 60px !important;
-      }
-      .title {
-        font-size: 16px !important;
-      }
-    }
   }
 }
 </style>
