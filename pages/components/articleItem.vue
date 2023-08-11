@@ -1,6 +1,7 @@
 <template lang="pug">
 .item(@click="jumpArticle(data._id)")
   .avatar
+    img(:src='profile?.avatar+"?x-oss-process=image/resize,m_fill,w_100"')
   .content-box
     .title {{ data.title }}
     .subtitle
@@ -18,6 +19,8 @@ const router = useRouter();
 const props = defineProps({
   data: Object,
 });
+const sys = useSysStore()
+let profile = sys.globalSetting.profile
 
 function jumpArticle(id) {
   router.push(`/article/${id}`);
@@ -49,6 +52,13 @@ function jumpArticle(id) {
     border-radius: 8px;
     background-color: var(--primary-color);
     margin-right: 10px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
   .content-box {

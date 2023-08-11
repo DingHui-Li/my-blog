@@ -3,11 +3,16 @@
 
 export default defineNuxtConfig({
   devtools: { enabled: false },
-  modules: ["@element-plus/nuxt"],
+  modules: ["@element-plus/nuxt", '@pinia/nuxt',],
   // ssr: true,
   routeRules: {
     "/admin/*": { ssr: false },
     "/inappwebview/*": { ssr: false },
+  },
+  imports: {
+    dirs: [
+      'composables/*/*.{ts,js,mjs,mts}',
+    ]
   },
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },

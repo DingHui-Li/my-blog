@@ -1,9 +1,10 @@
 <template lang="pug">
 .moment-item
   .avatar
+    img(:src='profile?.avatar+"?x-oss-process=image/resize,m_fill,w_100"')
   .right
     .user-info
-      .name xxxxx
+      .name {{profile?.name}}
       .time {{moment(data.updateTime).fromNow()}}
     .content {{data.textContent}}
     .topics
@@ -19,6 +20,8 @@ const router = useRouter();
 const props = defineProps({
   data: Object,
 });
+const sys = useSysStore()
+let profile = sys.globalSetting.profile
 </script>
 <style lang='scss' scoped>
 .moment-item {
@@ -31,6 +34,13 @@ const props = defineProps({
     border-radius: 8px;
     background-color: var(--primary-color);
     margin-right: 10px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
   .right {

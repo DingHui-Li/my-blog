@@ -15,6 +15,7 @@ import {
   getSameArticleList,
   searchArticleList,
 } from "../api/article.js";
+import { getGlobalSetting, setGlobalSetting } from '../api/sys.js'
 const router = createRouter();
 
 router.get("/api/topic", getTopicList);
@@ -31,6 +32,9 @@ router.post("/api/article", addArticle);
 router.put("/api/article", editArticle);
 
 router.post("/api/file/upload", uploadFile);
+
+router.get("/api/sys/setting", getGlobalSetting);
+router.post("/api/sys/setting", setGlobalSetting);
 
 export default defineNitroPlugin((nitroApp) => {
   nitroApp.h3App.stack.unshift({ route: "/", ...router });

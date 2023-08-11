@@ -1,7 +1,7 @@
 <template lang="pug">
 .side-menu
   .active-box(:style="`transform:translateY(${activeIndex*50}px)`")
-  .item(v-for='item in menuList' @click="eimts('update:modelValue',item.key)" :class="item.key==modelValue&&'active'")
+  .item(v-for='item in menuList' @click="handleClick(item)" :class="item.key==modelValue&&'active'")
     .label {{ item.label }}
   .website-info
     a(href='https://github.com/DingHui-Li/my-blog' target="_blank") github
@@ -13,6 +13,7 @@ const props = defineProps({
     default: ""
   }
 })
+const router = useRouter()
 const eimts = defineEmits(['update:modelValue'])
 const menuList = [
   {
@@ -32,6 +33,11 @@ const menuList = [
 let activeIndex = computed(() => {
   return menuList.findIndex(item => item.key == props.modelValue)
 })
+
+function handleClick(item) {
+  eimts('update:modelValue', item.key)
+  router.replace('#' + item.key)
+}
 </script>
 <style lang='scss' scoped>
 .side-menu {

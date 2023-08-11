@@ -20,8 +20,12 @@ const menuList = [
     path: "/admin/article",
   },
   {
-    title: "主题管理",
+    title: "标签管理",
     path: "/admin/topic",
+  },
+  {
+    title: "全局配置",
+    path: "/admin/setting",
   },
 ];
 </script>
@@ -30,6 +34,7 @@ const menuList = [
   width: 100%;
   min-height: 100vh;
   background: #dee0ed;
+
   .topbar-container {
     position: sticky;
     top: 0;
@@ -38,19 +43,24 @@ const menuList = [
     backdrop-filter: blur(5px);
     height: 50px;
   }
+
   .content-container {
     display: flex;
+
     .sidebar {
       position: sticky;
-      top: 60px;
+      top: 50px;
       width: 200px;
       height: 90vh;
-      background: red;
+      background: #fff;
+      border-right: 2px solid #eee;
     }
+
     .content {
       flex: 1;
       overflow: hidden;
       padding: 15px;
+      background: #fff;
     }
   }
 }

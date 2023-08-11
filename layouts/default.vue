@@ -2,7 +2,7 @@
 .layout
   .topbar-container
     .tabbar
-      .host(@click="router.replace('/')") vvcx.xyz
+      .host(@click="router.replace('/')") {{ website?.name }}
       .search(@click="router.push('/search')" v-if="route.name!='search'")
         .placeholder 搜索
         el-icon.icon
@@ -22,6 +22,8 @@ import { Search } from "@element-plus/icons-vue";
 import comSideMenu from '@/pages/components/sideMenu.vue'
 const router = useRouter();
 const route = useRoute();
+const sys = useSysStore()
+let website = sys.globalSetting.website
 
 let type = ref('')
 </script>

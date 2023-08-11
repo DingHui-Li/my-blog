@@ -7,6 +7,8 @@ import "./utils/momentCh.js";
 import "@/style/reset.css";
 import "@/style/color.css";
 const route = useRoute();
+const store = useSysStore()
+store.getData()
 </script>
 <style>
 .page-enter-active,
