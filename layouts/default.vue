@@ -1,14 +1,16 @@
 <template lang="pug">
 .layout
   .topbar-container
-    .tabbar
+    .topbar
+      el-icon.menu(:size='20' @click='showSideMenu=!showSideMenu')
+        Menu
       .host(@click="router.replace('/')") {{ website?.name }}
       .search(@click="router.push('/search')" v-if="route.name!='search'")
         .placeholder 搜索
         el-icon.icon
           Search
-  .content-container
-    .side
+  .content-container(@click="showSideMenu=false")
+    .side(:class="`${showSideMenu&&'show'}`")
       comSideMenu(v-model='type')
     .content 
       slot
@@ -18,14 +20,18 @@
 
 </template>
 <script setup>
-import { Search } from "@element-plus/icons-vue";
+import { Search, Menu } from "@element-plus/icons-vue";
 import comSideMenu from '@/pages/components/sideMenu.vue'
 const router = useRouter();
 const route = useRoute();
 const sys = useSysStore()
 let website = sys.globalSetting.website
 
+let showSideMenu = ref(false)
 let type = ref('')
+onMounted(() => {
+  type.value = route.hash?.replace('#', '')
+})
 </script>
 <style lang="scss" scoped>
 $max-width: 900px;
@@ -38,13 +44,13 @@ $max-width: 900px;
   .topbar-container {
     position: sticky;
     top: 0;
-    z-index: 9;
+    z-index: 9+1;
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(5px);
     width: 100%;
     border-bottom: 1px solid #eee;
 
-    .tabbar {
+    .topbar {
       max-width: $max-width;
       height: 50px;
       margin: 0 auto;
@@ -54,6 +60,10 @@ $max-width: 900px;
       padding: 0 10px;
       box-sizing: border-box;
 
+      .menu {
+        display: none;
+      }
+
       .host {
         font-size: 20px;
         font-weight: bold;
@@ -62,7 +72,6 @@ $max-width: 900px;
       }
 
       .search {
-        margin-left: 30px;
         width: 100%;
         max-width: 150px;
         overflow: hidden;
@@ -101,6 +110,8 @@ $max-width: 900px;
     display: flex;
 
     .side {
+      position: relative;
+      z-index: 9;
       background-color: #f5f5f5;
       padding-right: 5px;
       padding-left: 5px;
@@ -132,6 +143,44 @@ $max-width: 900px;
       a {
         color: var(--primary-color);
         text-decoration: none;
+      }
+    }
+  }
+}
+
+@media screen and (max-width:1080px) {
+  .layout {
+    .topbar-container {
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+
+        .menu {
+          display: block !important;
+        }
+
+        .host {
+          margin-left: 80px;
+        }
+
+        .search {
+          width: 80px !important;
+        }
+      }
+    }
+
+    .content-container {
+      .side {
+        position: fixed;
+        height: calc(100vh - 50px);
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(5px);
+        transform: translateX(-100%);
+        transition: all .3s;
+
+        &.show {
+          transform: translateX(0);
+        }
       }
     }
   }

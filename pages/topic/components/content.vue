@@ -1,22 +1,18 @@
 <template lang="pug">
 .content-container
   .list
-    div(v-for="page in list")
-      .item(v-for="item in page" @click='router.push("/article/"+item._id)')
-        img.cover(v-if='item.cover' :src='`${item.cover}?x-oss-process=image/resize,m_fill,w_400`')
-        .right
-          .subtitle
-            TopicTag(v-for="topic in item.topics" :data='topic')
-            .date {{moment(item.updateTime).fromNow()}}
-          .title {{ item.title }}
-          .desc {{item.desc}}...
+    .item(:class="type" v-for="(item,index) in list" :key='item._id' :style="`animation-delay:${index%10*100}ms`")
+      comMomentItem(v-if='item.type=="moment"' :data='item')
+      comAlbumItem(v-else-if='item.type=="photo"' :showMonth='true' :data='item')
+      comArticleItem(v-else :data='item')
     .empty(v-if="!list.length&!pagation.loading") 无数据
 </template>
 <script setup>
 const router = useRouter();
 import $http from "@/utils/http.js";
-import moment from "moment";
-import TopicTag from "~/pages/components/topicTag.vue";
+import comArticleItem from '../../components/articleItem'
+import comMomentItem from '../../components/momentItem'
+import comAlbumItem from '../../components/albumItem'
 
 const route = useRoute();
 
@@ -33,6 +29,9 @@ function getList(page = 1) {
   if (pagation.value.loading) return;
   console.log("get list");
   pagation.value.loading = true;
+  if (page == 1) {
+    list.value = []
+  }
   $http
     .get("/api/article", {
       page,
@@ -41,7 +40,7 @@ function getList(page = 1) {
     })
     .then((res) => {
       if (res.data.list?.length) {
-        list.value[page] = res.data.list;
+        list.value = [...list.value, ...res.data.list];
         pagation.value.page = page;
         pagation.value.isMore = page * pagation.value.size < res.data.total;
       }
@@ -58,79 +57,20 @@ function getList(page = 1) {
   background: #fff;
 
   .list {
+    padding-top: 15px;
+
     .item {
-      display: flex;
-      cursor: pointer;
-      padding-bottom: 15px;
-      margin-bottom: 15px;
-      border-bottom: 1px solid #99999950;
+      padding: 15px;
+      padding-left: 30px;
+      animation: fadeIn .3s forwards;
+      padding-bottom: 30px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid #eee;
 
-      &:last-child {
-        border: none;
-        margin-bottom: 0;
+      &.photo {
         padding-bottom: 0;
-      }
-
-      &:hover {
-        .right {
-          .subtitle {
-            .topic {
-              border-color: orangered;
-              color: orangered;
-            }
-          }
-
-          .title {
-            color: orangered;
-          }
-        }
-      }
-
-      .cover {
-        width: 250px;
-        height: 160px;
-        border-radius: 10px;
-        object-fit: cover;
-        margin-right: 20px;
-      }
-
-      .right {
-        flex: 1;
-        overflow: hidden;
-        word-break: break-all;
-
-        .subtitle {
-          display: flex;
-          align-items: center;
-          margin: 15px 0;
-
-          .topic {
-            font-size: 12px;
-            border-radius: 30px;
-            border: 1px solid #999;
-            padding: 2px 10px;
-            margin-right: 10px;
-            transition: all 0.3s;
-          }
-
-          .date {
-            font-size: 12px;
-            color: #999;
-          }
-        }
-
-        .title {
-          font-size: 18px;
-          font-weight: bold;
-          color: #333;
-          margin-bottom: 10px;
-          transition: all 0.3s;
-        }
-
-        .desc {
-          font-size: 14px;
-          color: #777;
-        }
+        margin-bottom: 0;
+        border: none;
       }
     }
   }

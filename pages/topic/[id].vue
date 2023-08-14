@@ -5,8 +5,6 @@
     .mask
     .name {{ topicDetail.name }}
   .container
-    //- .left
-    //-   LeftSide
     .content
       Content
 </template>

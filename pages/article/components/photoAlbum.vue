@@ -4,7 +4,7 @@
     .title {{ data.title }}
     .num 共{{ data.imgs.length }}张照片
     TopicTag(v-for="topic in data.topics" :data='topic')
-    .date(style="margin-right:30px") 发布于{{ moment(data.createTime).calendar() }}
+    .date() 发布于 {{ moment(data.createTime).calendar() }}
     .date(v-if="data.createTime!=data.updateTime") {{moment(data.updateTime).fromNow()}}更新
   .imgs
     .item(v-for="(item,index) in data.imgs")
@@ -24,6 +24,7 @@ import EXIF from 'exifr'
 const props = defineProps({
   data: Object,
 });
+console.log(props.data)
 let imgsEl = ref()
 let exifList = ref([])
 onMounted(() => {
@@ -46,6 +47,7 @@ function getShotInfo(info) {
 
   .header {
     margin-bottom: 15px;
+    text-align: center;
 
     .title {
       font-size: 30px;

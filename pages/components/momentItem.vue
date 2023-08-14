@@ -25,7 +25,6 @@ let profile = sys.globalSetting.profile
 </script>
 <style lang='scss' scoped>
 .moment-item {
-  margin-bottom: 90px;
   display: flex;
 
   .avatar {
@@ -50,7 +49,7 @@ let profile = sys.globalSetting.profile
     .user-info {
 
       .name {
-        font-size: 15px;
+        font-size: 17px;
         font-weight: bold;
         color: #3f51b5;
       }
@@ -64,7 +63,7 @@ let profile = sys.globalSetting.profile
 
     .content {
       margin-top: 5px;
-      font-size: 14px;
+      font-size: 16px;
       color: #333;
       word-break: break-all;
     }

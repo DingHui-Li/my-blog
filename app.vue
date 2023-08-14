@@ -1,5 +1,5 @@
 <template lang="pug">
-NuxtLayout(:name="route.name.includes('admin')?'admin':route.name.includes('inappwebview')?'none':'default'")
+NuxtLayout(:name="layout")
   NuxtPage
 </template>
 <script setup>
@@ -9,6 +9,17 @@ import "@/style/color.css";
 const route = useRoute();
 const store = useSysStore()
 store.getData()
+
+let layout = computed(() => {
+  let routeName = route.name;
+  if (routeName.includes('admin')) {
+    return 'admin'
+  }
+  if (routeName.includes('inappwebview')) {
+    return 'none'
+  }
+  return 'default'
+})
 </script>
 <style>
 .page-enter-active,
@@ -22,5 +33,15 @@ store.getData()
   /* filter: blur(1rem); */
   transform: scale(0.9);
   border-radius: 30px;
+}
+
+@font-face {
+  font-family: 'HarmonyOS_Sans_SC_Regular';
+  font-weight: normal;
+  src: url('./public/HarmonyOS_Sans_SC_Regular.woff2') format('truetype');
+}
+
+* {
+  font-family: HarmonyOS_Sans_SC_Regular !important;
 }
 </style>

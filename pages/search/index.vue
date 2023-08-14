@@ -1,20 +1,25 @@
 <template lang="pug">
 .search-page
-  Topics(@selected='v=>topics=v')
+  //- Topics(@selected='v=>topics=v')
   .search-box
     input.input(v-model="keyword" @blur='handleSearch' placeholder="输入关键字")
     el-icon.icon
-        Search
+      Search
   .list(v-if='result.length')
     .title 搜索结果
-    ArticleItem(v-for="item in result" :data='item')
+      .item(:class="type" v-for="(item,index) in result" :key='item._id' :style="`animation-delay:${index%10*100}ms`")
+        comMomentItem(v-if='item.type=="moment"' :data='item')
+        comAlbumItem(v-else-if='item.type=="photo"' :showMonth='true' :data='item')
+        comArticleItem(v-else :data='item')
   .empty(v-if="!loading&&!result.length&&searched") 无结果
 </template>
 <script setup>
-import ArticleItem from "./components/articleItem.vue";
 import Topics from "./components/topics.vue";
 import { Search } from "@element-plus/icons-vue";
 import $http from "@/utils/http.js";
+import comArticleItem from '../components/articleItem'
+import comMomentItem from '../components/momentItem'
+import comAlbumItem from '../components/albumItem'
 
 let topics = ref({});
 let keyword = ref("");
@@ -42,6 +47,7 @@ function handleSearch() {
 .search-page {
   background: #fff;
   padding: 15px;
+
   .search-box {
     display: flex;
     align-items: center;
@@ -50,6 +56,7 @@ function handleSearch() {
     margin: 60px auto;
     padding: 0 15px;
     max-width: 600px;
+
     .input {
       flex: 1;
       overflow: hidden;
@@ -59,25 +66,30 @@ function handleSearch() {
       outline: none;
       color: #fff;
       font-size: 18px;
+
       &::placeholder {
         color: #ffffff80;
         font-size: 13px;
       }
     }
+
     .icon {
       color: #fff;
       font-size: 20px;
       cursor: pointer;
     }
   }
+
   .list {
-    .title {
-      font-size: 12px;
-      color: #333;
-      margin-bottom: 10px;
-      font-weight: bold;
+    .item {
+      padding: 15px;
+      padding-left: 30px;
+      padding-bottom: 30px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid #eee;
     }
   }
+
   .empty {
     font-size: 14px;
     color: #999;

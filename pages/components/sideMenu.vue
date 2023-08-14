@@ -36,7 +36,7 @@ let activeIndex = computed(() => {
 
 function handleClick(item) {
   eimts('update:modelValue', item.key)
-  router.replace('#' + item.key)
+  router.replace('/#' + item.key)
 }
 </script>
 <style lang='scss' scoped>
@@ -60,6 +60,7 @@ function handleClick(item) {
   .item {
     position: relative;
     z-index: 2;
+    height: 21px;
     padding: 15px 30px;
     font-size: 14px;
     font-weight: bold;
