@@ -16,11 +16,16 @@
       template(#default="{row}")
         span(v-if="col.key=='createTime'") {{ moment(row.createTime).format('YYYY-MM-DD HH:mm') }}
         span(v-if="col.key=='updateTime'") {{ moment(row.updateTime).format('YYYY-MM-DD HH:mm') }}
-        span(v-else-if="col.key=='legalPerson'") {{ row.authentication?.legalPerson?.name }}
+        span(v-else-if="col.key=='type'")
+          el-tag(:type="row.type=='moment'?'success':''") {{ row.type }}
+        span(v-else-if="col.key=='title'") 
+          span(v-if='row.type=="moment"') {{ row.desc }}
+          span(v-else) {{ row.title }}
         span(v-else) {{ row[col.key] }}
     el-table-column
       template(#default="{row}")
-        el-button(type="primary" text @click='router.push({path:"/admin/article/new",query:{id:row._id}})') 编辑
+        el-button(type="primary" @click='router.push({path:"/admin/article/new",query:{id:row._id}})') 编辑
+        el-button.btn(type='danger' @click="handleDelete(row)") 删除
   .pagination
     el-pagination(background 
       layout="sizes,prev, pager, next" 
@@ -36,6 +41,8 @@ definePageMeta({
 });
 import moment from "moment";
 import useList from "../hooks/useList.js";
+import { ElMessage, ElMessageBox } from 'element-plus'
+import $http from "@/utils/http.js";
 
 const router = useRouter();
 let { pagation, list, getList } = useList("/api/article");
@@ -52,6 +59,10 @@ const cols = [
   {
     label: "标题",
     key: "title",
+  },
+  {
+    label: "类型",
+    key: "type",
   },
   {
     label: "创建时间",
@@ -71,10 +82,31 @@ function reset() {
   _getList();
 }
 function _getList() {
-  let filterParams = {
-    ...filter.value,
-  };
-  getList(filterParams);
+  getList(filter.value);
+}
+function handleDelete(e) {
+  ElMessageBox.confirm(
+    '确定删除？删除后无法恢复！',
+    '警告',
+    {
+      confirmButtonText: '删除',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  ).then(() => {
+    $http.delete(`/api/article/${e._id}`).then(() => {
+      ElMessage({
+        type: 'success',
+        message: '删除成功',
+      })
+      getList(filter.value);
+    }).catch(err => {
+      ElMessage({
+        type: 'error',
+        message: err?.msg || err?.message || "未知错误",
+      })
+    })
+  })
 }
 </script>
 <style lang="scss" scoped>
@@ -82,10 +114,12 @@ function _getList() {
   .actions {
     margin-bottom: 15px;
     text-align: right;
+
     .btn {
       width: 100px;
     }
   }
+
   .filter-container {
     background-color: #fff;
     padding: 15px;
@@ -93,9 +127,11 @@ function _getList() {
     border-radius: 5px;
     display: flex;
     flex-wrap: wrap;
+
     &:deep(.el-form-item) {
       width: 400px;
       margin-right: 15px;
+
       .el-form-item__label {
         font-size: 12px;
         color: #333;
@@ -104,6 +140,7 @@ function _getList() {
       }
     }
   }
+
   .pagination {
     margin-top: 15px;
     display: flex;

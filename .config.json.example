@@ -1,0 +1,13 @@
+{
+	"oss": {
+		"accessKeyId": "",
+		"accessKeySecret": ""
+	},
+	"mongodb": {
+		"ip": "",
+		"port": "",
+		"dbname": "",
+		"name": "",
+		"password": ""
+	}
+}

@@ -1,7 +1,7 @@
 import BaseResponse from "../base/baseResponse";
 import OSS from "ali-oss";
 import crypto from "crypto";
-import ossKey from "~/.osskey.json";
+import config from "~/.config.json";
 
 export let uploadFile = defineEventHandler(async (event) => {
   const rawBody = await readMultipartFormData(event);
@@ -10,6 +10,7 @@ export let uploadFile = defineEventHandler(async (event) => {
   // let filename = new Date().getTime() + "." + imgType;
   let dir = getDir(rawBody);
   let filename = getFileHash(file.data) + "." + imgType;
+  const ossKey = config['oss']
 
   const store = new OSS({
     debugger: true,

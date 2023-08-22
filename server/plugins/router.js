@@ -14,6 +14,7 @@ import {
   getArticleList,
   getSameArticleList,
   searchArticleList,
+  deleteArticle
 } from "../api/article.js";
 import { getGlobalSetting, setGlobalSetting } from '../api/sys.js'
 const router = createRouter();
@@ -30,6 +31,7 @@ router.get("/api/article/:id/same", getSameArticleList);
 router.get("/api/article/search", searchArticleList);
 router.post("/api/article", addArticle);
 router.put("/api/article", editArticle);
+router.delete("/api/article/:id", deleteArticle);
 
 router.post("/api/file/upload", uploadFile);
 

@@ -41,10 +41,5 @@ npm run preview
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
 
-## OSS
-
-在根目录添加《.osskey.json》
-内容：{
-"accessKeyId": id,
-"accessKeySecret": secret
-}
+# config
+~/.config.json

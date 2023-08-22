@@ -95,6 +95,13 @@ export let editArticle = defineEventHandler(async (event) => {
   return new BaseResponse({ data: res });
 });
 
+//删除
+export let deleteArticle = defineEventHandler(async (event) => {
+  let params = getRouterParams(event);
+  let res = await Article.deleteOne({ _id: params?.id });
+  return new BaseResponse({ data: res });
+});
+
 function validContent(body) {
   if (!body.title?.trim().length && body.type == 'article') {
     return new BaseResponse({ code: 100, msg: "标题不能为空" });

@@ -91,10 +91,10 @@ let typeList = [
     label: "文章",
     key: "article"
   },
-  {
-    label: "相册",
-    key: "photo"
-  },
+  // {
+  //   label: "相册",
+  //   key: "photo"
+  // },
 ]
 getTopicList();
 

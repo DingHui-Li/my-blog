@@ -21,4 +21,4 @@ logs
 .env.*
 !.env.example
 
-.osskey.json
+.config.json
