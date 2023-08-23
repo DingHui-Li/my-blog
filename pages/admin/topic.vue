@@ -67,13 +67,11 @@ function handleDelete(data, index) {
     type: "warning",
   }).then(() => {
     $http.delete("/api/topic/" + data._id).then((res) => {
-      if (res.deletedCount > 0) {
-        ElMessage({
-          message: "删除成功",
-          type: "success",
-        });
-        list.value.splice(index, 1);
-      }
+      ElMessage({
+        message: "删除成功",
+        type: "success",
+      });
+      getList()
     });
   });
 }

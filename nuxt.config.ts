@@ -14,9 +14,9 @@ export default defineNuxtConfig({
       'composables/*/*.{ts,js,mjs,mts}',
     ]
   },
-  experimental: {
-    renderJsonPayloads: false
-  },
+  // experimental: {
+  //   renderJsonPayloads: false
+  // },
   app: {
     pageTransition: { name: 'page', mode: 'default' },
     head: {

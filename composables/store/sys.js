@@ -4,7 +4,16 @@ import { GlobalSetting } from '../model/sys'
 
 export const useSysStore = defineStore('sys', {
     state: () => ({
-        globalSetting: new GlobalSetting()
+        globalSetting: {
+            website: {
+                name: "",
+                cover: ""
+            },
+            profile: {
+                name: 'ldh',
+                avatar: ""
+            }
+        }
     }),
     actions: {
         getData() {

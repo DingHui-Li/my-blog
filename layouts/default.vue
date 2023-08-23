@@ -177,9 +177,11 @@ $max-width: 900px;
         backdrop-filter: blur(5px);
         transform: translateX(-100%);
         transition: all .3s;
+        opacity: 0;
 
         &.show {
           transform: translateX(0);
+          opacity: 1;
         }
       }
     }

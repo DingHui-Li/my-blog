@@ -93,9 +93,11 @@ const menuList = [
         backdrop-filter: blur(5px);
         transition: all .3s;
         transform: translateX(-100%);
+        opacity: 0;
 
         &.show {
           transform: translateX(0);
+          opacity: 1;
         }
       }
     }
