@@ -3,10 +3,10 @@
   img(:src='website.cover')
 .home
   .item(:class="type" v-for="(item,index) in list" :key='item._id' :style="`animation-delay:${index%10*100}ms`")
-    comMomentItem(v-if='item.type=="moment"' :data='item')
-    comAlbumItem(v-else-if='item.type=="photo"' :data='item' 
+    comAlbumItem(v-if='type=="photo"' :data='item' 
       :showYear='index==0||item.updateYear!=list[index-1].updateYear',
       :showMonth='index==0||item.updateYear!=list[index-1].updateYear||item.updateMonth!=list[index-1].updateMonth')
+    comMomentItem(v-else-if='item.type=="moment"' :data='item')
     comArticleItem(v-else :data='item')
 </template>
 <script setup>

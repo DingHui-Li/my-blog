@@ -4,7 +4,7 @@
     .form-item
       .label 类型
       .topics
-        .topic(v-for='item in typeList' @click='form.type=item.key' :class='`${form.type==item.key&&"active"}`') {{ item.label }}
+        .topic.type(v-for='item in typeList' @click='form.type=item.key' :class='`${form.type==item.key&&"active"}`') {{ item.label }}
     .cover(@click="chooseImage" v-if='form.type=="article"')
       el-icon(size='35')
         PictureFilled
@@ -22,15 +22,18 @@
               Plus
     .title(v-if='form.type=="article"')
       el-input.input(placeholder="请输入文章标题" v-model="form.title" :maxlength='100' show-word-limit)
-    .title(v-if='form.type=="photo"')
-      el-input.input(placeholder="相册名称" v-model="form.title" :maxlength='10' show-word-limit)
     .content
       div(v-if='form.type=="article"')
         Editor( v-model="form.htmlContent" :init='editorInit' ref='editorEl')
       textarea.textarea(v-if='form.type=="moment"' v-model='form.htmlContent' placeholder="内容" maxlength='800')
     .imgs(v-if='form.type!="article"')
       .item(v-for='item in form.imgs')
-        img(:src='item')
+        .loading(v-if="!item")
+          el-icon.icon(size='25')
+            Loading
+        el-image(v-else :preview-teleported='true' :initial-index="index" style="width: 100%; height: 100%" fit='cover'  :src='item+"?x-oss-process=image/resize,m_fill,w_400"' :preview-src-list='form.imgs')
+        el-icon.clear(:size="30" v-if='item' @click.stop="form.imgs.splice(index,1)")
+          CircleCloseFilled
       .item(v-if="form.imgs.length<maxImgs")
         input.input(type='file' multiple accept="image/*" @change="onChooseImg")
         el-icon(size='20')
@@ -43,7 +46,7 @@ definePageMeta({
   middleware: ["auth"],
 });
 import $http from "@/utils/http.js";
-import { PictureFilled, Plus } from "@element-plus/icons-vue";
+import { PictureFilled, Plus, Loading, CircleCloseFilled } from "@element-plus/icons-vue";
 import Editor from "@tinymce/tinymce-vue";
 import { uploadImage } from "@/utils/upload.js";
 import { ElMessage, ElMessageBox } from "element-plus";
@@ -91,10 +94,6 @@ let typeList = [
     label: "文章",
     key: "article"
   },
-  // {
-  //   label: "相册",
-  //   key: "photo"
-  // },
 ]
 getTopicList();
 
@@ -133,9 +132,11 @@ function onInputChange(e) {
       form.value.cover = url;
     });
   }
+  e.target.value = ''
 }
 //上传图片
 async function onChooseImg(e) {
+  console.log(e)
   let folder = "photo"
   if (form.value.type == 'photo') {
     folder += `/${form.value.title}`
@@ -145,10 +146,12 @@ async function onChooseImg(e) {
       break;
     }
     const file = e.target.files[index];
-    let url = await uploadImage(file, folder)
-    console.log('url==', url)
-    form.value.imgs.push(url)
+    form.value.imgs[index] = ""
+    uploadImage(file, folder).then(url => {
+      form.value.imgs[index] = url
+    })
   }
+  e.target.value = ''
 }
 function save() {
   loading.value = true;
@@ -230,10 +233,10 @@ function save() {
     .topic {
       display: inline-block;
       width: fit-content;
-      font-size: 15px;
+      font-size: 13px;
       border-radius: 8px;
       background: #f5f5f5;
-      padding: 4px 15px;
+      padding: 6px 15px;
       margin-right: 10px;
       margin-bottom: 10px;
       color: #333;
@@ -242,14 +245,19 @@ function save() {
       cursor: pointer;
 
       &:hover {
-        border-color: orangered;
-        color: orangered;
+        border-color: var(--primary-color);
+        color: var(--primary-color);
       }
 
       &.active {
-        background: orangered;
-        border-color: orangered;
+        background: var(--primary-color);
+        border-color: var(--primary-color);
         color: #fff;
+      }
+
+      &.type {
+        padding: 8px 15px;
+        font-size: 15px;
       }
     }
   }
@@ -295,7 +303,7 @@ function save() {
 
   .imgs {
     width: 100%;
-    max-width: 300px;
+    max-width: 500px;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -314,6 +322,27 @@ function save() {
 
       &:active {
         opacity: 0.8;
+      }
+
+      .loading {
+        position: absolute;
+        z-index: 9;
+        color: var(--primary-color);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        .icon {
+          animation: loading 1s linear infinite;
+          transform-origin: center center;
+        }
+      }
+
+      .clear {
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: red;
       }
 
       .input {
@@ -341,6 +370,12 @@ function save() {
     text-align: center;
     border-top: 1px solid #eee;
     backdrop-filter: blur(5px);
+  }
+}
+
+@keyframes loading {
+  100% {
+    transform: rotate(360deg);
   }
 }
 </style>

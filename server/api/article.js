@@ -10,8 +10,11 @@ export let getArticleList = defineEventHandler(async (event) => {
     filter.topics = { $in: filter.topic };
     delete filter.topic;
   }
+  if (filter.type == 'photo') {
+    filter.type = 'moment'
+  }
   let res = await Article.find(filter)
-    .select({ htmlContent: 0, })
+    .select({ htmlContent: 0 })
     .skip((pagation.page - 1) * pagation.size)
     .limit(pagation.size)
     .sort({ updateTime: -1 })

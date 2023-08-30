@@ -1,22 +1,22 @@
 <template lang="pug">
-.year(v-if='showYear') {{ new Date(data.updateTime).getFullYear() }}年
-.moment-item
-  .month
-    span(v-if="showMonth") {{ new Date(data.updateTime).getMonth()+1 }}月
-  .right
-    .info
-      .title {{data.title}}
-        span (共{{ data.imgs.length }}张)
-      .time 更新于 {{moment(data.updateTime).fromNow()}}
-    .topics
-      TopicTag(v-for='item in data.topics' :data='item')
-    .imgs(@click="router.push('/article/'+data._id)")
-      .img(v-for='(item,index) in data.imgs.slice(0,3)' :style="getImgStyle(index)")
-        img(:src='item+"?x-oss-process=image/resize,m_fill,w_400"' :style="`filter: blur(${index * 5}px)`")
+div(v-if='data.imgs.length')
+  .year(v-if='showYear') {{ updateTime.getFullYear() }}年
+  .moment-item
+    .month
+      span(v-if="showMonth") {{ updateTime.getMonth()+1 }}月
+    .right
+      .info
+        .time {{updateTime.getDate()}}日
+      .topics
+        TopicTag(v-for='item in data.topics' :data='item')
+      .imgs(@click="router.push('/article/'+data._id)")
+        .img(v-for='(item,index) in data.imgs')
+          img(:src='item+"?x-oss-process=image/resize,m_fill,w_400"')
 </template>
 <script setup>
 import moment from "moment";
 import TopicTag from "./topicTag.vue";
+
 const router = useRouter();
 const props = defineProps({
   data: Object,
@@ -31,19 +31,14 @@ const props = defineProps({
 });
 const sys = useSysStore()
 let profile = sys.globalSetting.profile
+let updateTime = computed(() => new Date(props.data?.updateTime))
 
-function getImgStyle(index) {
-  let style = `position:${index > 0 ? 'absolute' : 'relative'};
-  top:${10 * index}px;right:${-10 * index}px;
-  z-index:${3 - index};transition-delay:${index * 50}ms`
-  return style
-}
 </script>
 <style lang='scss' scoped>
 .year {
   font-size: 20px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .moment-item {
@@ -54,7 +49,7 @@ function getImgStyle(index) {
     font-size: 20px;
     font-weight: bold;
     text-align: center;
-    width: 50px;
+    width: 90px;
   }
 
   .right {
@@ -78,33 +73,33 @@ function getImgStyle(index) {
       }
 
       .time {
-        font-size: 12px;
-        color: #999;
-        margin-top: 2px;
+        font-size: 20px;
+        color: #333;
       }
     }
 
     .imgs {
       position: relative;
       margin-top: 10px;
-      padding-bottom: 40px;
+      padding-bottom: 30px;
       cursor: pointer;
-      max-width: 250px;
 
-      &:hover {
-        .img {
-          transform: scale(1.06);
-        }
-      }
+      // &:hover {
+      //   .img {
+      //     transform: scale(1.06);
+      //   }
+      // }
 
       .img {
         top: 0;
-        max-width: 250px;
+        max-width: 150px;
         aspect-ratio: 1;
-        border-radius: 8px;
+        // border-radius: 8px;
         overflow: hidden;
         transition: all .3s;
         transform-origin: 0 0;
+        display: inline-block;
+        margin-right: 1px;
 
         img {
           width: 100%;

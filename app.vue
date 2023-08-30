@@ -38,7 +38,7 @@ let layout = computed(() => {
 @font-face {
   font-family: 'HarmonyOS_Sans_SC_Regular';
   font-weight: normal;
-  src: url('./public/HarmonyOS_Sans_SC_Regular.woff2') format('truetype');
+  src: url('/HarmonyOS_Sans_SC_Regular.woff2') format('truetype');
 }
 
 * {

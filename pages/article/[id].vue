@@ -1,8 +1,8 @@
 <template lang="pug">
 .article
   .content
-    comPhotoAlbum(v-if='detail.type=="photo"' :data='detail')
-    comContent(v-else :data='detail')
+    comContent(v-if='detail.type=="article"' :data='detail')
+    comPhotoAlbum(v-else :data='detail')
 </template>
 
 <script setup>
