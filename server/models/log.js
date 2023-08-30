@@ -3,7 +3,6 @@ const Schema = mongoose.Schema;
 
 const sysSchema = new Schema({
     ip: String,
-    platform: String,
     ua: String,
     url: String,
     time: {

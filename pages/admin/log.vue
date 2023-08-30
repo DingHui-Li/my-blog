@@ -1,12 +1,12 @@
 <template lang="pug">
 .log-page
-    .title 请求日志
+    .title 访问日志
     .list
         .item(v-for='item in list')
-            div {{ item.id }}
-            div {{ item.platform }}
-            div {{ item.url }}
-            div {{ moment(item.time).fromNow() }}
+            .ip {{ item.ip }}
+            .url {{ item.url }}
+            .time {{ moment(item.time).fromNow() }}
+            .ua {{ item.ua }}
 </template>
 <script setup>
 import $http from "@/utils/http.js";
@@ -35,17 +35,36 @@ onBeforeUnmount(() => {
         background-color: #333;
         padding: 15px;
         padding-bottom: 1px;
-        border-radius: 5px;
+        border-radius: 10px;
         margin-top: 15px;
 
         .item {
             display: flex;
             color: #fff;
             font-size: 12px;
-            margin-bottom: 15px;
+            margin-bottom: 30px;
 
             div {
+                min-width: 40px;
                 margin-right: 10px;
+            }
+
+            .ip {
+                width: 120px;
+            }
+
+            .url {
+                width: 70px;
+            }
+
+            .time {
+                white-space: nowrap;
+                width: 70px;
+            }
+
+            .ua {
+                flex: 1;
+                overflow: hidden;
             }
         }
     }
