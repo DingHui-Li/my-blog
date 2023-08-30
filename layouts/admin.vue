@@ -31,6 +31,10 @@ const menuList = [
     title: "全局配置",
     path: "/admin/setting",
   },
+  {
+    title: "Log",
+    path: "/admin/log",
+  },
 ];
 </script>
 <style lang="scss" scoped>
