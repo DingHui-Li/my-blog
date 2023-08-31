@@ -5,7 +5,8 @@
         .item(v-for='item in list')
             .ip {{ item.ip }}
             .url {{ item.url }}
-            .time {{ moment(item.time).fromNow() }}
+            .time {{ moment(item.time).calendar() }}
+                div {{ moment(item.time).format('YYYY-MM-DD HH:mm:ss') }}
             .ua {{ item.ua }}
 </template>
 <script setup>
@@ -20,7 +21,7 @@ let timer = setInterval(() => {
 }, 5000);
 
 function getList() {
-    $http.get('/api/log').then(res => {
+    $http.get('/api/log', { size: 100 }).then(res => {
         console.log(res)
         list.value = res?.data?.list
     })
@@ -54,12 +55,13 @@ onBeforeUnmount(() => {
             }
 
             .url {
-                width: 70px;
+                width: 100px;
+                word-break: break-all;
             }
 
             .time {
                 white-space: nowrap;
-                width: 70px;
+                width: 140px;
             }
 
             .ua {
