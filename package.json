@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "HOST=0.0.0.0 nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
@@ -14,7 +14,7 @@
     "@types/node": "^18",
     "element-plus": "^2.3.6",
     "node-sass": "^8.0.0",
-    "nuxt": "^3.5.2",
+    "nuxt": "^3.7.0",
     "pug": "^3.0.2",
     "pug-plain-loader": "^1.1.0",
     "sass": "^1.63.2",
@@ -34,6 +34,7 @@
     "mongodb": "^5.6.0",
     "mongoose": "^7.2.3",
     "pinia": "^2.1.6",
+    "request": "^2.88.2",
     "swiper": "^9.3.2",
     "tesseract.js": "^4.1.1",
     "tinymce": "^6.5.0"

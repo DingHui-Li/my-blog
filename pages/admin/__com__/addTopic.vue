@@ -62,9 +62,9 @@ function saveTopic() {
   addFormDialog.value.loading = true;
   let req;
   if (addFormDialog.value.form._id) {
-    req = $http.put("/api/topic", addFormDialog.value.form);
+    req = $http.put("/api/admin/topic", addFormDialog.value.form);
   } else {
-    req = $http.post("/api/topic", addFormDialog.value.form);
+    req = $http.post("/api/admin/topic", addFormDialog.value.form);
   }
   req
     .then((res) => {

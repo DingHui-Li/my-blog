@@ -4,7 +4,6 @@
 export default defineNuxtConfig({
   devtools: { enabled: false },
   modules: ["@element-plus/nuxt", '@pinia/nuxt',],
-  ssr: true,
   routeRules: {
     "/admin/*": { ssr: false },
     "/inappwebview/*": { ssr: false },

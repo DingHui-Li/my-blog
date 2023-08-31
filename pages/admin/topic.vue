@@ -66,7 +66,7 @@ function handleDelete(data, index) {
     cancelButtonText: "取消",
     type: "warning",
   }).then(() => {
-    $http.delete("/api/topic/" + data._id).then((res) => {
+    $http.delete("/api/admin/topic/" + data._id).then((res) => {
       ElMessage({
         message: "删除成功",
         type: "success",

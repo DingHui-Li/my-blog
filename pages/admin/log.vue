@@ -4,6 +4,7 @@
     .list
         .item(v-for='item in list')
             .ip {{ item.ip }}
+                div {{ item.location }}
             .url {{ item.url }}
             .time {{ moment(item.time).calendar() }}
                 div {{ moment(item.time).format('YYYY-MM-DD HH:mm:ss') }}
@@ -22,7 +23,6 @@ let timer = setInterval(() => {
 
 function getList() {
     $http.get('/api/log', { size: 100 }).then(res => {
-        console.log(res)
         list.value = res?.data?.list
     })
 }

@@ -168,9 +168,9 @@ function save() {
   };
   let req;
   if (form.value._id) {
-    req = $http.put("/api/article", payload);
+    req = $http.put("/api/admin/article", payload);
   } else {
-    req = $http.post("/api/article", payload);
+    req = $http.post("/api/admin/article", payload);
   }
   req
     .then((res) => {

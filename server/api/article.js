@@ -1,6 +1,7 @@
 import BaseResponse from "../base/baseResponse";
 import parseQuery from "../utils/parseQuery";
 import Article from "../models/article";
+import { createRouter, defineEventHandler, useBase } from 'h3';
 
 //查询列表
 export let getArticleList = defineEventHandler(async (event) => {
@@ -117,3 +118,13 @@ function validContent(body) {
   }
   return true
 }
+
+const router = createRouter();
+router.get("/article", getArticleList);
+router.get("/article/:id", getArticle);
+router.get("/article/:id/same", getSameArticleList);
+router.get("/article/search", searchArticleList);
+router.post("/admin/article", addArticle);
+router.put("/admin/article", editArticle);
+router.delete("/admin/article/:id", deleteArticle);
+export default useBase('/', router.handler);

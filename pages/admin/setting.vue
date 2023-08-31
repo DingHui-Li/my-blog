@@ -59,7 +59,7 @@ function onChooseImg(e, type) {
 }
 
 function handleSave() {
-  $http.post('/api/sys/setting', { ...toRaw(form.value) }).then((res) => {
+  $http.post('/api/admin/sys/setting', { ...toRaw(form.value) }).then((res) => {
     ElMessage({
       message: "操作成功",
       type: "success",

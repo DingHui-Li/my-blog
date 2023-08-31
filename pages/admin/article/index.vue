@@ -94,7 +94,7 @@ function handleDelete(e) {
       type: 'warning',
     }
   ).then(() => {
-    $http.delete(`/api/article/${e._id}`).then(() => {
+    $http.delete(`/api/admin/article/${e._id}`).then(() => {
       ElMessage({
         type: 'success',
         message: '删除成功',

@@ -5,6 +5,7 @@ const sysSchema = new Schema({
     ip: String,
     ua: String,
     url: String,
+    location: String,
     time: {
         type: Number,
         default: Date.now,
