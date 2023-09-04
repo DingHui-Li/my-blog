@@ -1,20 +1,13 @@
 import Log from "../models/log";
-import request from 'request'
+import { getLocationByIp } from '../utils/location'
 
 export async function push({ ip = 'unknow', ua, url }) {
     return new Promise(async resolve => {
         if (!ip || ip == 'unknow') {
             return resolve(await Log.create({ ip, ua, url }))
         }
-        request(`https://opendata.baidu.com/api.php?query=${ip}&co=&resource_id=6006&oe=utf8`,
-            async (err, res, body) => {
-                let data = {}
-                try {
-                    data = JSON.parse(body)
-                    data = data.data[0]
-                } catch (err) { }
-                resolve(await Log.create({ ip, ua, url, location: data.location }))
-            })
+        let location = await getLocationByIp(ip)
+        resolve(await Log.create({ ip, ua, url, location }))
     })
 }
 

@@ -23,6 +23,7 @@ const articleSchema = new Schema({
   htmlContent: String,
   textContent: String,
   desc: String,
+  location: String,
   imgs: {
     type: Array,
     default: []

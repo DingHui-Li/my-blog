@@ -9,7 +9,7 @@
   .imgs
     .item(v-for="(item,index) in data.imgs")
       .img
-        el-image(ref='imgsEl' :preview-teleported='true' loading="lazy" :initial-index="index" style="width: 100%; height: 100%" fit='cover'  :src='item+"?x-oss-process=image/resize,m_fill,w_1000"' :preview-src-list='data.imgs')
+        el-image(ref='imgsEl' :preview-teleported='true' loading="lazy" :initial-index="index" style="width: 100%; height: auto" :src='item+"?x-oss-process=image/resize,m_fill,w_1000"' :preview-src-list='data.imgs')
         .info(v-if='exifList[index]')
           .text.left {{exifList[index].Make}} {{exifList[index].Model }}
             .date {{ moment(exifList[index].CreateDate).format('YYYY/MM/DD HH:mm') }}

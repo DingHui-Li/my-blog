@@ -1,6 +1,7 @@
 import BaseResponse from "../base/baseResponse";
 import parseQuery from "../utils/parseQuery";
 import Article from "../models/article";
+import { getLocationByIp } from "../utils/location";
 
 //查询列表
 export let getArticleList = defineEventHandler(async (event) => {
@@ -68,6 +69,11 @@ export let searchArticleList = defineEventHandler(async (event) => {
 
 //添加
 export let addArticle = defineEventHandler(async (event) => {
+  const headers = event.node.req.headers
+  let ip = headers['remote-host']
+    || headers['x-real-ip']
+    || event.node.req.message?.socket?.remoteAddress
+  let location = await getLocationByIp(ip)
   const body = await readBody(event);
   let validRes = validContent(body)
   if (validRes !== true) {
@@ -75,6 +81,7 @@ export let addArticle = defineEventHandler(async (event) => {
   }
   let res = await Article.create({
     ...body,
+    location,
     desc: body.textContent?.slice(0, 50),
   });
   return new BaseResponse({ data: res });

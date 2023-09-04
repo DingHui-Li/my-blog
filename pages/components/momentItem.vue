@@ -12,10 +12,16 @@
     .imgs
       .img(v-for='(item,index) in data.imgs' :style="`width:${data.imgs.length==1?100:data.imgs.length==2?50:33.33}%`")
         el-image(:preview-teleported='true' :initial-index="index" style="width: 100%; height: 100%" fit='cover'  :src='item+"?x-oss-process=image/resize,m_fill,w_400"' :preview-src-list='data.imgs')
+    .location(v-if="data.location")
+      el-icon.icon
+        LocationFilled
+      span {{data.location}}
 </template>
 <script setup>
 import moment from "moment";
 import TopicTag from "./topicTag.vue";
+import { LocationFilled } from '@element-plus/icons-vue'
+
 const router = useRouter();
 const props = defineProps({
   data: Object,
@@ -47,6 +53,7 @@ let profile = sys.globalSetting.profile
     overflow: hidden;
 
     .user-info {
+      margin-bottom: 5px;
 
       .name {
         font-size: 17px;
@@ -61,8 +68,11 @@ let profile = sys.globalSetting.profile
       }
     }
 
+    .topics {
+      margin-bottom: 5px;
+    }
+
     .content {
-      margin-top: 5px;
       font-size: 16px;
       color: #333;
       word-break: break-all;
@@ -70,7 +80,7 @@ let profile = sys.globalSetting.profile
 
     .imgs {
       max-width: 360px;
-      margin-top: 5px;
+      margin-bottom: 5px;
 
       .img {
         display: inline-block;
@@ -83,6 +93,18 @@ let profile = sys.globalSetting.profile
         &:deep(.el-image) {
           border-radius: 8px;
         }
+      }
+    }
+
+    .location {
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      color: #303F9F;
+
+      .icon {
+        margin-top: -1px;
+        font-size: 16px;
       }
     }
   }
