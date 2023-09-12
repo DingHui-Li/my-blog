@@ -11,7 +11,7 @@ export function getLocationByIp(ip) {
                 } catch (err) {
                     return reject(err)
                 }
-                resolve(data.location)
+                resolve(data?.location||"")
             })
     })
 }

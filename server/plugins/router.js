@@ -24,7 +24,7 @@ const router = createRouter();
 
 router.get("/api/topic", getTopicList);
 router.get("/api/topic/:id", getTopic);
-router.post("/api/topic", addTopic);
+router.post("/api/admin/topic", addTopic);
 router.put("/api/admin/topic", editTopic);
 router.delete("/api/admin/topic/:id", deleteTopic);
 
