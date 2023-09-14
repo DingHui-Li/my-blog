@@ -32,7 +32,7 @@ function handleClick() {
   cursor: pointer;
   color: #3f51b5;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 14px;
 
   &:hover {
     opacity: 0.8;

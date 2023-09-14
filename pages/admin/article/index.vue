@@ -15,7 +15,7 @@
     el-table-column(v-for="col in cols"  :prop='col.key' :label='col.label')
       template(#default="{row}")
         span(v-if="col.key=='createTime'") {{ moment(row.createTime).format('YYYY-MM-DD HH:mm') }}
-        span(v-if="col.key=='updateTime'") {{ moment(row.updateTime).format('YYYY-MM-DD HH:mm') }}
+        span(v-else-if="col.key=='updateTime'") {{ moment(row.updateTime).format('YYYY-MM-DD HH:mm') }}
         span(v-else-if="col.key=='type'")
           el-tag(:type="row.type=='moment'?'success':''") {{ row.type }}
         span(v-else-if="col.key=='title'") 
@@ -52,10 +52,10 @@ class Filter {
   content = null;
 }
 const cols = [
-  {
-    label: "ID",
-    key: "_id",
-  },
+  // {
+  //   label: "ID",
+  //   key: "_id",
+  // },
   {
     label: "标题",
     key: "title",

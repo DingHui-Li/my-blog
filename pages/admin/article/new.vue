@@ -27,7 +27,7 @@
         Editor( v-model="form.htmlContent" :init='editorInit' ref='editorEl')
       textarea.textarea(v-if='form.type=="moment"' v-model='form.htmlContent' placeholder="内容" maxlength='800')
     .imgs(v-if='form.type!="article"')
-      .item(v-for='item in form.imgs')
+      .item(v-for='(item,index) in form.imgs')
         .loading(v-if="!item")
           el-icon.icon(size='25')
             Loading

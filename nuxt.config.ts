@@ -17,7 +17,7 @@ export default defineNuxtConfig({
   //   renderJsonPayloads: false
   // },
   app: {
-    pageTransition: { name: 'page', mode: 'default' },
+    // pageTransition: { name: 'page', mode: 'default' },
     head: {
       script: [
         {

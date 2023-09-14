@@ -92,6 +92,7 @@ let updateTime = computed(() => new Date(props.data?.updateTime))
 
       .img {
         top: 0;
+        width: calc(50% - 1px);
         max-width: 150px;
         aspect-ratio: 1;
         // border-radius: 8px;

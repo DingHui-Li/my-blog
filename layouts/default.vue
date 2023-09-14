@@ -77,7 +77,7 @@ $max-width: 900px;
         overflow: hidden;
         padding: 7px 10px;
         border-radius: 30px;
-        background: orangered;
+        background: var(--primary-color);
         display: flex;
         align-items: center;
         cursor: pointer;
@@ -148,7 +148,7 @@ $max-width: 900px;
   }
 }
 
-@media screen and (max-width:1080px) {
+@media screen and (max-width:750px) {
   .layout {
     .topbar-container {
       .topbar {
@@ -157,6 +157,7 @@ $max-width: 900px;
 
         .menu {
           display: block !important;
+          padding: 10px;
         }
 
         .host {
@@ -173,11 +174,13 @@ $max-width: 900px;
       .side {
         position: fixed;
         height: calc(100vh - 50px);
-        background: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(5px);
+        width: 50vw;
+        background: rgba(255, 255, 255, 1);
+        // backdrop-filter: blur(5px);
         transform: translateX(-100%);
         transition: all .3s;
         opacity: 0;
+        box-shadow: 0 10px 10px 5px rgba(0, 0, 0, 0.1);
 
         &.show {
           transform: translateX(0);

@@ -20,13 +20,11 @@ let website = sys.globalSetting.website
 const route = useRoute()
 let type = ref(route.hash?.replace('#', ''))
 let list = ref([]);
-getArticleList();
-watch(route, v => {
-  if (v.name == 'index') {
-    type.value = v.hash?.replace('#', '')
-    getArticleList()
-  }
-})
+
+watch(() => route.hash, v => {
+  type.value = v?.replace('#', '')
+  getArticleList()
+}, { immediate: true })
 
 function getArticleList(page = 1) {
   if (page == 1) {

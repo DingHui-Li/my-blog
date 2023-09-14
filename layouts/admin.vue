@@ -81,11 +81,12 @@ const menuList = [
   }
 }
 
-@media screen and (max-width:1080px) {
+@media screen and (max-width:750px) {
   .layout {
     .topbar-container {
       .menu {
         display: block;
+        padding: 10px;
       }
     }
 
@@ -93,11 +94,12 @@ const menuList = [
       .sidebar {
         position: fixed;
         z-index: 9;
-        background: #ffffff90;
-        backdrop-filter: blur(5px);
+        background: #ffffff;
         transition: all .3s;
         transform: translateX(-100%);
         opacity: 0;
+        box-shadow: 0 10px 10px 5px rgba(0, 0, 0, 0.1);
+        border: none;
 
         &.show {
           transform: translateX(0);

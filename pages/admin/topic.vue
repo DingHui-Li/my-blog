@@ -28,10 +28,10 @@ import comAddTopic from './__com__/addTopic'
 let addDialogEl = ref()
 
 const cols = [
-  {
-    label: "ID",
-    key: "_id",
-  },
+  // {
+  //   label: "ID",
+  //   key: "_id",
+  // },
   {
     label: "主题",
     key: "name",
