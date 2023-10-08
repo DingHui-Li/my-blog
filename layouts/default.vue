@@ -173,6 +173,7 @@ $max-width: 900px;
     .content-container {
       .side {
         position: fixed;
+        z-index: 99;
         height: calc(100vh - 50px);
         width: 50vw;
         background: rgba(255, 255, 255, 1);

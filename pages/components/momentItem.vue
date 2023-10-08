@@ -5,12 +5,12 @@
   .right
     .user-info
       .name {{profile?.name}}
-      .time {{moment(data.updateTime).fromNow()}}
+      .time {{moment(data.createTime).format('LLLL')}}
     .content {{data.textContent}}
     .topics
       TopicTag(v-for='item in data.topics' :data='item')
     .imgs
-      .img(v-for='(item,index) in data.imgs' :style="`width:${data.imgs.length==1?100:data.imgs.length==2?50:33.33}%`")
+      .img(:class=`data.imgs.length==1&&'single'` v-for='(item,index) in data.imgs' :style="`width:${data.imgs.length==1?100:data.imgs.length==2?50:33.33}%;`")
         el-image(:preview-teleported='true' :initial-index="index" style="width: 100%; height: 100%" fit='cover'  :src='item+"?x-oss-process=image/resize,m_fill,w_400"' :preview-src-list='data.imgs')
     .location(v-if="data.location")
       el-icon.icon
@@ -90,8 +90,13 @@ let profile = sys.globalSetting.profile
         padding-right: 5px;
         box-sizing: border-box;
 
+        &.single {
+          width: 100%;
+          height: fit-content;
+        }
+
         &:deep(.el-image) {
-          border-radius: 8px;
+          // border-radius: 8px;
         }
       }
     }

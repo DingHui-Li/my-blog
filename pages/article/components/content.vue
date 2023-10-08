@@ -49,7 +49,7 @@ function addContentImgEvent() {
 $topbar-height: 50px;
 
 .content-container {
-  background: #f9f9f9;
+  background: #fff;
   height: 100%;
 
   .cover {
@@ -69,10 +69,10 @@ $topbar-height: 50px;
     position: sticky;
     z-index: 9;
     top: -60px;
-    padding: 30px;
+    padding: 15px;
     padding-bottom: 5px;
     border-radius: 20px 20px 0 0;
-    background-color: #f9f9f9;
+    background-color: #fff;
 
     .subtitle {
       display: flex;
@@ -96,15 +96,21 @@ $topbar-height: 50px;
   .container {
     position: relative;
     z-index: 1;
-    padding: 30px;
     // padding-top: 0;
-    background: #f9f9f9;
+    background: #fff;
     min-height: 500px;
     overflow: hidden;
 
     .content {
       // margin-top: 15px;
       padding: 0 15px;
+
+      &:deep(.code-block) {
+        line-height: 10px !important;
+      }
+      &:deep(.content-img){
+        height: auto;
+      }
     }
   }
 }

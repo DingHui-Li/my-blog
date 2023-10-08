@@ -40,18 +40,20 @@ const menuList = [
 <style lang="scss" scoped>
 .layout {
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   background: #dee0ed;
+  display: flex;
+  flex-direction: column;
 
   .topbar-container {
-    position: sticky;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
     top: 0;
     z-index: 9;
     background: #ffffff90;
-    backdrop-filter: blur(5px);
     height: 50px;
 
     .menu {
@@ -61,22 +63,22 @@ const menuList = [
   }
 
   .content-container {
+    height: 100%;
+    overflow: hidden;
+    flex: 1;
     display: flex;
 
     .sidebar {
-      position: sticky;
-      top: 50px;
       width: 200px;
-      height: 90vh;
+      height: 100%;
       background: #fff;
       border-right: 2px solid #eee;
     }
 
     .content {
       flex: 1;
-      overflow: hidden;
-      padding: 15px;
-      background: #fff;
+      height: 100%;
+      overflow: auto;
     }
   }
 }
@@ -93,7 +95,7 @@ const menuList = [
     .content-container {
       .sidebar {
         position: fixed;
-        z-index: 9;
+        z-index: 99;
         background: #ffffff;
         transition: all .3s;
         transform: translateX(-100%);

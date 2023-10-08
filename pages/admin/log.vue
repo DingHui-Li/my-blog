@@ -32,6 +32,9 @@ onBeforeUnmount(() => {
 </script>
 <style lang='scss' scoped>
 .log-page {
+    padding: 15px;
+    background-color: #fff;
+
     .list {
         background-color: #333;
         padding: 15px;

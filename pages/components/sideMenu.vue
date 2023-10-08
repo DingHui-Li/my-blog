@@ -28,6 +28,11 @@ const menuList = [
     label: "相册",
     key: "photo"
   },
+  {
+    label: "访客",
+    path: "visitor",
+    key: "visitor"
+  },
 ]
 
 let activeIndex = computed(() => {
@@ -36,7 +41,11 @@ let activeIndex = computed(() => {
 
 function handleClick(item) {
   eimts('update:modelValue', item.key)
-  router.replace('/#' + item.key)
+  if (item.path) {
+    router.push('/' + item.path)
+  } else {
+    router.replace('/#' + item.key)
+  }
 }
 </script>
 <style lang='scss' scoped>

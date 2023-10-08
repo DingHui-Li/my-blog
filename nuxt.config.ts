@@ -6,6 +6,7 @@ export default defineNuxtConfig({
   modules: ["@element-plus/nuxt", '@pinia/nuxt',],
   routeRules: {
     "/admin/*": { ssr: false },
+    "/visitor": { ssr: false },
     "/inappwebview/*": { ssr: false },
   },
   imports: {

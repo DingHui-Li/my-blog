@@ -1,15 +1,17 @@
 <template lang="pug">
-.new-article
+.new-article(@scroll="onScroll")
+  .actions
+    el-button.btn.confirm(type='primary' @click="save" :loading='loading') {{form._id?'保存':'发布'}}
   .container
     .form-item
       .label 类型
       .topics
         .topic.type(v-for='item in typeList' @click='form.type=item.key' :class='`${form.type==item.key&&"active"}`') {{ item.label }}
     .cover(@click="chooseImage" v-if='form.type=="article"')
-      el-icon(size='35')
+      el-icon(size='35' v-if='!form.cover')
         PictureFilled
       img( v-if='form.cover' :src='form.cover')
-      input(type='file' ref="inputEl" accept="image/*" @change="onInputChange" style="display:none")
+      input(type='file' accept="image/*" @change="onInputChange" style="position:absolute;width:100%;height:100%;opacity:0")
     .form-item
       .label 标签
       .topics
@@ -24,7 +26,7 @@
       el-input.input(placeholder="请输入文章标题" v-model="form.title" :maxlength='100' show-word-limit)
     .content
       div(v-if='form.type=="article"')
-        Editor( v-model="form.htmlContent" :init='editorInit' ref='editorEl')
+        comRichEditor(ref="richEditorEl" v-model="form.htmlContent")
       textarea.textarea(v-if='form.type=="moment"' v-model='form.htmlContent' placeholder="内容" maxlength='800')
     .imgs(v-if='form.type!="article"')
       .item(v-for='(item,index) in form.imgs')
@@ -38,8 +40,6 @@
         input.input(type='file' multiple accept="image/*" @change="onChooseImg")
         el-icon(size='20')
           PictureFilled
-  .actions
-    el-button(type='primary' @click="save" :loading='loading') {{form._id?'保存':'发布'}}
 </template>
 <script setup>
 definePageMeta({
@@ -47,10 +47,10 @@ definePageMeta({
 });
 import $http from "@/utils/http.js";
 import { PictureFilled, Plus, Loading, CircleCloseFilled } from "@element-plus/icons-vue";
-import Editor from "@tinymce/tinymce-vue";
 import { uploadImage } from "@/utils/upload.js";
 import { ElMessage, ElMessageBox } from "element-plus";
 import comAddTopic from '../__com__/addTopic'
+import comRichEditor from './components/richEditor'
 
 const route = useRoute();
 const router = useRouter();
@@ -61,6 +61,7 @@ if (route.query.id) {
   });
 }
 
+let richEditorEl = ref(null)
 let loading = ref(false);
 let form = ref({
   cover: "",
@@ -71,19 +72,7 @@ let form = ref({
   type: "moment",
   imgs: []
 });
-let editorInit = ref({
-  language_url: "/zh-Hans.js",
-  language: "zh-Hans",
-  height: 1000,
-  paste_data_images: true,
-  plugins: "image link code table lists wordcount",
-  toolbar:
-    "fontselect fontsizeselect link lineheight forecolor backcolor bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | image quicklink h1 h2 h3 blockquote table numlist bullist preview fullscreen",
-  images_upload_handler: (blobInfo) => uploadImage(blobInfo.blob(), "article"),
-});
 
-let editorEl = ref();
-let inputEl = ref();
 let topics = ref([]);
 let typeList = [
   {
@@ -121,10 +110,6 @@ function handleTopicClick(topic) {
     form.value.topics.push(topic);
   }
 }
-//选择封面
-function chooseImage() {
-  inputEl.value.click();
-}
 function onInputChange(e) {
   let files = e.target.files;
   if (files.length) {
@@ -157,7 +142,7 @@ function save() {
   loading.value = true;
   let pureContentText;
   if (form.value.type == 'article') {
-    pureContentText = editorEl.value.getEditor().getContent({ format: "text" })
+    pureContentText = richEditorEl.value.getPureText()
   } else {
     pureContentText = form.value.htmlContent
   }
@@ -188,13 +173,19 @@ function save() {
       loading.value = false;
     });
 }
+
+function onScroll(e) {
+  console.log(e)
+}
 </script>
 <style lang="scss" scoped>
 .new-article {
+  height: 100%;
+  overflow: auto;
+
   .container {
     padding: 15px;
     border-radius: 5px;
-    margin-bottom: 100px;
     background: #fff;
   }
 
@@ -362,14 +353,18 @@ function save() {
   }
 
   .actions {
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.8);
+    position: sticky;
+    z-index: 99;
+    top: 0;
+    background: rgba(255, 255, 255);
     padding: 15px;
-    text-align: center;
-    border-top: 1px solid #eee;
-    backdrop-filter: blur(5px);
+    text-align: right;
+    border-bottom: 1px solid #eee;
+
+    .btn {
+
+      &.confirm {}
+    }
   }
 }
 

@@ -78,6 +78,9 @@ function handleDelete(data, index) {
 </script>
 <style lang="scss" scoped>
 .topic-list-page {
+  padding: 15px;
+  background-color: #fff;
+
   .actions {
     margin-bottom: 15px;
     text-align: right;

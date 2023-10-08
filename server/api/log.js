@@ -8,3 +8,8 @@ export let get = defineEventHandler(async (event) => {
     let res = await LogService.get(pagation);
     return new BaseResponse({ data: { list: res, ...pagation } });
 });
+
+export let st = defineEventHandler(async (event) => {
+    let res = await LogService.st();
+    return new BaseResponse({ data: res });
+});

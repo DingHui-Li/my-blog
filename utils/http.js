@@ -25,6 +25,9 @@ class Http {
       if (responseData.code == 0) {
         return responseData;
       } else {
+        if (responseData instanceof Blob) {
+          return responseData
+        }
         if (responseData.code >= 2000 && responseData.code < 2010) {
           ElMessage.error(responseData?.msg);
         }

@@ -1,12 +1,12 @@
 <template lang="pug">
 div(v-if='data.imgs.length')
-  .year(v-if='showYear') {{ updateTime.getFullYear() }}年
+  .year(v-if='showYear') {{ createTime.getFullYear() }}年
   .moment-item
     .month
-      span(v-if="showMonth") {{ updateTime.getMonth()+1 }}月
+      span(v-if="showMonth") {{ createTime.getMonth()+1 }}月
     .right
       .info
-        .time {{updateTime.getDate()}}日
+        .time {{createTime.getDate()}}日
       .topics
         TopicTag(v-for='item in data.topics' :data='item')
       .imgs(@click="router.push('/article/'+data._id)")
@@ -31,7 +31,7 @@ const props = defineProps({
 });
 const sys = useSysStore()
 let profile = sys.globalSetting.profile
-let updateTime = computed(() => new Date(props.data?.updateTime))
+let createTime = computed(() => new Date(props.data?.createTime))
 
 </script>
 <style lang='scss' scoped>

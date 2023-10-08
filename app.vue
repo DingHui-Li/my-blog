@@ -44,4 +44,10 @@ let layout = computed(() => {
 * {
   font-family: HarmonyOS_Sans_SC_Regular !important;
 }
+
+.tox-tinymce-aux {
+  .tox-notifications-container{
+    display: none; 
+  }
+}
 </style>

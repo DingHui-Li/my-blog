@@ -18,7 +18,7 @@ export let getArticleList = defineEventHandler(async (event) => {
     .select({ htmlContent: 0 })
     .skip((pagation.page - 1) * pagation.size)
     .limit(pagation.size)
-    .sort({ updateTime: -1 })
+    .sort({ createTime: -1 })
     .populate("topics");
   let total = await Article.find(filter).count();
   return new BaseResponse({

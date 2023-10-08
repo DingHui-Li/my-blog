@@ -73,6 +73,9 @@ function handleSave() {
 </script>
 <style lang='scss' scoped>
 .setting-page {
+  padding: 15px;
+  background-color: #fff;
+
   .title {
     font-size: 15px;
     font-weight: bold;
