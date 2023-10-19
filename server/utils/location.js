@@ -11,7 +11,7 @@ export function getLocationByIp(ip) {
                     data = data.data[0]
                     location = data.location.split(' ')[0]
                 } catch (err) {
-                    return reject(err)
+                    return resolve(location)
                 }
                 resolve(location)
             })

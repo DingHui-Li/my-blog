@@ -71,8 +71,8 @@ export let searchArticleList = defineEventHandler(async (event) => {
 export let addArticle = defineEventHandler(async (event) => {
   const headers = event.node.req.headers
   let ip = headers['remote-host']
+    || headers['x-client-source-ip']
     || headers['x-real-ip']
-    || event.node.req.message?.socket?.remoteAddress
   let location = await getLocationByIp(ip)
   const body = await readBody(event);
   let validRes = validContent(body)
