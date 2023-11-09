@@ -64,7 +64,7 @@ function handleInsertCode() {
 
     .btn {
         position: absolute;
-        z-index: 9;
+        z-index: 99;
         right: 15px;
         top: 10px;
         background-color: #8BC34A;
@@ -73,6 +73,7 @@ function handleInsertCode() {
 
     &:deep(.tox-tinymce) {
         overflow: visible;
+
         .tox-editor-container {
             overflow: visible;
 

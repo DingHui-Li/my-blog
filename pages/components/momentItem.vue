@@ -76,6 +76,7 @@ let profile = sys.globalSetting.profile
       font-size: 16px;
       color: #333;
       word-break: break-all;
+      white-space: pre-wrap;
     }
 
     .imgs {
@@ -106,6 +107,7 @@ let profile = sys.globalSetting.profile
       align-items: center;
       font-size: 13px;
       color: #303F9F;
+      margin-top: 10px;
 
       .icon {
         margin-top: -1px;
