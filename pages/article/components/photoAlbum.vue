@@ -9,10 +9,10 @@
   .imgs
     .item(v-for="(item,index) in data.imgs")
       .img
-        el-image(ref='imgsEl' :preview-teleported='true' loading="lazy" :initial-index="index" style="width: 100%; height: auto" :src='item+"?x-oss-process=image/resize,m_fill,w_1000"' :preview-src-list='data.imgs')
+        Vimg(:preview-teleported='true' :src='item' :thumb='item+"?x-oss-process=image/resize,m_fill,w_1000"')
         .info(v-if='exifList[index]')
-          .text.left {{exifList[index].Make}} {{exifList[index].Model }}
-            .date {{ moment(exifList[index].CreateDate).format('YYYY/MM/DD HH:mm') }}
+          .text.left {{exifList[index].Make||""}} {{exifList[index].Model||"" }}
+            .date {{ moment(exifList[index].CreateDate||"").format('YYYY/MM/DD HH:mm') }}
           .text.right 
             .shot {{ getShotInfo(exifList[index]) }}
 </template>
@@ -25,7 +25,6 @@ const props = defineProps({
   data: Object,
 });
 console.log(props.data)
-let imgsEl = ref()
 let exifList = ref([])
 watch(() => props.data, () => {
   props.data.imgs?.forEach((item, index) => {
@@ -36,6 +35,9 @@ watch(() => props.data, () => {
 })
 
 function getShotInfo(info) {
+  if (!info.FocalLengthIn35mmFormat) {
+    return ''
+  }
   return `${info.FocalLengthIn35mmFormat}mm  f/${info.FNumber}  ${info.ExposureTime?.toFixed(2)}s  ISO${info.ISO}`
 }
 </script>
@@ -76,7 +78,7 @@ function getShotInfo(info) {
       .img {
         width: 100%;
         max-width: 600px;
-        height: auto;
+        height: fit-content;
         margin: 0 auto;
 
         .info {

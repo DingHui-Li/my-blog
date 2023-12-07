@@ -10,8 +10,7 @@
     .topics
       TopicTag(v-for='item in data.topics' :data='item')
     .imgs
-      .img(:class=`data.imgs.length==1&&'single'` v-for='(item,index) in data.imgs' :style="`width:${data.imgs.length==1?100:data.imgs.length==2?50:33.33}%;`")
-        el-image(:preview-teleported='true' :initial-index="index" style="width: 100%; height: 100%" fit='cover'  :src='item+"?x-oss-process=image/resize,m_fill,w_400"' :preview-src-list='data.imgs')
+      Vimg.img(:class=`data.imgs.length==1&&'single'` v-for='(item,index) in data.imgs' :style="`width:${data.imgs.length==1?100:data.imgs.length==2?50:33.33}%;`" :src='item' :thumb='item+"?x-oss-process=image/resize,m_fill,w_400"')
     .location(v-if="data.location")
       el-icon.icon
         LocationFilled
