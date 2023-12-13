@@ -1,17 +1,21 @@
 <template lang="pug">
-.earth-container(@mousemove="onMouseMove" 
+.earth-container(
+@mousemove="onMouseMove" 
 @mousedown="onMouseDown" 
-@mouseup="mouseHold = false"
-@mouseleave="mouseHold = false")
+@mouseup="onMouseUp"
+@mouseenter="onMouseEnter"
+@mouseleave="onMouseLeave")
     .earth(ref="earthBoxEl")
 </template>
 <script setup>
 import * as THREE from 'three';
 import { DEG2RAD, getImageData, visibilityForCoordinate, polarToCartesian } from './util'
+import $http from "@/utils/http.js";
 
 let earthBoxEl = ref(null)
 let width = 500; //宽度
 let radius = width / 2
+let timer = null
 const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 const camera = new THREE.PerspectiveCamera(30, 1, 1, 3000);
 const scene = new THREE.Scene();
@@ -24,18 +28,25 @@ onMounted(async () => {
     radius = width / 2
     group.add(createSphereMesh())
     group.add(await createMapMesh())
-    group.add(createPointMesh())
+    getStData()
     render(group)
     loopRotate(group)
 })
+
+function getStData() {
+    $http.get('/api/log/st').then(res => {
+        console.log(res)
+        group.add(createPointMesh(res.data?.filter(item => item.location.lat)))
+    })
+}
 
 //创建球体mesh
 function createSphereMesh() {
     const geometry = new THREE.SphereGeometry(radius, radius / 2, radius / 2)
     const material = new THREE.MeshStandardMaterial({
-        color: "#3F51B5",
+        color: "#05347E",
         metalness: 0,
-        roughness: 0.9,
+        roughness: 0.8,
         alphaTest: 0.02
     })
 
@@ -47,7 +58,6 @@ function createSphereMesh() {
 //创建地图mesh
 async function createMapMesh() {
     const geometry = new THREE.CircleGeometry(1.2, 5);
-    // const geometry = new THREE.CylinderGeometry(1, 1, 50, 8);
     const dotMaterial = new THREE.MeshStandardMaterial({
         color: "#ffffff",
         metalness: 0,
@@ -63,42 +73,25 @@ async function createMapMesh() {
     return dotMesh
 }
 
-function createPointMesh() {
-    let points = [
-        {
-            latlng: ['35.1258', '117.9859'],
-            count: 13
-        },
-        {
-            latlng: ['20.30149', '-88.71094'],
-            count: 45
-        },
-        {
-            latlng: ['38.24632', '-109.61027'],
-            count: 32
-        },
-        {
-            latlng: ['32.69504', '-96.36421'],
-            count: 87
-        },
-    ]
+function createPointMesh(points = []) {
     const dummyDot = new THREE.Object3D();
     const dotData = [];
 
-    const geometry = new THREE.CylinderGeometry(2, 2, 180);
+    const geometry = new THREE.CylinderGeometry(2, 2, 2);
     geometry.translate(0, 0.5, 0);
     geometry.rotateX(-Math.PI / 2);
     const material = new THREE.MeshBasicMaterial({
         blending: THREE.AdditiveBlending,
-        opacity: 0.70,
-        transparent: true,
-        color: '#536DFE'
+        opacity: 1,
+        transparent: false,
+        color: '#D32F2F'
     });
 
     points.forEach(item => {
-        const pos = polarToCartesian(Number(item.latlng[0]), Number(item.latlng[1]), radius);
+        let latlng = [item.location.lat, item.location.lon]
+        const pos = polarToCartesian(Number(latlng[0]), Number(latlng[1]), radius);
         dummyDot.position.set(pos.x, pos.y, pos.z);
-        const lookAt = polarToCartesian(Number(item.latlng[0]), Number(item.latlng[1]), radius + 5);
+        const lookAt = polarToCartesian(Number(latlng[0]), Number(latlng[1]), radius + 5);
         dummyDot.lookAt(lookAt.x, lookAt.y, lookAt.z);
         dummyDot.updateMatrix();
         dotData.push(dummyDot.matrix.clone());
@@ -106,6 +99,7 @@ function createPointMesh() {
     let dotMesh = new THREE.InstancedMesh(geometry, material, dotData.length)
     for (let i = 0; i < dotData.length; i++) {
         dotMesh.setMatrixAt(i, dotData[i])
+        dotMesh.setColorAt(i, new THREE.Color('#D32F2F'))
     }
     dotMesh.renderOrder = 3;
     return dotMesh
@@ -164,9 +158,14 @@ function render(group) {
 }
 
 function loopRotate(group) {
-    setInterval(() => {
-        renderer.render(scene, camera)
-        group.rotateY(0.005)
+    if (timer) {
+        clearInterval(timer)
+    }
+    timer = setInterval(() => {
+        requestAnimationFrame(() => {
+            renderer.render(scene, camera)
+            group.rotateY(0.005)
+        })
     }, 50);
 }
 
@@ -187,6 +186,18 @@ function onMouseMove(e) {
         // group.rotateX(-(diffY * 0.002))
         group.rotateY(-(diffX * 0.002))
     }
+}
+
+function onMouseUp() {
+    mouseHold = false
+}
+
+function onMouseEnter() {
+    // clearInterval(timer)
+}
+function onMouseLeave() {
+    mouseHold = false
+    // loopRotate(group)
 }
 </script>
 <style lang='scss' scoped>

@@ -2,13 +2,13 @@
     <div ref="vimg" class="v-img vue-img-com-vvcx" @click="handleClick" :style="style">
         <img ref='img' class="img" :src="thumb || src" :alt="alt" :style="`${imgStyle}`">
         <div class="title" v-if="title">{{ title }}</div>
-        <div ref="el" class="v-img-zoom">
+        <div @click="imgClick" ref="el" class="v-img-zoom">
             <!-- <div class="indicator">
                 {{ currentIndex + 1 }}/{{ imgList.length }}
             </div> -->
-            <img @click="imgClick" ref="zoomImg" class="zoom-img" @wheel="onMouseWheel" :src="src" :draggable="false"
-                @mousedown="touchStart" @touchstart="touchStart" @mousemove="touchMove" @touchmove="touchMove"
-                @touchend="touchEnd" @mouseup="touchEnd" @mouseover="touchcancel" @touchcancel="touchcancel" />
+            <img ref="zoomImg" class="zoom-img" @wheel="onMouseWheel" :src="src" :draggable="false" @mousedown="touchStart"
+                @touchstart="touchStart" @mousemove="touchMove" @touchmove="touchMove" @touchend="touchEnd"
+                @mouseup="touchEnd" @mouseover="touchcancel" @touchcancel="touchcancel" />
             <div ref="mask" class="v-img-mask"></div>
             <!-- <div ref="imglist" class="img-list" @mousedown="imgListTouchStart" @touchstart="imgListTouchStart"
                 @mousemove="imgListTouchMove" @touchmove="imgListTouchMove" @touchend="imgListTouchEnd"
@@ -483,6 +483,7 @@ export default {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    object-fit: cover;
 }
 
 .v-img-zoom>.indicator {

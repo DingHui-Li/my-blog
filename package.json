@@ -36,7 +36,6 @@
     "pinia": "^2.1.6",
     "request": "^2.88.2",
     "swiper": "^9.3.2",
-    "tesseract.js": "^4.1.1",
     "three": "^0.156.1",
     "tinymce": "^6.5.0"
   },

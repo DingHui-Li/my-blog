@@ -104,11 +104,21 @@ $topbar-height: 50px;
     .content {
       // margin-top: 15px;
       padding: 0 15px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      line-height: 1.4;
+      color: #333;
+
+      // line-height: 22px;
+      &:deep(p) {
+        margin: 1rem 0;
+      }
 
       &:deep(.code-block) {
-        line-height: 10px !important;
+        line-height: 12px !important;
+        white-space: pre-wrap;
       }
-      &:deep(.content-img){
+
+      &:deep(.content-img) {
         height: auto;
       }
     }
