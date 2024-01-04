@@ -1,12 +1,15 @@
 import request from 'request'
 import Geocode from "../models/geocode";
 import config from "~/.config.json";
+import zlib from 'zlib';
 
 export function getLocationByIp(ip) {
     return new Promise((resolve, reject) => {
-        request(`https://opendata.baidu.com/api.php?query=${ip}&co=&resource_id=6006&oe=utf8`,
+        request({
+            url: `https://opendata.baidu.com/api.php?query=${ip}&co=&resource_id=6006&oe=utf8`,
+        },
             async (err, res, body) => {
-                let location = '未知'
+                let location = ''
                 try {
                     let data = JSON.parse(body)
                     data = data.data[0]
@@ -16,6 +19,29 @@ export function getLocationByIp(ip) {
                 }
                 resolve(location)
             })
+    })
+}
+
+export function getWeather(location = '') {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let latlon = await getGeocode(location)
+            let chunks = []
+            let res = request(`https://devapi.qweather.com/v7/weather/now?location=${latlon.lon},${latlon.lat}&key=${config.qweather.key}`)
+            res.on('data', chunk => {
+                chunks.push(chunk)
+            })
+            res.on('end', () => {
+                let buffer = Buffer.concat(chunks);
+                zlib.gunzip(buffer, (err, d) => {
+                    let data = JSON.parse(d.toString())
+                    data.now.fxLink = data.fxLink
+                    resolve(data?.now || {})
+                })
+            })
+        } catch (err) {
+            resolve({})
+        }
     })
 }
 

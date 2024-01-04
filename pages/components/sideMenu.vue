@@ -29,6 +29,11 @@ const menuList = [
     key: "photo"
   },
   {
+    label: "人生",
+    path: "life",
+    key: "life"
+  },
+  {
     label: "访客",
     path: "visitor",
     key: "visitor"
@@ -42,7 +47,7 @@ let activeIndex = computed(() => {
 function handleClick(item) {
   eimts('update:modelValue', item.key)
   if (item.path) {
-    router.push('/' + item.path)
+    router.push('/' + item.path + '#' + item.key)
   } else {
     router.replace('/#' + item.key)
   }

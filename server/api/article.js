@@ -1,7 +1,7 @@
 import BaseResponse from "../base/baseResponse";
 import parseQuery from "../utils/parseQuery";
 import Article from "../models/article";
-import { getLocationByIp } from "../utils/location";
+import { getLocationByIp, getWeather } from "../utils/location";
 
 //查询列表
 export let getArticleList = defineEventHandler(async (event) => {
@@ -74,6 +74,10 @@ export let addArticle = defineEventHandler(async (event) => {
     || headers['x-client-source-ip']
     || headers['x-real-ip']
   let location = await getLocationByIp(ip)
+  let weather = {}
+  if (location) {
+    weather = await getWeather(location)
+  }
   const body = await readBody(event);
   let validRes = validContent(body)
   if (validRes !== true) {
@@ -82,6 +86,7 @@ export let addArticle = defineEventHandler(async (event) => {
   let res = await Article.create({
     ...body,
     location,
+    weather,
     desc: body.textContent?.slice(0, 50),
   });
   return new BaseResponse({ data: res });

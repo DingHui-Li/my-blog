@@ -11,10 +11,12 @@
       TopicTag(v-for='item in data.topics' :data='item')
     .imgs
       Vimg.img(:class=`data.imgs.length==1&&'single'` v-for='(item,index) in data.imgs' :style="`width:${data.imgs.length==1?100:data.imgs.length==2?50:33.33}%;`" :src='item' :thumb='item+"?x-oss-process=image/resize,m_fill,w_400"')
-    .location(v-if="data.location")
-      el-icon.icon
-        LocationFilled
-      span {{data.location}}
+    .info
+      .location(v-if="data.location")
+        el-icon.icon
+          LocationFilled
+        span {{data.location}}
+      .weather(v-if='data.weather' @click='openWeather')  {{ data.weather.text }} {{ data.weather.temp }}°C
 </template>
 <script setup>
 import moment from "moment";
@@ -27,6 +29,12 @@ const props = defineProps({
 });
 const sys = useSysStore()
 let profile = sys.globalSetting.profile
+
+function openWeather() {
+  if (props.data.weather?.fxLink) {
+    window.open(props.data.weather?.fxLink, '_blank')
+  }
+}
 </script>
 <style lang='scss' scoped>
 .moment-item {
@@ -101,16 +109,27 @@ let profile = sys.globalSetting.profile
       }
     }
 
-    .location {
+    .info {
       display: flex;
       align-items: center;
-      font-size: 13px;
-      color: #303F9F;
       margin-top: 10px;
 
-      .icon {
-        margin-top: -1px;
-        font-size: 16px;
+      .location {
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+        color: #303F9F;
+
+        .icon {
+          margin-top: -1px;
+          font-size: 16px;
+        }
+      }
+
+      .weather {
+        font-size: 13px;
+        color: #303F9F;
+        margin-left: 10px;
       }
     }
   }

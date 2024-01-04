@@ -24,7 +24,6 @@ export function get({ page = 1, size = 100 }, filter = {}) {
 export function st() {
     return new Promise(async resolve => {
         const result = await Cache.find({ label: "logSt" })
-        console.log(result)
         if (result?.length && new Date().getTime() - result[0].time < (1000 * 60 * 60 * 24)) {
             return resolve(result[0].value)
         }

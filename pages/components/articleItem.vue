@@ -19,7 +19,7 @@ const props = defineProps({
 });
 
 function jumpArticle(id) {
-  router.push(`/article/${id}`);
+  router.push(`/article/${id}#article`);
 }
 </script>
 <style lang='scss' scoped>
@@ -74,7 +74,7 @@ function jumpArticle(id) {
     }
 
     .title {
-      font-size: 14px;
+      font-size: 16px;
       color: #333;
       font-weight: bold;
       transition: all 0.3s;

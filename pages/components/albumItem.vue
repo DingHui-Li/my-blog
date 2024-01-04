@@ -9,7 +9,7 @@ div(v-if='data.imgs.length')
         .time {{createTime.getDate()}}日
       .topics
         TopicTag(v-for='item in data.topics' :data='item')
-      .imgs(@click="router.push('/article/'+data._id)")
+      .imgs(@click="router.push('/article/'+data._id+'#photo')")
         .img(v-for='(item,index) in data.imgs')
           img(:src='item+"?x-oss-process=image/resize,m_fill,w_400"')
 </template>
@@ -36,7 +36,7 @@ let createTime = computed(() => new Date(props.data?.createTime))
 </script>
 <style lang='scss' scoped>
 .year {
-  font-size: 20px;
+  font-size: 21px;
   font-weight: bold;
   margin-bottom: 20px;
 }

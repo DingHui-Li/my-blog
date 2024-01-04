@@ -27,7 +27,8 @@ const articleSchema = new Schema({
   imgs: {
     type: Array,
     default: []
-  }
+  },
+  weather: Object
 });
 articleSchema.index({ "$**": "text" });
 export default mongoose.model("Article", articleSchema);

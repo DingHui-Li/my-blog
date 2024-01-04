@@ -20,6 +20,11 @@ let layout = computed(() => {
   }
   return 'default'
 })
+
+watch(() => route.fullPath, (v) => {
+  console.log(route)
+  window.scrollTo(0, 0)
+})
 </script>
 <style>
 .page-enter-active,
@@ -38,7 +43,7 @@ let layout = computed(() => {
 @font-face {
   font-family: 'HarmonyOS_Sans_SC_Regular';
   font-weight: normal;
-  src: url('/HarmonyOS_Sans_SC_Regular.woff2') format('truetype');
+  src: url('@/HarmonyOS_Sans_SC_Regular.woff2') format('truetype');
 }
 
 * {
@@ -46,8 +51,8 @@ let layout = computed(() => {
 }
 
 .tox-tinymce-aux {
-  .tox-notifications-container{
-    display: none; 
+  .tox-notifications-container {
+    display: none;
   }
 }
 </style>

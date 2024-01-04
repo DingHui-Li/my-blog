@@ -9,5 +9,8 @@
 		"dbname": "",
 		"name": "",
 		"password": ""
+	},
+	"qweather":{
+		"key":""
 	}
 }

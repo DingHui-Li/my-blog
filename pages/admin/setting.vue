@@ -13,9 +13,9 @@
           PictureFilled
         img(v-else :src='form.website.cover')
         input(type='file' ref="inputEl" accept="image/*" @change="onChooseImg($event,'cover')")
-  .title 站长信息
+  .title 个人信息
   .form-item
-    .label 姓名
+    .label 昵称
     .value 
       el-input(v-model='form.profile.name')
   .form-item
@@ -26,6 +26,13 @@
           PictureFilled
         img(v-else :src='form.profile.avatar')
         input(type='file' ref="inputEl" accept="image/*" @change="onChooseImg($event,'avatar')")
+  .form-item
+    .label 生日
+    .value 
+      el-date-picker(
+        v-model="form.profile.birthday"
+        type="date"
+        placeholder="选择日期")
   .actions
     el-button(type='primary' style="width:100px" @click='handleSave') 保存
 </template>
@@ -40,10 +47,9 @@ store.getData().then(res => {
     form.value = res.data
   }
 })
-console.log(store)
 let inputEl = ref()
 
-let form = ref(new GlobalSetting())
+let form = ref(store.globalSetting)
 
 function onChooseImg(e, type) {
   let files = e.target.files;

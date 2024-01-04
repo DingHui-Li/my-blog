@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import $http from "@/utils/http.js";
-import { GlobalSetting } from '../model/sys'
 
 export const useSysStore = defineStore('sys', {
     state: () => ({
@@ -11,7 +10,8 @@ export const useSysStore = defineStore('sys', {
             },
             profile: {
                 name: 'ldh',
-                avatar: ""
+                avatar: "",
+                brithday: ''
             }
         }
     }),

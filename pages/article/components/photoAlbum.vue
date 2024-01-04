@@ -6,10 +6,11 @@
     TopicTag(v-for="topic in data.topics" :data='topic')
     .date() 发布于 {{ moment(data.createTime).calendar() }}
     .date(v-if="data.createTime!=data.updateTime") {{moment(data.updateTime).fromNow()}}更新
+  .content {{ data.textContent }}
   .imgs
     .item(v-for="(item,index) in data.imgs")
       .img
-        Vimg(:preview-teleported='true' :src='item' :thumb='item+"?x-oss-process=image/resize,m_fill,w_1000"')
+        Vimg(ref='imgsEl' :preview-teleported='true' :src='item' :thumb='item+"?x-oss-process=image/resize,m_fill,w_1000"')
         .info(v-if='exifList[index]')
           .text.left {{exifList[index].Make||""}} {{exifList[index].Model||"" }}
             .date {{ moment(exifList[index].CreateDate||"").format('YYYY/MM/DD HH:mm') }}
@@ -17,19 +18,25 @@
             .shot {{ getShotInfo(exifList[index]) }}
 </template>
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, nextTick } from 'vue'
 import moment from "moment";
 import TopicTag from "~/pages/components/topicTag.vue";
 import EXIF from 'exifr'
 const props = defineProps({
   data: Object,
 });
-console.log(props.data)
 let exifList = ref([])
-watch(() => props.data, () => {
-  props.data.imgs?.forEach((item, index) => {
-    EXIF.parse(item, ['CreateDate', 'Make', 'LensModel', 'Model', 'FocalLengthIn35mmFormat', 'FNumber', 'ExposureTime', 'ISO']).then(res => {
-      exifList.value[index] = res
+let imgsEl = ref([])
+
+watch(() => props.data, (v) => {
+  console.log(v)
+  nextTick(() => {
+    // console.log(imgsEl.value[0].originImgEl.file)
+    props.data.imgs?.forEach((item, index) => {
+      item = item.replace('http:', 'https:')
+      EXIF.parse(item, ['CreateDate', 'Make', 'LensModel', 'Model', 'FocalLengthIn35mmFormat', 'FNumber', 'ExposureTime', 'ISO']).then(res => {
+        exifList.value[index] = res
+      })
     })
   })
 })
@@ -69,6 +76,12 @@ function getShotInfo(info) {
     }
   }
 
+  .content {
+    font-size: 15px;
+    color: #333;
+    text-align: center;
+  }
+
   .imgs {
     .item {
       // border-top: 15px solid #f5f5f5;
@@ -78,7 +91,6 @@ function getShotInfo(info) {
       .img {
         width: 100%;
         max-width: 600px;
-        height: fit-content;
         margin: 0 auto;
 
         .info {
