@@ -1,5 +1,5 @@
 <template lang="pug">
-.new-article(@scroll="onScroll")
+.new-article()
   .actions
     el-button.btn.confirm(type='primary' @click="save" :loading='loading') {{form._id?'保存':'发布'}}
   .container
@@ -7,7 +7,7 @@
       .label 类型
       .topics
         .topic.type(v-for='item in typeList' @click='form.type=item.key' :class='`${form.type==item.key&&"active"}`') {{ item.label }}
-    .cover(@click="chooseImage" v-if='form.type=="article"')
+    .cover(v-if='form.type=="article"')
       el-icon(size='35' v-if='!form.cover')
         PictureFilled
       img( v-if='form.cover' :src='form.cover')
@@ -26,7 +26,7 @@
       el-input.input(placeholder="请输入文章标题" v-model="form.title" :maxlength='100' show-word-limit)
     .content
       div(v-if='form.type=="article"')
-        comRichEditor(ref="richEditorEl" v-model="form.htmlContent")
+        RichEditor(ref="richEditorEl" :value="form.htmlContent")
       textarea.textarea(v-if='form.type=="moment"' v-model='form.htmlContent' placeholder="内容" maxlength='800')
     .imgs(v-if='form.type!="article"')
       .item(v-for='(item,index) in form.imgs')
@@ -50,7 +50,6 @@ import { PictureFilled, Plus, Loading, CircleCloseFilled } from "@element-plus/i
 import { uploadImage } from "@/utils/upload.js";
 import { ElMessage, ElMessageBox } from "element-plus";
 import comAddTopic from '../__com__/addTopic'
-import comRichEditor from './components/richEditor'
 
 const route = useRoute();
 const router = useRouter();
@@ -117,7 +116,7 @@ function onInputChange(e) {
       form.value.cover = url;
     });
   }
-  e.target.value = ''
+  e.value = ''
 }
 //上传图片
 async function onChooseImg(e) {
@@ -140,17 +139,16 @@ async function onChooseImg(e) {
 }
 function save() {
   loading.value = true;
-  let pureContentText;
-  if (form.value.type == 'article') {
-    pureContentText = richEditorEl.value.getPureText()
-  } else {
-    pureContentText = form.value.htmlContent
-  }
   let payload = {
     ...form.value,
     topics: form.value.topics.map((item) => item._id),
-    textContent: pureContentText,
   };
+  if (form.value.type == 'article') {
+    payload.textContent = richEditorEl.value.getPureText()
+    payload.htmlContent = richEditorEl.value.getHtmlContent()
+  } else {
+    payload.textContent = form.value.htmlContent
+  }
   let req;
   if (form.value._id) {
     req = $http.put("/api/admin/article", payload);
@@ -172,10 +170,6 @@ function save() {
     .finally(() => {
       loading.value = false;
     });
-}
-
-function onScroll(e) {
-  console.log(e)
 }
 </script>
 <style lang="scss" scoped>
@@ -208,6 +202,7 @@ function onScroll(e) {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      pointer-events: none;
     }
   }
 

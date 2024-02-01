@@ -9,7 +9,8 @@
       .date(v-if="data.createTime!=data.updateTime") {{moment(data.updateTime).fromNow()}}更新
     .title {{data.title}}
   .container(:class="data.cover&&'has-cover'")
-    .content(v-html='data.htmlContent')
+    //- .content(v-html='data.htmlContent')
+    RichEditor(:value="data.htmlContent" readonly)
 .img-preview(v-if='previewImg.show' @click="previewImg.show=false")
   img(:src='previewImg.url')
 </template>
@@ -102,9 +103,7 @@ $topbar-height: 50px;
     overflow: hidden;
 
     .content {
-      // margin-top: 15px;
       padding: 0 15px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       line-height: 1.4;
       color: #333;
 

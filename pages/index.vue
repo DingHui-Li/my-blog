@@ -58,7 +58,6 @@ function getArticleList(page = 1) {
         item.month = date.getMonth() + 1
         return item
       })
-      console.log(res.list)
       list.value = [...list.value, ...res?.list];
       pagination.value = {
         ...pagination.value,
