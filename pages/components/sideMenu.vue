@@ -15,30 +15,8 @@ const props = defineProps({
 })
 const router = useRouter()
 const eimts = defineEmits(['update:modelValue'])
-const menuList = [
-  {
-    label: "动态",
-    key: ""
-  },
-  {
-    label: "文章",
-    key: "article"
-  },
-  {
-    label: "相册",
-    key: "photo"
-  },
-  {
-    label: "人生",
-    path: "life",
-    key: "life"
-  },
-  {
-    label: "访客",
-    path: "visitor",
-    key: "visitor"
-  },
-]
+const sys = useSysStore()
+const menuList = sys.sideMenu
 
 let activeIndex = computed(() => {
   return menuList.findIndex(item => item.key == props.modelValue)

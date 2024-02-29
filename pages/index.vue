@@ -1,26 +1,30 @@
-<template lang="pug">
-.cover(v-if='website.cover')
-  img(:src='website.cover')
-.home
-  .item(:class="type" v-for="(item,index) in list" :key='item._id' :style="`animation-delay:${index%10*100}ms`")
-    comAlbumItem(v-if='type=="photo"' :data='item' 
-      :showYear='index==0||item.year!=list[index-1].year',
-      :showMonth='index==0||item.year!=list[index-1].year||item.month!=list[index-1].month')
-    comMomentItem(v-else-if='item.type=="moment"' :data='item')
-    comArticleItem(v-else :data='item')
-  LoadMore(:loading="pagination.loading" :has-more="pagination.hasMore" @load-more="loadMore") 
+<template>
+  <div class="cover" v-if="website.cover"><img :src="website.cover" /></div>
+  <div class="home">
+    <div class="item" :class="type" v-for="(item, index) in list" :key="item._id.toString()"
+      :style="`animation-delay:${index % 10 * 100}ms`">
+      <comAlbumItem v-if="type == 'photo'" :data="item"
+        :showYear="index == 0 || item.createTimeObj?.getFullYear() != list[index - 1]?.createTimeObj?.getFullYear()"
+        :showMonth="index == 0 || item.createTimeObj?.getFullYear() != list[index - 1].createTimeObj?.getFullYear() || item.createTimeObj?.getMonth() != list[index - 1].createTimeObj?.getMonth()">
+      </comAlbumItem>
+      <comMomentItem v-else-if="item.type == 'moment'" :data="item"></comMomentItem>
+      <comArticleItem v-else :data="item"></comArticleItem>
+    </div>
+    <LoadMore :loading="pagination.loading" :has-more="pagination.hasMore" @load-more="loadMore"> </LoadMore>
+  </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import $http from "@/utils/http.js";
-import comArticleItem from './components/articleItem'
-import comMomentItem from './components/momentItem'
-import comAlbumItem from './components/albumItem'
+import comArticleItem from './components/articleItem.vue'
+import comMomentItem from './components/momentItem.vue'
+import comAlbumItem from './components/albumItem.vue'
+import { Article } from "~/types";
 
 const sys = useSysStore()
 let website = sys.globalSetting.website
 const route = useRoute()
 let type = ref(route.hash?.replace('#', ''))
-let list = ref([]);
+let list = ref<Array<Article>>([]);
 
 const pagination = ref({
   loading: false,
@@ -49,16 +53,15 @@ function getArticleList(page = 1) {
       page,
       size: pagination.value.size
     }).then(({ data: res }) => {
+      let t: Array<Article> = res.list
       if (type.value == 'photo') {
-        res.list = res.list.filter(item => item.imgs.length > 0)
+        t = t.filter(item => item.imgs.length > 0)
       }
-      res.list = res?.list?.map((item, index) => {
-        let date = new Date(item.createTime)
-        item.year = date.getFullYear()
-        item.month = date.getMonth() + 1
+      t = t?.map((item, index) => {
+        item.createTimeObj = new Date(Number(item.createTime))
         return item
       })
-      list.value = [...list.value, ...res?.list];
+      list.value = [...list.value, ...t];
       pagination.value = {
         ...pagination.value,
         page,

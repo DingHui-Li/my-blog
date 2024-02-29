@@ -6,6 +6,7 @@ NuxtLayout(:name="layout")
 import "./utils/momentCh.js";
 import "@/style/reset.css";
 import "@/style/color.css";
+import '@/style/iconfont.css';
 const route = useRoute();
 const store = useSysStore()
 store.getData()

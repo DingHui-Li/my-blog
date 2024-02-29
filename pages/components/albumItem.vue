@@ -1,37 +1,33 @@
-<template lang="pug">
-div(v-if='data.imgs.length')
-  .year(v-if='showYear') {{ createTime.getFullYear() }}年
-  .moment-item
-    .month
-      span(v-if="showMonth") {{ createTime.getMonth()+1 }}月
-    .right
-      .info
-        .time {{createTime.getDate()}}日
-      .topics
-        TopicTag(v-for='item in data.topics' :data='item')
-      .imgs(@click="router.push('/article/'+data._id+'#photo')")
-        .img(v-for='(item,index) in data.imgs')
-          img(:src='item+"?x-oss-process=image/resize,m_fill,w_400"')
+<template>
+  <div v-if="data.imgs.length">
+    <div class="year" v-if="showYear">{{ createTime.getFullYear() }}年</div>
+    <div class="moment-item">
+      <div class="month"><span v-if="showMonth">{{ createTime.getMonth() + 1 }}月</span></div>
+      <div class="right">
+        <div class="info">
+          <div class="time">{{ createTime.getDate() }}日</div>
+        </div>
+        <div class="topics">
+          <TopicTag v-for="item in data.topics" :data="item"></TopicTag>
+        </div>
+        <div class="imgs" @click="router.push('/article/' + data._id + '#photo')">
+          <div class="img" v-for="(item, index) in data.imgs"><img
+              :src="item + '?x-oss-process=image/resize,m_fill,w_400'" /></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import moment from "moment";
 import TopicTag from "./topicTag.vue";
+import { Article } from "~/types";
 
 const router = useRouter();
-const props = defineProps({
-  data: Object,
-  showMonth: {
-    type: Boolean,
-    default: false
-  },
-  showYear: {
-    type: Boolean,
-    default: false
-  }
-});
+const props = defineProps<{ data: Article, showMonth: Boolean, showYear: Boolean }>();
 const sys = useSysStore()
 let profile = sys.globalSetting.profile
-let createTime = computed(() => new Date(props.data?.createTime))
+let createTime = computed(() => new Date(Number(props.data.createTime)))
 
 </script>
 <style lang='scss' scoped>

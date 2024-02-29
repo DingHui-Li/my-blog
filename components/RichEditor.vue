@@ -17,7 +17,7 @@
             .item(v-for="item in aligns" @click="editor.chain().focus().setTextAlign(item.value).run()" :class="{ 'is-active': editor.isActive({ textAlign: item.value }) }") {{ item.label }}
             div
             .item.disabled >
-            .item(@click="editor.chain().focus().toggleCodeBlock().run()" :class="{ 'is-active': editor.isActive('codeBlock')}") 代码高亮
+            .item(@click="editor.chain().focus().toggleCodeBlock().run()" :class="{ 'is-active': editor.isActive('codeBlock')}") 代码块
             .item(@click="editor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': editor.isActive('bulletList') }") 无序列表
             .item(@click="editor.chain().focus().toggleOrderedList().run()" :class="{ 'is-active': editor.isActive('orderedList') }") 有序列表
             .item(@click="editor.chain().focus().setHorizontalRule().run()") 分隔线

@@ -1,6 +1,6 @@
 <template lang="pug">
 .life-page
-    .title 人生不过30000天，如白驹过隙，及时行乐
+    .title 人生不过30000天，如白驹过隙，请及时行乐
     .title 现在已经
         .num {{ (lifeDays / 365).toFixed(8) }}
         span 岁了

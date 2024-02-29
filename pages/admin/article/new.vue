@@ -130,9 +130,8 @@ async function onChooseImg(e) {
       break;
     }
     const file = e.target.files[index];
-    form.value.imgs[index] = ""
-    uploadImage(file, folder).then(url => {
-      form.value.imgs[index] = url
+    await uploadImage(file, folder).then(url => {
+      form.value.imgs.push(url)
     })
   }
   e.target.value = ''

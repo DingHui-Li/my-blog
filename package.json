@@ -19,7 +19,9 @@
     "pug-plain-loader": "^1.1.0",
     "sass": "^1.63.2",
     "sass-loader": "^10.4.1",
-    "scss-loader": "^0.0.1"
+    "scss-loader": "^0.0.1",
+    "typescript": "^5.3.3",
+    "vue-tsc": "^1.8.27"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",

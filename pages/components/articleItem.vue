@@ -1,24 +1,25 @@
-<template lang="pug">
-.article-item(@click="jumpArticle(data._id)")
-  .content-box
-    .title {{ data.title }}
-    .subtitle
-      TopicTag(v-for="topic in data.topics" :data='topic')
-      .date {{moment(data.updateTime).fromNow()}}
-    .desc {{ data.desc }}...
-  img.cover( v-if='data.cover' :src='`${data.cover}?x-oss-process=image/resize,m_fill,w_400`')
+<template>
+  <div class="article-item" @click="jumpArticle(data._id)">
+    <div class="content-box">
+      <div class="title">{{ data.title }}</div>
+      <div class="subtitle">
+        <TopicTag v-for="topic in data.topics" :data="topic"></TopicTag>
+        <div class="date">{{ moment(Number(data.updateTime)).fromNow() }}</div>
+      </div>
+      <div class="desc">{{ data.desc }}...</div>
+    </div><img class="cover" v-if="data.cover" :src="`${data.cover}?x-oss-process=image/resize,m_fill,w_400`" />
+  </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import TopicTag from "./topicTag.vue";
 import moment from "moment";
+import { Article } from "~/types";
 
 const router = useRouter();
 
-const props = defineProps({
-  data: Object,
-});
+const props = defineProps<{ data: Article }>();
 
-function jumpArticle(id) {
+function jumpArticle(id: String) {
   router.push(`/article/${id}#article`);
 }
 </script>

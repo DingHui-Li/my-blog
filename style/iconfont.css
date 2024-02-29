@@ -1,0 +1,21 @@
+@font-face {
+  font-family: "iconfont";
+  /* Project id 4431001 */
+  src: url('./iconfont.woff2?t=1706860551485') format('woff2')
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-diqiu:before {
+  content: "\e668";
+}
+
+.icon-dianzhentu:before {
+  content: "\e617";
+}
