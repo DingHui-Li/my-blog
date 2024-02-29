@@ -1,0 +1,6 @@
+const albumItem_vue_vue_type_style_index_0_scoped_38d10bc2_lang = ".year[data-v-38d10bc2]{font-size:21px;font-weight:700;margin-bottom:20px}.moment-item[data-v-38d10bc2]{display:flex;margin-bottom:0}.moment-item .month[data-v-38d10bc2]{font-size:20px;font-weight:700;text-align:center;width:90px}.moment-item .right[data-v-38d10bc2]{flex:1;overflow:hidden}.moment-item .right .info .title[data-v-38d10bc2]{color:#3f51b5;color:3f51b5;font-size:14px;font-weight:700;word-break:break-all}.moment-item .right .info .title span[data-v-38d10bc2]{color:#333;font-size:12px;margin-left:5px}.moment-item .right .info .time[data-v-38d10bc2]{color:#333;font-size:20px}.moment-item .right .imgs[data-v-38d10bc2]{cursor:pointer;margin-top:10px;padding-bottom:30px;position:relative}.moment-item .right .imgs .img[data-v-38d10bc2]{aspect-ratio:1;display:inline-block;margin-right:1px;max-width:150px;overflow:hidden;top:0;transform-origin:0 0;transition:all .3s;width:calc(50% - 1px)}.moment-item .right .imgs .img img[data-v-38d10bc2]{height:100%;-o-object-fit:cover;object-fit:cover;width:100%}";
+
+const albumItemStyles_4446d5c8 = [albumItem_vue_vue_type_style_index_0_scoped_38d10bc2_lang, albumItem_vue_vue_type_style_index_0_scoped_38d10bc2_lang];
+
+export { albumItemStyles_4446d5c8 as default };
+//# sourceMappingURL=albumItem-styles.4446d5c8.mjs.map
