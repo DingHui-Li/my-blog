@@ -11,6 +11,8 @@
             .item(@click="editor.chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }") 划线
             .item(@click="editor.chain().focus().setParagraph().run()" :class="{ 'is-active': editor.isActive('paragraph') }") 段落
             .item(@click="editor.chain().focus().toggleHighlight().run()" :class="{ 'is-active': editor.isActive('highlight') }") 高光
+            .item(@click="setLink" :class="{ 'is-active': editor.isActive('link') }") 链接
+            .item(@click="editor.chain().focus().unsetLink().run()" :disabled="!editor.isActive('link')") 取消链接
             .item(v-for="item in 2" @click="editor.chain().focus().toggleHeading({ level: item }).run()" :class="{ 'is-active': editor.isActive('heading', { level: item }) }") H{{ item }}
             div
             .item.disabled >
@@ -33,6 +35,7 @@ import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
 import StarterKit from '@tiptap/starter-kit'
+import Link from '@tiptap/extension-link'
 import Highlight from '@tiptap/extension-highlight'
 import TextAlign from '@tiptap/extension-text-align'
 import { Editor, EditorContent, BubbleMenu, VueNodeViewRenderer } from '@tiptap/vue-3'
@@ -46,6 +49,8 @@ import FileHandler from '@tiptap-pro/extension-file-handler'
 import Image from '@tiptap/extension-image'
 
 import { uploadImage } from "@/utils/upload.js";
+
+import { ElMessageBox } from 'element-plus'
 
 const lowlight = createLowlight({ html, css, js, ts })
 
@@ -86,6 +91,9 @@ let editor = new Editor({
         Text,
         Image,
         Highlight,
+        Link.configure({
+
+        }),
         TextAlign.configure({
             types: ['heading', 'paragraph'],
         }),
@@ -142,6 +150,25 @@ function onFilePaste(currentEditor, files, htmlContent) {
                 },
             }).focus().run()
         })
+    })
+}
+
+function setLink() {
+    ElMessageBox.prompt('', '添加链接', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern:
+            /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/,
+        inputErrorMessage: '无效链接',
+    }).then(({ value }) => {
+        if (value) {
+            editor
+                .chain()
+                .focus()
+                .extendMarkRange('link')
+                .setLink({ href: value })
+                .run()
+        }
     })
 }
 </script>
