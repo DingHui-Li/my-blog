@@ -7,10 +7,11 @@
       TopicTag(v-for="topic in data.topics" :data='topic')
       .date(style="margin-right:30px") 发布于{{ moment(data.createTime).calendar() }}
       .date(v-if="data.createTime!=data.updateTime") {{moment(data.updateTime).fromNow()}}更新
-    .title {{data.title}}
+    h1.title {{data.title}}
   .container(:class="data.cover&&'has-cover'")
     //- .content(v-html='data.htmlContent')
-    RichEditor(:value="data.htmlContent" readonly)
+    div(style="padding:15px")
+      RichEditor(:value="data.htmlContent" readonly)
 .img-preview(v-if='previewImg.show' @click="previewImg.show=false")
   img(:src='previewImg.url')
 </template>
@@ -89,8 +90,10 @@ $topbar-height: 50px;
     .title {
       position: sticky;
       top: 0;
-      font-size: 25px;
+      // font-size: 25px;
       font-weight: bold;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 15px;
     }
   }
 

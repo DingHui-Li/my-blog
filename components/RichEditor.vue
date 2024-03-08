@@ -13,7 +13,7 @@
             .item(@click="editor.chain().focus().toggleHighlight().run()" :class="{ 'is-active': editor.isActive('highlight') }") 高光
             .item(@click="setLink" :class="{ 'is-active': editor.isActive('link') }") 链接
             .item(@click="editor.chain().focus().unsetLink().run()" :disabled="!editor.isActive('link')") 取消链接
-            .item(v-for="item in 2" @click="editor.chain().focus().toggleHeading({ level: item }).run()" :class="{ 'is-active': editor.isActive('heading', { level: item }) }") H{{ item }}
+            .item(v-for="item in 6" @click="editor.chain().focus().toggleHeading({ level: item }).run()" :class="{ 'is-active': editor.isActive('heading', { level: item }) }") H{{ item }}
             div
             .item.disabled >
             .item(v-for="item in aligns" @click="editor.chain().focus().setTextAlign(item.value).run()" :class="{ 'is-active': editor.isActive({ textAlign: item.value }) }") {{ item.label }}
@@ -29,7 +29,7 @@
             .item(@click="editor.chain().focus().undo().run()" :disabled="!editor.can().chain().focus().undo().run()") undo ⬅️
             .item(@click="editor.chain().focus().redo().run()" :disabled="!editor.can().chain().focus().redo().run()") redo ➡️
 </template>
-<script setup>
+<script setup lang="ts">
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
@@ -55,7 +55,10 @@ import { ElMessageBox } from 'element-plus'
 const lowlight = createLowlight({ html, css, js, ts })
 
 const props = defineProps({
-    value: String,
+    value: {
+        type: String,
+        default: ""
+    },
     readonly: {
         type: Boolean,
         default: false
@@ -112,7 +115,7 @@ let editor = new Editor({
     ],
 });
 
-watch(() => props.value, v => {
+watch(() => props.value, (v: any) => {
     if (editor) {
         editor.commands.insertContent(v)
     }
@@ -125,7 +128,7 @@ function getHtmlContent() {
     return editor.getHTML()
 }
 
-function onFileDrop(currentEditor, files, pos) {
+function onFileDrop(currentEditor: any, files: Array<File>, pos: any) {
     files.forEach(file => {
         uploadImage(file, "article").then(url => {
             currentEditor.chain().insertContentAt(pos, {
@@ -137,7 +140,7 @@ function onFileDrop(currentEditor, files, pos) {
         })
     })
 }
-function onFilePaste(currentEditor, files, htmlContent) {
+function onFilePaste(currentEditor: any, files: Array<File>, htmlContent: any) {
     if (htmlContent) {
         return false
     }
@@ -174,6 +177,7 @@ function setLink() {
 </script>
 <style lang='scss' scoped>
 .rich-editor {
+    width: 100%;
     position: relative;
     min-height: 50vh;
 
@@ -187,6 +191,8 @@ function setLink() {
     }
 
     &:deep(.tiptap) {
+        width: 100%;
+        box-sizing: border-box;
         padding: 30px 15px;
         border: 3px solid #000;
         border-radius: 15px;
@@ -201,6 +207,7 @@ function setLink() {
     &.readonly {
         &:deep(.tiptap) {
             border: none;
+            padding: 0;
         }
     }
 

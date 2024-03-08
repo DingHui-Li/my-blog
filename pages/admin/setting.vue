@@ -13,6 +13,20 @@
           PictureFilled
         img(v-else :src='form.website.cover')
         input(type='file' ref="inputEl" accept="image/*" @change="onChooseImg($event,'cover')")
+  .form-item
+    .label 《关于我》
+    .value 
+      el-input(v-model='form.website.aboutme' placeholder="请输入文章ID")
+      .article(v-if='aboutmeArticle._id' @click='jumpArticle(aboutmeArticle._id)')
+        .title 《{{ aboutmeArticle.title }}》
+        .time {{ moment(aboutmeArticle.updateTime).calendar() }}更新
+  .form-item
+    .label 《关于本站》
+    .value 
+      el-input(v-model='form.website.about' placeholder="请输入文章ID")
+      .article(v-if='aboutArticle._id' @click='jumpArticle(aboutArticle._id)')
+        .title 《{{ aboutArticle.title }}》
+        .time {{ moment(aboutArticle.updateTime).calendar() }}更新
   .title 个人信息
   .form-item
     .label 昵称
@@ -37,10 +51,13 @@
     el-button(type='primary' style="width:100px" @click='handleSave') 保存
 </template>
 <script setup>
+import moment from "moment";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { uploadImage } from "@/utils/upload.js";
 import $http from "@/utils/http.js";
 import { PictureFilled } from "@element-plus/icons-vue";
+
+const router = useRouter();
 const store = useSysStore()
 store.getData().then(res => {
   if (res?.data) {
@@ -48,8 +65,34 @@ store.getData().then(res => {
   }
 })
 let inputEl = ref()
+let form = ref({ ...store.globalSetting })
+const aboutmeArticle = ref({})
+const aboutArticle = ref({})
 
-let form = ref(store.globalSetting)
+watch(() => form.value.website.aboutme, (id) => {
+  if (id) {
+    $http.get(`/api/article/search?_id=` + id).then(res => {
+      console.log(res)
+      aboutmeArticle.value = res.data[0]
+    }).catch(() => {
+      aboutmeArticle.value = {}
+    })
+  } else {
+    aboutmeArticle.value = {}
+  }
+}, { immediate: true })
+watch(() => form.value.website.about, (id) => {
+  if (id) {
+    $http.get(`/api/article/search?_id=` + id).then(res => {
+      console.log(res)
+      aboutArticle.value = res.data[0]
+    }).catch(() => {
+      aboutArticle.value = {}
+    })
+  } else {
+    aboutArticle.value = {}
+  }
+}, { immediate: true })
 
 function onChooseImg(e, type) {
   let files = e.target.files;
@@ -64,12 +107,17 @@ function onChooseImg(e, type) {
   }
 }
 
+function jumpArticle(id) {
+  router.push({ path: "/admin/article/new", query: { id } })
+}
+
 function handleSave() {
   $http.post('/api/admin/sys/setting', { ...toRaw(form.value) }).then((res) => {
     ElMessage({
       message: "操作成功",
       type: "success",
     });
+    store.changeGlobalSetting(res)
   })
     .catch((err) => {
       console.log(err)
@@ -83,7 +131,7 @@ function handleSave() {
   background-color: #fff;
 
   .title {
-    font-size: 15px;
+    font-size: 18px;
     font-weight: bold;
     margin-top: 30px;
   }
@@ -91,7 +139,7 @@ function handleSave() {
   .form-item {
     display: flex;
     align-items: center;
-    padding: 10px 0;
+    padding: 15px 0;
 
     .label {
       width: 100px;
@@ -127,6 +175,27 @@ function handleSave() {
           height: 100%;
           z-index: 1;
           opacity: 0;
+        }
+      }
+
+      .article {
+        padding: 10px;
+        border-radius: 8px;
+        background-color: #eee;
+        width: fit-content;
+        margin-top: 5px;
+        cursor: pointer;
+
+        .title {
+          font-size: 14px;
+          color: #333;
+          margin: 0;
+        }
+
+        .time {
+          font-size: 12px;
+          color: #999;
+          margin-top: 5px;
         }
       }
     }

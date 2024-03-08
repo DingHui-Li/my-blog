@@ -17,6 +17,11 @@ export const useSysStore = defineStore('sys', {
                 key: "photo"
             },
             {
+                label: "关于",
+                path: "about",
+                key: "about"
+            },
+            {
                 label: "杂乱无章",
                 path: "other",
                 key: "other"
@@ -25,7 +30,9 @@ export const useSysStore = defineStore('sys', {
         globalSetting: {
             website: {
                 name: "",
-                cover: ""
+                cover: "",
+                about: "",
+                aboutme: ""
             },
             profile: {
                 name: 'ldh',
@@ -42,6 +49,9 @@ export const useSysStore = defineStore('sys', {
                 }
                 return res
             })
+        },
+        changeGlobalSetting(config) {
+            this.globalSetting = config
         }
     }
 })

@@ -5,8 +5,7 @@ import { getLocationByIp, getWeather } from "../utils/location";
 
 //查询列表
 export let getArticleList = defineEventHandler(async (event) => {
-  let query = getQuery(event);
-  let { pagation, filter } = parseQuery(query);
+  let { pagation, filter } = parseQuery(getQuery(event));
   if (filter.topic) {
     filter.topics = { $in: filter.topic };
     delete filter.topic;
@@ -53,16 +52,18 @@ export let getSameArticleList = defineEventHandler(async (event) => {
 
 //搜索
 export let searchArticleList = defineEventHandler(async (event) => {
-  let query = getQuery(event);
-
-  let filter = {
-    $text: { $search: query.keyword },
-  };
-  if (query.topics) {
-    filter["topics"] = { $in: query.topics?.split(",") };
+  let { pagation, filter } = parseQuery(getQuery(event));
+  if (filter.keyword) {
+    filter["$text"] = { $search: filter.keyword }
+    delete filter.keyword
+  }
+  if (filter.topics) {
+    filter["topics"] = { $in: filter.topics?.split(",") };
   }
   let res = await Article.find(filter)
-    .limit(20)
+    .select({ htmlContent: 0, textContent: 0 })
+    .skip((pagation.page - 1) * pagation.size)
+    .limit(pagation.size)
     .populate("topics");
   return new BaseResponse({ data: res });
 });

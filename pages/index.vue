@@ -1,5 +1,15 @@
 <template>
-  <div class="cover" v-if="website.cover"><img :src="website.cover" /></div>
+  <div class="cover" v-if="website.cover">
+    <div class="img-box">
+      <img :src="website.cover" />
+    </div>
+    <div class="profile">
+      <div class="name">{{ profile.name }}</div>
+      <div class="avatar">
+        <img :src="profile.avatar" alt="">
+      </div>
+    </div>
+  </div>
   <div class="home">
     <div class="item" :class="type" v-for="(item, index) in list" :key="item._id.toString()"
       :style="`animation-delay:${index % 10 * 100}ms`">
@@ -22,6 +32,7 @@ import { Article } from "~/types";
 
 const sys = useSysStore()
 let website = sys.globalSetting.website
+let profile = sys.globalSetting.profile
 const route = useRoute()
 let type = ref(route.hash?.replace('#', ''))
 let list = ref<Array<Article>>([]);
@@ -74,13 +85,69 @@ function getArticleList(page = 1) {
 </script>
 <style lang="scss" scoped>
 .cover {
+  position: relative;
+  z-index: 9;
   width: 100%;
   height: auto;
-  transform: scale(1.1);
+  aspect-ratio: 16/9;
 
-  img {
+  &::before {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    bottom: 0;
+    left: 0;
     width: 100%;
-    height: auto;
+    height: 60px;
+    background: linear-gradient(to top, rgba(0, 0, 0, .2), transparent);
+  }
+
+  .img-box {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.1);
+    }
+  }
+
+  .profile {
+    position: absolute;
+    z-index: 3;
+    overflow: hidden;
+    width: 100%;
+    bottom: -20px;
+    display: flex;
+    justify-content: flex-end;
+    padding: 15px;
+    padding-bottom: 0;
+    box-sizing: border-box;
+
+    .name {
+      padding-top: 4px;
+      width: fit-content;
+      font-size: 22px;
+      font-weight: bold;
+      color: #fff;
+      margin-right: 15px;
+    }
+
+    .avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
   }
 }
 
@@ -89,7 +156,7 @@ function getArticleList(page = 1) {
   // top: -5px;
   background: #fff;
   min-height: 100vh;
-  padding-top: 15px;
+  padding-top: 50px;
   padding-bottom: 60px;
 
   .item {
@@ -98,7 +165,7 @@ function getArticleList(page = 1) {
     opacity: 0;
     animation: fadeIn .3s forwards;
     padding-bottom: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     border-bottom: 1px solid #eee;
 
     &.photo {

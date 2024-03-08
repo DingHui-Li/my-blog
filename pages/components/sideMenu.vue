@@ -1,10 +1,10 @@
 <template lang="pug">
 .side-menu
-  .active-box(:style="`transform:translateY(${activeIndex*50}px)`")
+  .active-box(:style="`transform:translateY(${activeIndex*51}px)`")
   .item(v-for='item in menuList' @click="handleClick(item)" :class="item.key==modelValue&&'active'")
     .label {{ item.label }}
   .website-info
-    a(href='https://github.com/DingHui-Li/my-blog' target="_blank") github
+    a(href='https://github.com/DingHui-Li/my-blog' target="_blank") Github
 </template>
 <script setup>
 const props = defineProps({
@@ -61,6 +61,9 @@ function handleClick(item) {
     user-select: none;
     text-align: center;
     transition: all .3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &.active {
       color: #fff;

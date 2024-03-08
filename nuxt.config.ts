@@ -7,6 +7,7 @@ export default defineNuxtConfig({
   routeRules: {
     "/admin/*": { ssr: false },
     "/visitor": { ssr: false },
+    "/about": { ssr: false },
     "/inappwebview/*": { ssr: false },
   },
   imports: {

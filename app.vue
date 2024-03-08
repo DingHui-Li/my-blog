@@ -1,6 +1,6 @@
 <template lang="pug">
 NuxtLayout(:name="layout")
-  NuxtPage
+  NuxtPage(keep-alive)
 </template>
 <script setup>
 import "./utils/momentCh.js";

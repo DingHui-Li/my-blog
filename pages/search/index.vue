@@ -47,11 +47,12 @@ function handleSearch() {
 .search-page {
   background: #fff;
   padding: 15px;
+  min-height: 100%;
 
   .search-box {
     display: flex;
     align-items: center;
-    background: orangered;
+    background: var(--primary-color);
     border-radius: 30px;
     margin: 60px auto;
     padding: 0 15px;

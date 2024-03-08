@@ -52,10 +52,10 @@ class Filter {
   content = null;
 }
 const cols = [
-  // {
-  //   label: "ID",
-  //   key: "_id",
-  // },
+  {
+    label: "ID",
+    key: "_id",
+  },
   {
     label: "标题",
     key: "title",
