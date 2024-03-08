@@ -1,6 +1,0 @@
-const topics_vue_vue_type_style_index_0_scoped_706a6466_lang = '.topics .title[data-v-706a6466]{color:#333;font-size:12px;font-weight:700;margin-bottom:10px}.topics .list[data-v-706a6466]{display:flex;flex-wrap:wrap}.topics .list .item[data-v-706a6466]{align-items:center;aspect-ratio:9/16;cursor:pointer;display:flex;justify-content:center;position:relative;width:100px}.topics .list .item[data-v-706a6466]:hover:after{background:rgba(0,0,0,.8)}.topics .list .item[data-v-706a6466]:after{background:rgba(0,0,0,.7);content:"";transition:all .3s;z-index:1}.topics .list .item .bg[data-v-706a6466],.topics .list .item[data-v-706a6466]:after{height:100%;left:0;position:absolute;top:0;width:100%}.topics .list .item .bg[data-v-706a6466]{-o-object-fit:cover;object-fit:cover}.topics .list .item .name[data-v-706a6466]{color:#fff;font-size:25px;font-weight:700;position:relative;z-index:2}.topics .list .item .selected[data-v-706a6466]{color:#ff4500;font-size:20px;position:absolute;right:5px;top:5px;z-index:3}';
-
-const topicsStyles_831dd80a = [topics_vue_vue_type_style_index_0_scoped_706a6466_lang, topics_vue_vue_type_style_index_0_scoped_706a6466_lang];
-
-export { topicsStyles_831dd80a as default };
-//# sourceMappingURL=topics-styles.831dd80a.mjs.map
