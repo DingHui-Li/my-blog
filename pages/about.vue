@@ -12,23 +12,27 @@
     </div>
 </template>
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import $http from "@/utils/http.js";
 import { Article } from "~/types";
 
-const website = useSysStore().globalSetting.website
+const { globalSetting } = storeToRefs(useSysStore())
+const website = computed(() => globalSetting.value.website || {})
 const aboutmeArticle = ref<Article>()
 const aboutArticle = ref<Article>()
 
-if (website.about) {
-    $http.get(`/api/article/${website.about}`).then(res => {
-        aboutArticle.value = res.data
-    })
-}
-if (website.aboutme) {
-    $http.get(`/api/article/${website.aboutme}`).then(res => {
-        aboutmeArticle.value = res.data
-    })
-}
+watch(() => website, v => {
+    if (website.value.about) {
+        $http.get(`/api/article/${website.value.about}`).then(res => {
+            aboutArticle.value = res.data
+        })
+    }
+    if (website.value.aboutme) {
+        $http.get(`/api/article/${website.value.aboutme}`).then(res => {
+            aboutmeArticle.value = res.data
+        })
+    }
+}, { deep: true })
 </script>
 <style lang='scss' scoped>
 .about-page {

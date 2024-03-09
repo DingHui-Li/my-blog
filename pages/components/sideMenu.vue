@@ -7,6 +7,7 @@
     a(href='https://github.com/DingHui-Li/my-blog' target="_blank") Github
 </template>
 <script setup>
+import { storeToRefs } from 'pinia'
 const props = defineProps({
   'modelValue': {
     type: String,
@@ -15,11 +16,10 @@ const props = defineProps({
 })
 const router = useRouter()
 const eimts = defineEmits(['update:modelValue'])
-const sys = useSysStore()
-const menuList = sys.sideMenu
+const { sideMenu: menuList } = storeToRefs(useSysStore())
 
 let activeIndex = computed(() => {
-  return menuList.findIndex(item => item.key == props.modelValue)
+  return menuList.value.findIndex(item => item.key == props.modelValue)
 })
 
 function handleClick(item) {

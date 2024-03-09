@@ -16,7 +16,7 @@ import {
   searchArticleList,
   deleteArticle
 } from "../api/article.js";
-import { getGlobalSetting, setGlobalSetting } from '../api/sys.js'
+import { getGlobalSetting, setGlobalSetting, login, getTOTPQR } from '../api/sys.js'
 import { test } from '../api/money.js'
 import * as LogApi from '../api/log.js'
 
@@ -29,6 +29,7 @@ router.put("/api/admin/topic", editTopic);
 router.delete("/api/admin/topic/:id", deleteTopic);
 
 router.get("/api/article", getArticleList);
+router.get("/api/admin/articleList", getArticleList);
 router.get("/api/article/:id", getArticle);
 router.get("/api/article/:id/same", getSameArticleList);
 router.get("/api/article/search", searchArticleList);
@@ -38,6 +39,8 @@ router.delete("/api/admin/article/:id", deleteArticle);
 
 router.post("/api/admin/file/upload", uploadFile);
 
+router.get("/api/getTOTPQR", getTOTPQR);
+router.post("/api/login", login);
 router.get("/api/sys/setting", getGlobalSetting);
 router.post("/api/admin/sys/setting", setGlobalSetting);
 

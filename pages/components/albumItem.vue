@@ -19,14 +19,15 @@
   </div>
 </template>
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import moment from "moment";
 import TopicTag from "./topicTag.vue";
 import { Article } from "~/types";
 
 const router = useRouter();
 const props = defineProps<{ data: Article, showMonth: Boolean, showYear: Boolean }>();
-const sys = useSysStore()
-let profile = sys.globalSetting.profile
+const { globalSetting } = storeToRefs(useSysStore())
+const profile = computed(() => globalSetting.value.profile || {})
 let createTime = computed(() => new Date(Number(props.data.createTime)))
 
 </script>

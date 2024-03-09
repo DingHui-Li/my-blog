@@ -36,6 +36,7 @@ const menuList = [
     path: "/admin/log",
   },
 ];
+
 </script>
 <style lang="scss" scoped>
 .layout {

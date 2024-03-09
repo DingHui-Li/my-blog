@@ -13,7 +13,6 @@ class Http {
   }
 
   requestBefore(request, options) {
-    // options.headers["Mmym-Token"] = localStorage.getItem("token");
     return { request, options };
   }
   responseBefore(response) {
@@ -30,6 +29,9 @@ class Http {
         }
         if (responseData.code >= 2000 && responseData.code < 2010) {
           ElMessage.error(responseData?.msg);
+          if ([2000, 2002].includes(responseData.code)) {
+            useSysStore().logout()
+          }
         }
         return Promise.reject(responseData);
       }
@@ -38,7 +40,8 @@ class Http {
     }
   }
 
-  request({ url, query, body, headers, method }) {
+  request({ url, query, body, headers = {}, method }) {
+    headers['Authorization'] = useSysStore().token
     return new Promise((resolve, reject) => {
       $fetch(url, {
         method,

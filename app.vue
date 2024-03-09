@@ -13,11 +13,11 @@ store.getData()
 
 let layout = computed(() => {
   let routeName = route.name;
+  if (routeName.includes('inappwebview') || routeName.includes('login')) {
+    return 'none'
+  }
   if (routeName.includes('admin')) {
     return 'admin'
-  }
-  if (routeName.includes('inappwebview')) {
-    return 'none'
   }
   return 'default'
 })
@@ -25,6 +25,9 @@ let layout = computed(() => {
 watch(() => route.fullPath, (v) => {
   console.log(route)
   window.scrollTo(0, 0)
+})
+onMounted(() => {
+  store.setToken(window.localStorage['token'] || "")
 })
 </script>
 <style>

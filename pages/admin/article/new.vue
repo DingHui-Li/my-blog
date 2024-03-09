@@ -1,6 +1,7 @@
 <template lang="pug">
 .new-article()
   .actions
+    .time(v-if="cacheTime") {{ moment(cacheTime).format('YYYY MMMM Do, hh:mm:ss') }}已缓存
     el-button.btn.confirm(type='primary' @click="save" :loading='loading') {{form._id?'保存':'发布'}}
   .container
     .form-item
@@ -42,9 +43,7 @@
           PictureFilled
 </template>
 <script setup>
-definePageMeta({
-  middleware: ["auth"],
-});
+import moment from "moment";
 import $http from "@/utils/http.js";
 import { PictureFilled, Plus, Loading, CircleCloseFilled } from "@element-plus/icons-vue";
 import { uploadImage } from "@/utils/upload.js";
@@ -53,12 +52,6 @@ import comAddTopic from '../__com__/addTopic'
 
 const route = useRoute();
 const router = useRouter();
-
-if (route.query.id) {
-  $http.get(`/api/article/${route.query.id}`).then((res) => {
-    form.value = res.data;
-  });
-}
 
 let richEditorEl = ref(null)
 let loading = ref(false);
@@ -71,7 +64,7 @@ let form = ref({
   type: "moment",
   imgs: []
 });
-
+let cacheTime = ref()
 let topics = ref([]);
 let typeList = [
   {
@@ -84,6 +77,33 @@ let typeList = [
   },
 ]
 getTopicList();
+let timer
+onMounted(() => {
+  if (route.query.id) {
+    $http.get(`/api/article/${route.query.id}`).then((res) => {
+      form.value = res.data;
+    });
+  } else {
+    let cache = window.localStorage['cache-article'] || ""
+    if (cache) {
+      try {
+        form.value = JSON.parse(cache)
+        window.localStorage['cache-article'] = ""
+      } catch { }
+    }
+  }
+  timer = setInterval(() => {
+    let payload = getPayload()
+    if (payload.textContent) {
+      cacheTime.value = new Date()
+      payload.cacheTime = cacheTime.value
+      window.localStorage['cache-article'] = JSON.stringify(payload)
+    }
+  }, 10000);
+})
+onBeforeUnmount(() => {
+  clearInterval(timer)
+})
 
 let selectedTopicsMap = computed(() => {
   let _t = {};
@@ -136,8 +156,8 @@ async function onChooseImg(e) {
   }
   e.target.value = ''
 }
-function save() {
-  loading.value = true;
+
+function getPayload() {
   let payload = {
     ...form.value,
     topics: form.value.topics.map((item) => item._id),
@@ -148,6 +168,12 @@ function save() {
   } else {
     payload.textContent = form.value.htmlContent
   }
+  return payload
+}
+
+function save() {
+  loading.value = true;
+  let payload = getPayload()
   let req;
   if (form.value._id) {
     req = $http.put("/api/admin/article", payload);
@@ -167,6 +193,8 @@ function save() {
       ElMessage.error(err?.msg || "未知错误");
     })
     .finally(() => {
+      clearInterval(timer)
+      window.localStorage['cache-article'] = null
       loading.value = false;
     });
 }
@@ -175,6 +203,29 @@ function save() {
 .new-article {
   height: 100%;
   overflow: auto;
+
+  .actions {
+    position: sticky;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    z-index: 99;
+    top: 0;
+    background: rgba(255, 255, 255);
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+
+    .time {
+      color: #999;
+      margin-right: 20px;
+      font-size: 12px;
+    }
+
+    .btn {
+
+      &.confirm {}
+    }
+  }
 
   .container {
     padding: 15px;
@@ -343,21 +394,6 @@ function save() {
         height: 100%;
         object-fit: cover;
       }
-    }
-  }
-
-  .actions {
-    position: sticky;
-    z-index: 99;
-    top: 0;
-    background: rgba(255, 255, 255);
-    padding: 15px;
-    text-align: right;
-    border-bottom: 1px solid #eee;
-
-    .btn {
-
-      &.confirm {}
     }
   }
 }

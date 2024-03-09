@@ -1,13 +1,25 @@
 import BaseResponse from "../base/baseResponse";
+import { verifyToken } from '../services/sys.js'
 
 export default defineNitroPlugin((nitroApp) => {
     nitroApp.hooks.hook("request", (event) => {
         try {
-            // if (event.node.req.url.includes('/api/log')) {
-            //     let res = new BaseResponse({ data: "no token", code: 500 })
-            //     event.node.res.write(JSON.stringify(res));
-            //     event.node.res.end();
-            // }
+            if (event.node.req.url.includes('api/admin')) {
+                const token = event.node.req.headers?.authorization
+                let res = null
+                if (!token) {
+                    res = new BaseResponse({ msg: "Token cannot be empty", code: 2000 })
+                } else {
+                    let jwt = verifyToken(token)
+                    if (!jwt?.user) {
+                        res = new BaseResponse({ msg: "Token is invalid", code: 2002 })
+                    }
+                }
+                if (res) {
+                    event.node.res.write(JSON.stringify(res));
+                    event.node.res.end();
+                }
+            }
         } catch (err) { }
     });
 })

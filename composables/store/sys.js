@@ -3,6 +3,7 @@ import $http from "@/utils/http.js";
 
 export const useSysStore = defineStore('sys', {
     state: () => ({
+        token: 'testToken',
         sideMenu: [
             {
                 label: "动态",
@@ -42,6 +43,22 @@ export const useSysStore = defineStore('sys', {
         }
     }),
     actions: {
+        login(params = {}) {
+            return $http.post('/api/login', params).then(res => {
+                this.setToken(res.data?.token || "")
+            })
+        },
+        logout() {
+            this.setToken("")
+            useRouter().replace('/admin/login')
+        },
+        setToken(token) {
+            this.token = token
+            window.localStorage['token'] = token
+        },
+        isLogin() {
+            return Boolean(this.token)
+        },
         getData() {
             return $http.get('/api/sys/setting').then(res => {
                 if (res?.data) {

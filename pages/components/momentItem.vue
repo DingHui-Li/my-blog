@@ -19,6 +19,7 @@
       .weather(v-if='data.weather' @click='openWeather')  {{ data.weather.text }} {{ data.weather.temp }}°C
 </template>
 <script setup>
+import { storeToRefs } from 'pinia'
 import moment from "moment";
 import TopicTag from "./topicTag.vue";
 import { LocationFilled } from '@element-plus/icons-vue'
@@ -27,8 +28,8 @@ const router = useRouter();
 const props = defineProps({
   data: Object,
 });
-const sys = useSysStore()
-let profile = sys.globalSetting.profile
+const { globalSetting } = storeToRefs(useSysStore())
+const profile = computed(() => globalSetting.value.profile || {})
 
 function openWeather() {
   if (props.data.weather?.fxLink) {

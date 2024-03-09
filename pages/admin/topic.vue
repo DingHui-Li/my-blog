@@ -17,9 +17,6 @@
         el-button(type="primary" text @click="handleEdit(row,$index)") 编辑
 </template>
 <script setup>
-definePageMeta({
-  middleware: ["auth"],
-});
 import $http from "@/utils/http.js";
 import moment from "moment";
 import { ElMessage, ElMessageBox } from "element-plus";

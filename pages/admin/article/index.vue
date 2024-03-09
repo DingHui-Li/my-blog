@@ -36,16 +36,13 @@
       @size-change="pagation.page=1;_getList()")
   </template>
 <script setup>
-definePageMeta({
-  middleware: ["auth"],
-});
 import moment from "moment";
 import useList from "../hooks/useList.js";
 import { ElMessage, ElMessageBox } from 'element-plus'
 import $http from "@/utils/http.js";
 
 const router = useRouter();
-let { pagation, list, getList } = useList("/api/article");
+let { pagation, list, getList } = useList("/api/admin/articleList");
 
 class Filter {
   title = null;

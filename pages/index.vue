@@ -24,18 +24,20 @@
   </div>
 </template>
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import $http from "@/utils/http.js";
 import comArticleItem from './components/articleItem.vue'
 import comMomentItem from './components/momentItem.vue'
 import comAlbumItem from './components/albumItem.vue'
 import { Article } from "~/types";
 
-const sys = useSysStore()
-let website = sys.globalSetting.website
-let profile = sys.globalSetting.profile
+const { globalSetting } = storeToRefs(useSysStore())
+const website = computed(() => globalSetting.value.website || {})
+const profile = computed(() => globalSetting.value.profile || {})
 const route = useRoute()
 let type = ref(route.hash?.replace('#', ''))
 let list = ref<Array<Article>>([]);
+
 
 const pagination = ref({
   loading: false,

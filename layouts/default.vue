@@ -20,12 +20,13 @@
 
 </template>
 <script setup>
+import { storeToRefs } from 'pinia'
 import { Search, Menu } from "@element-plus/icons-vue";
 import comSideMenu from '@/pages/components/sideMenu.vue'
 const router = useRouter();
 const route = useRoute();
-const sys = useSysStore()
-let website = sys.globalSetting.website
+const { globalSetting } = storeToRefs(useSysStore())
+const website = computed(() => globalSetting.value.website || {})
 
 let showSideMenu = ref(false)
 let type = ref('')
@@ -41,6 +42,14 @@ $max-width: 900px;
   min-height: 100vh;
   background: #dee0ed;
 
+  &::before {
+    content: '';
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-image: url(/bg.webp);
+  }
+
   .topbar-container {
     position: sticky;
     top: 0;
@@ -51,6 +60,7 @@ $max-width: 900px;
     border-bottom: 1px solid #eee;
 
     .topbar {
+      z-index: 2;
       max-width: $max-width;
       height: 50px;
       margin: 0 auto;
@@ -103,6 +113,7 @@ $max-width: 900px;
   }
 
   .content-container {
+    z-index: 1;
     width: 100%;
     max-width: $max-width;
     min-height: 100vh;

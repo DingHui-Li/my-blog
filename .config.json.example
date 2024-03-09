@@ -12,5 +12,10 @@
 	},
 	"qweather":{
 		"key":""
+	},
+	"TOTP":{
+		"user":"lidinghui@outlook.com",
+		"service":"My Blog", 
+		"secret":"xxx" 
 	}
 }
