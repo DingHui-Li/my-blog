@@ -33,6 +33,7 @@ function handleClick() {
   color: #3f51b5;
   font-weight: bold;
   font-size: 14px;
+  white-space: nowrap;
 
   &:hover {
     opacity: 0.8;

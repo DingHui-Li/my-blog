@@ -1,6 +1,5 @@
 <template lang="pug">
 .admin
-  h1 admin
 </template>
 <script setup>
 const router = useRouter();

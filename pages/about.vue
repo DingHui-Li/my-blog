@@ -32,7 +32,7 @@ watch(() => website, v => {
             aboutmeArticle.value = res.data
         })
     }
-}, { deep: true })
+}, { deep: true, immediate: true })
 </script>
 <style lang='scss' scoped>
 .about-page {

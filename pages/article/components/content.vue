@@ -80,6 +80,7 @@ $topbar-height: 50px;
       display: flex;
       align-items: center;
       margin-bottom: 15px;
+      flex-wrap: wrap;
 
       .date {
         font-size: 12px;

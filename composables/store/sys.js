@@ -3,7 +3,7 @@ import $http from "@/utils/http.js";
 
 export const useSysStore = defineStore('sys', {
     state: () => ({
-        token: 'testToken',
+        token: '',
         sideMenu: [
             {
                 label: "动态",
@@ -50,11 +50,13 @@ export const useSysStore = defineStore('sys', {
         },
         logout() {
             this.setToken("")
-            useRouter().replace('/admin/login')
+            navigateTo({ path: "/admin/login" }, { replace: true })
         },
         setToken(token) {
             this.token = token
-            window.localStorage['token'] = token
+            if (process.client) {
+                window.localStorage['token'] = token
+            }
         },
         isLogin() {
             return Boolean(this.token)

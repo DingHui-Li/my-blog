@@ -2,7 +2,7 @@
     <div class="other-page">
         <div class="list">
             <div class="item" v-for="item in list" @click="jump(item.path)">
-                <span :class="`icon iconfont icon-${item.icon}`"></span>
+                <span :style="`color:${item.color}`" :class="`icon iconfont icon-${item.icon}`"></span>
                 <div class="name">{{ item.name }}</div>
             </div>
         </div>
@@ -14,18 +14,30 @@ const router = useRouter()
 const list = [
     {
         name: '人生',
-        icon: 'dianzhentu',
+        icon: 'life-solid',
+        color: "#4CAF50",
         path: '/other/life'
     },
     {
         name: '访客',
-        icon: 'diqiu',
+        icon: 'fangkeshu',
+        color: "#2196F3",
         path: '/other/visitor'
+    },
+    {
+        name: '后台管理',
+        icon: 'admin',
+        color: "#5D4037",
+        path: '/admin'
     }
 ]
 
 function jump(path: String) {
-    router.push(path + '#other')
+    if (path.includes('/admin')) {
+        navigateTo({ path: "/admin" })
+    } else {
+        router.push(path + '#other')
+    }
 }
 </script>
 <style lang='scss' scoped>
@@ -45,11 +57,13 @@ function jump(path: String) {
             cursor: pointer;
 
             .icon {
-                font-size: 40px;
+                font-size: 30px;
             }
 
             .name {
-                font-size: 14px;
+                font-size: 13px;
+                margin-top: 4px;
+                color: #333;
             }
 
             &:hover {

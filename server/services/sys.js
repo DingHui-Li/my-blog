@@ -39,5 +39,11 @@ export async function login(code = '') {
 }
 
 export function verifyToken(token = "") {
-  return jwt.verify(token, TOTPCONF.secret)
+  return new Promise(resolve => {
+    try {
+      resolve(jwt.verify(token, TOTPCONF.secret))
+    } catch (err) {
+      resolve("")
+    }
+  })
 }

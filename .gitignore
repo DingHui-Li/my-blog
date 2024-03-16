@@ -2,6 +2,7 @@
 .nuxt
 .nitro
 .cache
+.output
 dist
 
 # Node dependencies

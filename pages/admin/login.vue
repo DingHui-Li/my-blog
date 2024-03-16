@@ -50,7 +50,7 @@ function login() {
   if (input.value) {
     useSysStore().login({ code: input.value }).then(() => {
       console.log("登录成功")
-      router.replace("/admin")
+      navigateTo({ path: "/admin" }, { replace: true })
     })
   }
 }

@@ -87,7 +87,8 @@ onMounted(() => {
     let cache = window.localStorage['cache-article'] || ""
     if (cache) {
       try {
-        form.value = JSON.parse(cache)
+        cache = JSON.parse(cache)
+        form.value = cache || form.value
         window.localStorage['cache-article'] = ""
       } catch { }
     }
@@ -194,7 +195,7 @@ function save() {
     })
     .finally(() => {
       clearInterval(timer)
-      window.localStorage['cache-article'] = null
+      window.localStorage['cache-article'] = ""
       loading.value = false;
     });
 }
