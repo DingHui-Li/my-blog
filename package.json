@@ -6,23 +6,26 @@
     "dev": "HOST=0.0.0.0 nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "deploy": "node deploy.js"
   },
   "devDependencies": {
     "@element-plus/nuxt": "^1.0.5",
     "@nuxt/devtools": "latest",
     "@types/node": "^18",
+    "chalk": "^5.3.0",
     "element-plus": "^2.3.6",
     "node-sass": "^8.0.0",
     "nuxt": "^3.7.0",
+    "ora": "^8.0.1",
     "pug": "^3.0.2",
     "pug-plain-loader": "^1.1.0",
     "sass": "^1.63.2",
     "sass-loader": "^10.4.1",
+    "scp2": "^0.5.0",
     "scss-loader": "^0.0.1",
     "typescript": "^5.3.3",
-    "vue-tsc": "^1.8.27",
-    "wrangler": "^3.34.2"
+    "vue-tsc": "^1.8.27"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",

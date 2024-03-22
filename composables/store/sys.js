@@ -59,7 +59,10 @@ export const useSysStore = defineStore('sys', {
             }
         },
         isLogin() {
-            return Boolean(this.token)
+            if (process.client) {
+                return Boolean(window.localStorage['token'])
+            }
+            return false
         },
         getData() {
             return $http.get('/api/sys/setting').then(res => {

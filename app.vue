@@ -26,6 +26,7 @@ watch(() => route.fullPath, (v) => {
   console.log(route)
   window.scrollTo(0, 0)
 })
+
 onMounted(() => {
   store.setToken(window.localStorage['token'] || "")
 })

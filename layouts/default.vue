@@ -35,7 +35,7 @@ onMounted(() => {
 })
 </script>
 <style lang="scss" scoped>
-$max-width: 900px;
+$max-width: 1080px;
 
 .layout {
   width: 100%;
@@ -120,6 +120,7 @@ $max-width: 900px;
     min-height: 100vh;
     margin: 0 auto;
     display: flex;
+    background:#fff;
 
     .side {
       position: relative;
