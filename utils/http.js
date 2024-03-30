@@ -41,7 +41,10 @@ class Http {
   }
 
   request({ url, query, body, headers = {}, method }) {
-    headers['Authorization'] = useSysStore().token
+    if (process.client) {
+      headers['Authorization'] = window.localStorage['token']
+    }
+
     return new Promise((resolve, reject) => {
       $fetch(url, {
         method,

@@ -1,7 +1,7 @@
 <template lang="pug">
 .content-container
   .list
-    .item(:class="type" v-for="(item,index) in list" :key='item._id' :style="`animation-delay:${index%10*100}ms`")
+    .item(:class="item.type" v-for="(item,index) in list" :key='item._id' :style="`animation-delay:${index%10*100}ms`")
       comMomentItem(v-if='item.type=="moment"' :data='item')
       comAlbumItem(v-else-if='item.type=="photo"' :showMonth='true' :data='item')
       comArticleItem(v-else :data='item')
