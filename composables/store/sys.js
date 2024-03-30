@@ -18,6 +18,11 @@ export const useSysStore = defineStore('sys', {
                 key: "photo"
             },
             {
+                label: "话题",
+                key: "topic",
+                path: "topic",
+            },
+            {
                 label: "关于",
                 path: "about",
                 key: "about"
@@ -49,6 +54,7 @@ export const useSysStore = defineStore('sys', {
             })
         },
         logout() {
+            console.log("logout")
             this.setToken("")
             navigateTo({ path: "/admin/login" }, { replace: true })
         },
