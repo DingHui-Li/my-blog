@@ -1,12 +1,14 @@
 import BaseResponse from "../base/baseResponse";
 import Topic from "../models/topic";
+import Article from "../models/article";
 
-//查询列表
+//查询主题列表
 export let getTopicList = defineEventHandler(async (event) => {
   let list = await Topic.find();
   return new BaseResponse({ data: list });
 });
 
+//查询某个主题下的内容
 export let getTopic = defineEventHandler(async (event) => {
   let params = getRouterParams(event);
   let res = await Topic.findOne({ _id: params.id });
@@ -53,3 +55,15 @@ async function checkTopicExist(name) {
   let res = await Topic.findOne({ name });
   return Boolean(res);
 }
+
+
+//统计每个主题的内容数
+export let stTopic = defineEventHandler(async (event) => {
+  let list = await Topic.find();
+  for (const index in list) {
+    let topic = list[index]
+    let count = await Article.find({ topics: { $in: topic._id.toString() } }).count()
+    list[index]._doc['count'] = count
+  }
+  return new BaseResponse({ data: list });
+});

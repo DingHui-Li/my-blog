@@ -23,6 +23,12 @@
           .topic 
             el-icon(size='15')
               Plus
+    .form-item(v-if="form.type=='moment'")
+      .label 电影
+      div(style="display:flex;align-items:center;margin-bottom:15px;")
+        el-select(v-model="form.movie" v-loading="searching" value-key="link" style='flex:1;max-width:500px' filterable remote :remote-method="onMovieInput" reserve-keyword placeholder='搜索电影' :loading="searching")
+          el-option(v-for="item in movieList" :label="item.title" :value="item")
+        el-button(:disabled="!movieName" style="margin-left:15px" type="primary" :icon="Search" circle @click="searchMovie")
     .title(v-if='form.type=="article"')
       el-input.input(placeholder="请输入文章标题" v-model="form.title" :maxlength='100' show-word-limit)
     .content
@@ -45,10 +51,11 @@
 <script setup>
 import moment from "moment";
 import $http from "@/utils/http.js";
-import { PictureFilled, Plus, Loading, CircleCloseFilled } from "@element-plus/icons-vue";
+import { PictureFilled, Plus, Loading, CircleCloseFilled, Search } from "@element-plus/icons-vue";
 import { uploadImage } from "@/utils/upload.js";
 import { ElMessage, ElMessageBox } from "element-plus";
 import comAddTopic from '../__com__/addTopic'
+import { movieName, movieList, searchMovie, searching, onMovieInput } from './create.js'
 
 const route = useRoute();
 const router = useRouter();
@@ -62,7 +69,8 @@ let form = ref({
   textContent: "",
   topics: [],
   type: "moment",
-  imgs: []
+  imgs: [],
+  movie: {}
 });
 let cacheTime = ref()
 let topics = ref([]);
@@ -76,6 +84,7 @@ let typeList = [
     key: "article"
   },
 ]
+
 getTopicList();
 let timer
 onMounted(() => {
@@ -199,6 +208,7 @@ function save() {
       loading.value = false;
     });
 }
+
 </script>
 <style lang="scss" scoped>
 .new-article {
@@ -262,6 +272,21 @@ function save() {
       font-size: 12px;
       color: #333;
       margin-bottom: 5px;
+    }
+
+    .input {
+      margin-bottom: 15px;
+    }
+
+    .movie {
+      display: flex;
+      color: #333;
+
+      img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+      }
     }
   }
 

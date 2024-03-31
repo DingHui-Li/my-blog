@@ -1,0 +1,21 @@
+import puppeteer from 'puppeteer';
+
+export async function searchMovie(text) {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36")
+  await page.goto("https://search.douban.com/movie/subject_search?search_text=" + text)
+  const listEl = await page.$$('div > .item-root');
+  const list = []
+  for (const i in listEl) {
+    list.push({
+      cover: await listEl[i].$eval('img', el => el?.src),
+      link: await listEl[i].$eval('.cover-link', el => el?.href),
+      title: await listEl[i].$eval('.title', el => el?.textContent),
+      rate: await listEl[i].$eval('.rating', el => el?.textContent),
+      meta: await listEl[i].$eval('.meta,.abstract', el => el?.textContent),
+    })
+  }
+
+  return list
+}

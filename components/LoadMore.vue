@@ -29,6 +29,7 @@ function loadMore() {
     color: #333;
     font-style: oblique;
     margin-top: 10px;
+    cursor: pointer;
 
     &:active {
         opacity: 0.8;

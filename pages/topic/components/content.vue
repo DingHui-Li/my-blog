@@ -6,6 +6,7 @@
       comAlbumItem(v-else-if='item.type=="photo"' :showMonth='true' :data='item')
       comArticleItem(v-else :data='item')
     .empty(v-if="!list.length&!pagation.loading") 无数据
+    LoadMore(:loading="pagation.loading" :hasMore="pagation.isMore" @loadMore="loadMore")
 </template>
 <script setup>
 const router = useRouter();
@@ -25,6 +26,11 @@ let pagation = ref({
 let list = ref([]);
 getList();
 
+function loadMore() {
+  if (!pagation.value.loading && pagation.value.isMore) {
+    getList(pagation.value.page + 1)
+  }
+}
 function getList(page = 1) {
   if (pagation.value.loading) return;
   console.log("get list");
@@ -46,7 +52,6 @@ function getList(page = 1) {
       }
     })
     .finally(() => {
-      pagation.value.isMore = false;
       pagation.value.loading = false;
     });
 }

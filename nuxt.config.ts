@@ -3,7 +3,7 @@
 
 export default defineNuxtConfig({
   devtools: { enabled: false },
-  modules: ["@element-plus/nuxt", '@pinia/nuxt',],
+  modules: ["@element-plus/nuxt", "@pinia/nuxt"],
   routeRules: {
     "/admin/*": { ssr: false },
     "/visitor": { ssr: false },
@@ -11,15 +11,13 @@ export default defineNuxtConfig({
     "/inappwebview/*": { ssr: false },
   },
   imports: {
-    dirs: [
-      'composables/*/*.{ts,js,mjs,mts}',
-    ]
+    dirs: ["composables/*/*.{ts,js,mjs,mts}"],
   },
   // experimental: {
   //   renderJsonPayloads: false
   // },
   app: {
-    pageTransition: { name: 'page', mode: 'default' },
+    pageTransition: { name: "page", mode: "default" },
     head: {
       script: [
         {

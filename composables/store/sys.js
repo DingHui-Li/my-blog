@@ -18,6 +18,11 @@ export const useSysStore = defineStore('sys', {
                 key: "photo"
             },
             {
+                label: "电影",
+                key: "movie",
+                path: "movie"
+            },
+            {
                 label: "话题",
                 key: "topic",
                 path: "topic",

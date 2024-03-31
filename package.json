@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "node --max-old-space-size=4096 node_modules/nuxt/bin/nuxt.mjs build",
-    "dev": "HOST=0.0.0.0 nuxt dev",
+    "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
@@ -52,6 +52,7 @@
     "mongoose": "^7.2.3",
     "otplib": "^12.0.1",
     "pinia": "^2.1.6",
+    "puppeteer": "^22.6.1",
     "qrcode": "^1.5.3",
     "request": "^2.88.2",
     "swiper": "^9.3.2",

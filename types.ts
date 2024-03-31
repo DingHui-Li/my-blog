@@ -1,22 +1,33 @@
 export type Topic = {
-    createTime: Number,
-    name: String,
-    cover: String,
-}
+  _id: string;
+  createTime: number;
+  name: string;
+  cover: string;
+  count: number;
+};
 
 export type Article = {
-    _id: String,
-    createTime: Number,
-    createTimeObj?: Date,
-    updateTime: Number,
-    title: String,
-    topics: Array<Topic>,
-    type: 'article' | 'moment' | 'photo',
-    cover: String,
-    htmlContent: String,
-    textContent: String,
-    desc: String,
-    location: String,
-    imgs: Array<String>,
-    weather: Object
-}
+  _id: string;
+  createTime: number;
+  createTimeObj?: Date;
+  updateTime: number;
+  title: string;
+  topics: Array<Topic>;
+  type: "article" | "moment" | "photo";
+  cover: string;
+  htmlContent: string;
+  textContent: string;
+  desc: string;
+  location: string;
+  imgs: Array<string>;
+  weather: any;
+  movie: Movie;
+};
+
+export type Movie = {
+  cover: string;
+  link: string;
+  title: string;
+  rate: string;
+  meta: string;
+};

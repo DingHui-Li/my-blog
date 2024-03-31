@@ -1,6 +1,6 @@
 <template lang="pug">
 NuxtLayout(:name="layout")
-  NuxtPage(keep-alive)
+  NuxtPage(keep-alive style="position:absolute;width:100%;height:100%")
 </template>
 <script setup>
 import "./utils/momentCh.js";
@@ -24,7 +24,6 @@ let layout = computed(() => {
 
 watch(() => route.fullPath, (v) => {
   console.log(route)
-  window.scrollTo(0, 0)
 })
 
 onMounted(() => {
@@ -34,15 +33,21 @@ onMounted(() => {
 <style>
 .page-enter-active,
 .page-leave-active {
-  transition: all 0.3s;
+  transition: all .3s;
 }
 
 .page-enter-from,
 .page-leave-to {
   opacity: 0;
-  /* filter: blur(1rem); */
-  transform: scale(0.9);
-  border-radius: 30px;
+  /* transform: scale(0.9); */
+  transform: translateY(20px);
+}
+
+.page-enter-to,
+.page-leave-from {
+  opacity: 1;
+  /* transform: scale(1); */
+  transform: translateY(0);
 }
 
 @font-face {

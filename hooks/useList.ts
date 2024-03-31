@@ -1,11 +1,11 @@
 import { ref } from "vue";
 import $http from "@/utils/http.js";
 
-export default function (url) {
+export default function <T>(url: string) {
   let pagation = ref(new Pagation());
-  let list = ref([]);
+  let list = ref<T>();
 
-  function getList(filter = {}) {
+  function getList<T>(filter = {}) {
     pagation.value.loading = true;
     return $http
       .get(url, {

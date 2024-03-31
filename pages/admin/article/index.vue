@@ -37,7 +37,7 @@
   </template>
 <script setup>
 import moment from "moment";
-import useList from "../hooks/useList.js";
+import useList from "@/hooks/useList";
 import { ElMessage, ElMessageBox } from 'element-plus'
 import $http from "@/utils/http.js";
 
@@ -148,3 +148,4 @@ function handleDelete(e) {
   }
 }
 </style>
+../../../hooks/useList.js

@@ -5,6 +5,7 @@ import {
   deleteTopic,
   editTopic,
   getTopic,
+  stTopic
 } from "../api/topic.js";
 import { uploadFile } from "../api/file.js";
 import {
@@ -14,7 +15,8 @@ import {
   getArticleList,
   getSameArticleList,
   searchArticleList,
-  deleteArticle
+  deleteArticle,
+  searchMovie
 } from "../api/article.js";
 import { getGlobalSetting, setGlobalSetting, login, getTOTPQR } from '../api/sys.js'
 import { test } from '../api/money.js'
@@ -23,6 +25,7 @@ import * as LogApi from '../api/log.js'
 const router = createRouter();
 
 router.get("/api/topic", getTopicList);
+router.get("/api/topic/st", stTopic);
 router.get("/api/topic/:id", getTopic);
 router.post("/api/admin/topic", addTopic);
 router.put("/api/admin/topic", editTopic);
@@ -36,6 +39,7 @@ router.get("/api/article/search", searchArticleList);
 router.post("/api/admin/article", addArticle);
 router.put("/api/admin/article", editArticle);
 router.delete("/api/admin/article/:id", deleteArticle);
+router.get("/api/admin/searchmovie", searchMovie);
 
 router.post("/api/admin/file/upload", uploadFile);
 

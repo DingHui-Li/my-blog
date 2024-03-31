@@ -30,6 +30,7 @@ import comArticleItem from './components/articleItem.vue'
 import comMomentItem from './components/momentItem.vue'
 import comAlbumItem from './components/albumItem.vue'
 import { Article } from "~/types";
+import { Console } from 'console';
 
 const { globalSetting } = storeToRefs(useSysStore())
 const website = computed(() => globalSetting.value.website || {})
@@ -58,6 +59,7 @@ function loadMore() {
 function getArticleList(page = 1) {
   if (page == 1) {
     list.value = []
+    window.scrollTo(0, 0)
   }
   pagination.value.loading = true
   $http.get("/api/article",

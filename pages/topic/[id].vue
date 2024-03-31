@@ -10,12 +10,11 @@
 </template>
 <script setup>
 import Content from "./components/content.vue";
-import LeftSide from "./components/leftSide.vue";
 import $http from "@/utils/http.js";
 
 const route = useRoute();
-if(!route.hash.includes('topic')){
-  useRouter().replace(route.fullPath+'#topic')
+if (!route.hash.includes('topic')) {
+  useRouter().replace(route.fullPath + '#topic')
 }
 let topicDetail = ref({});
 getTopic();

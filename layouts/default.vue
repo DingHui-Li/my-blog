@@ -13,7 +13,7 @@
     .side(:class="`${showSideMenu&&'show'}`")
       comSideMenu(v-model='type')
     .content 
-      slot
+      slot()
   //- .footer-container
   //-   .footer
   //-     a(href='https://github.com/DingHui-Li/my-blog' target="_blank") github
@@ -117,10 +117,10 @@ $max-width: 1080px;
     z-index: 1;
     width: 100%;
     max-width: $max-width;
-    min-height: 100vh;
+    min-height: calc(100vh - 60px);
     margin: 0 auto;
     display: flex;
-    background:#fff;
+    background: #fff;
 
     .side {
       position: relative;
@@ -134,6 +134,7 @@ $max-width: 1080px;
     .content {
       flex: 1;
       overflow: hidden;
+      position: relative;
     }
   }
 

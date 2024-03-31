@@ -8,11 +8,11 @@ export default defineNitroPlugin((nitroApp) => {
                 const token = event.node.req.headers?.authorization
                 let res = null
                 if (!token) {
-                    res = new BaseResponse({ msg: "Token cannot be empty", code: 2000 })
+                    res = new BaseResponse({ msg: "Token不能为空", code: 2000 })
                 } else {
                     let jwt = await verifyToken(token)
                     if (!jwt?.user) {
-                        res = new BaseResponse({ msg: "Token is invalid", code: 2002 })
+                        res = new BaseResponse({ msg: "Token无效", code: 2002 })
                     }
                 }
                 if (res) {

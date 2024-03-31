@@ -2,6 +2,7 @@ import BaseResponse from "../base/baseResponse";
 import parseQuery from "../utils/parseQuery";
 import Article from "../models/article";
 import { getLocationByIp, getWeather } from "../utils/location";
+import * as MovieService from '../services/movie'
 
 //查询列表
 export let getArticleList = defineEventHandler(async (event) => {
@@ -12,6 +13,9 @@ export let getArticleList = defineEventHandler(async (event) => {
   }
   if (filter.type == 'photo') {
     filter.type = 'moment'
+  }
+  if (filter.type == 'movie') {
+    filter = { 'movie.link': { $ne: null } }
   }
   let res = await Article.find(filter)
     .select({ htmlContent: 0 })
@@ -130,3 +134,10 @@ function validContent(body) {
   }
   return true
 }
+
+//从豆瓣搜索电影
+export let searchMovie = defineEventHandler(async (event) => {
+  let query = getQuery(event);
+  let res = await MovieService.searchMovie(query.name)
+  return new BaseResponse({ data: res });
+});
