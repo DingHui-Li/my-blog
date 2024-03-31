@@ -10,6 +10,15 @@ export default defineNuxtConfig({
     "/about": { ssr: false },
     "/inappwebview/*": { ssr: false },
   },
+  // typescript: {
+  //   typeCheck: true,
+  // },
+  nitro: {
+    rollupConfig: {
+      external: ["ali-oss"],
+      plugins: [],
+    },
+  },
   imports: {
     dirs: ["composables/*/*.{ts,js,mjs,mts}"],
   },
