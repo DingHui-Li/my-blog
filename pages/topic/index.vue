@@ -90,7 +90,7 @@ function updateChart(data: Array<any>) {
 @media screen and (max-width:750px) {
   .chart {
     margin: 0 !important;
-    height: calc(100vh - 90px);
+    height: 100%;
   }
 }
 </style>

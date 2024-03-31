@@ -41,6 +41,7 @@ watch(() => website, v => {
     background-color: #fff;
     padding: 15px;
     box-sizing: border-box;
+    overflow: auto;
 
     h2 {
         margin-top: 30px;

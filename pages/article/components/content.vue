@@ -68,9 +68,9 @@ $topbar-height: 50px;
   }
 
   .title-box {
-    position: sticky;
+    // position: sticky;
     z-index: 9;
-    top: -60px;
+    top: 0;
     padding: 15px;
     padding-bottom: 5px;
     border-radius: 20px 20px 0 0;

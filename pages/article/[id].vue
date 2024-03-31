@@ -27,5 +27,6 @@ function getArticle() {
 <style lang="scss" scoped>
 .article {
   position: relative;
+  overflow: auto;
 }
 </style>

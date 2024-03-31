@@ -39,7 +39,9 @@ $max-width: 1080px;
 
 .layout {
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: #dee0ed;
 
   &::before {
@@ -54,7 +56,8 @@ $max-width: 1080px;
     position: sticky;
     top: 0;
     z-index: 9+1;
-    background: rgba(255, 255, 255, 0.8);
+    // background: rgba(255, 255, 255, 0.8);
+    background-color: #fff;
     backdrop-filter: blur(5px);
     width: 100%;
     border-bottom: 1px solid #eee;
@@ -113,11 +116,11 @@ $max-width: 1080px;
   }
 
   .content-container {
+    flex: 1;
     position: relative;
     z-index: 1;
     width: 100%;
     max-width: $max-width;
-    min-height: calc(100vh - 60px);
     margin: 0 auto;
     display: flex;
     background: #fff;

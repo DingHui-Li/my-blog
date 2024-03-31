@@ -18,11 +18,10 @@
           :thumb='item + "?x-oss-process=image/resize,m_fill,w_355"' />
       </div>
       <div class="movie" v-if="data.movie && data.movie.link" @click="openMovie">
-        <img :src="data.movie.cover" crossOrigin="Anonmyous" referrerPolicy="no-referrer" />
+        <img :src="data.movie.cover" crossOrigin="Anonmyous" referrer-policy="no-referrer" />
         <div class="movie-info">
           <div class="name">{{ data.movie.title }}</div>
           <div class="rate">{{ data.movie.rate }}</div>
-          <div class="meta">{{ data.movie.meta }}</div>
         </div>
       </div>
       <div class="info">
@@ -152,6 +151,7 @@ function openMovie() {
       .movie-info {
         flex: 1;
         overflow: hidden;
+        padding: 10px 0;
 
         .name {
           font-size: 14px;

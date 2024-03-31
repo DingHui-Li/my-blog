@@ -91,6 +91,9 @@ onMounted(() => {
   if (route.query.id) {
     $http.get(`/api/article/${route.query.id}`).then((res) => {
       form.value = res.data;
+      if (res.data?.movie?.link) {
+        movieList.value = [res.data.movie]
+      }
     });
   } else {
     let cache = window.localStorage['cache-article'] || ""

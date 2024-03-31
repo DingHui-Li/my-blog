@@ -1,26 +1,28 @@
 <template>
-  <div class="cover" v-if="website.cover">
-    <div class="img-box">
-      <img :src="website.cover" />
-    </div>
-    <div class="profile">
-      <div class="name">{{ profile.name }}</div>
-      <div class="avatar">
-        <img :src="profile.avatar" alt="">
+  <div style="overflow: auto;">
+    <div class="cover" v-if="website.cover">
+      <div class="img-box">
+        <img :src="website.cover" />
+      </div>
+      <div class="profile">
+        <div class="name">{{ profile.name }}</div>
+        <div class="avatar">
+          <img :src="profile.avatar" alt="">
+        </div>
       </div>
     </div>
-  </div>
-  <div class="home">
-    <div class="item" :class="type" v-for="(item, index) in list" :key="item._id.toString()"
-      :style="`animation-delay:${index % 10 * 100}ms`">
-      <comAlbumItem v-if="type == 'photo'" :data="item"
-        :showYear="index == 0 || item.createTimeObj?.getFullYear() != list[index - 1]?.createTimeObj?.getFullYear()"
-        :showMonth="index == 0 || item.createTimeObj?.getFullYear() != list[index - 1].createTimeObj?.getFullYear() || item.createTimeObj?.getMonth() != list[index - 1].createTimeObj?.getMonth()">
-      </comAlbumItem>
-      <comMomentItem v-else-if="item.type == 'moment'" :data="item"></comMomentItem>
-      <comArticleItem v-else :data="item"></comArticleItem>
+    <div class="home">
+      <div class="item" :class="type" v-for="(item, index) in list" :key="item._id.toString()"
+        :style="`animation-delay:${index % 10 * 100}ms`">
+        <comAlbumItem v-if="type == 'photo'" :data="item"
+          :showYear="index == 0 || item.createTimeObj?.getFullYear() != list[index - 1]?.createTimeObj?.getFullYear()"
+          :showMonth="index == 0 || item.createTimeObj?.getFullYear() != list[index - 1].createTimeObj?.getFullYear() || item.createTimeObj?.getMonth() != list[index - 1].createTimeObj?.getMonth()">
+        </comAlbumItem>
+        <comMomentItem v-else-if="item.type == 'moment'" :data="item"></comMomentItem>
+        <comArticleItem v-else :data="item"></comArticleItem>
+      </div>
+      <LoadMore :loading="pagination.loading" :has-more="pagination.hasMore" @load-more="loadMore"> </LoadMore>
     </div>
-    <LoadMore :loading="pagination.loading" :has-more="pagination.hasMore" @load-more="loadMore"> </LoadMore>
   </div>
 </template>
 <script setup lang="ts">
@@ -59,7 +61,9 @@ function loadMore() {
 function getArticleList(page = 1) {
   if (page == 1) {
     list.value = []
-    window.scrollTo(0, 0)
+    if (process.client) {
+      window.scrollTo(0, 0)
+    }
   }
   pagination.value.loading = true
   $http.get("/api/article",

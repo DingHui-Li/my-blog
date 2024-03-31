@@ -27,8 +27,8 @@ function getTopic() {
 </script>
 <style lang="scss" scoped>
 .topic {
-  // display: flex;
   position: relative;
+  overflow: auto;
 
   .cover {
     position: relative;

@@ -1,24 +1,25 @@
 <template>
   <div class="movie-page">
-    <div v-if="list?.length" class="info">
-      <img class="bg" :src="list[selected].movie.cover" referrerPolicy="no-referrer">
-      <div class="content">
+    <div class="info">
+      <img v-if="list?.length && selected >= 0" class="bg" :src="list[selected].movie.cover"
+        referrer-policy="no-referrer">
+      <div class="content" v-if="list?.length && selected >= 0">
         <div class="rate">
           <el-icon color="#FF9800" :size="20">
             <StarFilled />
           </el-icon>
           {{ list[selected].movie.rate }}
+          <div class="btn" @click="openMovie">豆瓣</div>
         </div>
         <div class="title">{{ list[selected].movie.title }}</div>
         <div class="desc">{{ list[selected].movie.meta }}</div>
         <div class="text">{{ list[selected].textContent }}</div>
         <div class="time">——{{ moment(list[selected].createTime).format('LLLL') }}</div>
-        <div class="btn" @click="openMovie">豆瓣</div>
       </div>
     </div>
     <div class="list">
-      <div class="item" v-for="(item, index) in list" @click="selected = index">
-        <img class="bg" :src="item.movie.cover" referrerPolicy="no-referrer">
+      <div class="item" v-for="(item, index) in list" @click="handleSelect(index)">
+        <img class="bg" :src="item.movie.cover" referrer-policy="no-referrer">
         <div class="content">
           <div class="title">
             <div v-for="word in item.movie.title.split(' ')[0]">{{ word }}</div>
@@ -50,10 +51,16 @@ function openMovie() {
     window.open(list.value[selected.value].movie.link, '_blank')
   }
 }
+function handleSelect(index: number) {
+  selected.value = -1
+  nextTick(() => {
+    selected.value = index
+  })
+}
 </script>
 <style lang="scss" scoped>
 .movie-page {
-  height: calc(100vh - 55px);
+  height: 100%;
   overflow: auto;
 
   .info {
@@ -70,7 +77,7 @@ function openMovie() {
       z-index: 1;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.2);
+      background-color: rgba(0, 0, 0, 0.5);
     }
 
     .bg {
@@ -80,8 +87,10 @@ function openMovie() {
       height: 100%;
       object-fit: cover;
       transition: all .3s;
-      filter: blur(10px);
+      filter: blur(20px);
       transform: scale(1.1);
+      opacity: 0;
+      animation: zoom-in .5s forwards;
     }
 
     .content {
@@ -98,18 +107,20 @@ function openMovie() {
 
       .rate {
         display: flex;
-        align-items: center
+        align-items: center;
+        margin-bottom: 10px;
       }
 
       .title {
-        font-size: 25px;
+        font-size: 20px;
         font-weight: bold;
         margin: 5px 0;
       }
 
       .desc {
-        font-size: 15px;
+        font-size: 12px;
         margin-bottom: 20px;
+        opacity: 0.8;
       }
 
       .text {
@@ -120,18 +131,19 @@ function openMovie() {
       .time {
         text-align: right;
         font-size: 12px;
-        margin-top: 20px;
+        margin-top: 10px;
       }
 
       .btn {
-        padding: 8px 30px;
+        padding: 8px 20px;
         border-radius: 30px;
-        border: 1px solid #fff;
+        // border: 1px solid #fff;
+        background-color: #00B51D;
         width: fit-content;
-        font-size: 15px;
-        margin: 0 auto;
-        margin-top: 15px;
+        font-size: 12px;
+        margin-left: 15px;
         cursor: pointer;
+        color: #fff;
         user-select: none;
 
         &:active {
@@ -230,6 +242,18 @@ function openMovie() {
 
   .item {
     aspect-ratio: 10/30 !important;
+  }
+}
+
+@keyframes zoom-in {
+  0% {
+    opacity: 0;
+    transform: translateY(100%) scale(0.5);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1.1);
   }
 }
 </style>
