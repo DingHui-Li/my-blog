@@ -2,4 +2,6 @@
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
+  --el-drawer-padding-primary: 0;
+  --el-dialog-bg-color: transparent;
 }

@@ -45,6 +45,7 @@ function jump(path: String) {
     height: 100%;
     background-color: #fff;
     padding: 30px;
+    box-sizing: border-box;
 
     .list {
         .item {

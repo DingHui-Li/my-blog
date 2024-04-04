@@ -18,8 +18,8 @@
           :showYear="index == 0 || item.createTimeObj?.getFullYear() != list[index - 1]?.createTimeObj?.getFullYear()"
           :showMonth="index == 0 || item.createTimeObj?.getFullYear() != list[index - 1].createTimeObj?.getFullYear() || item.createTimeObj?.getMonth() != list[index - 1].createTimeObj?.getMonth()">
         </comAlbumItem>
-        <comMomentItem v-else-if="item.type == 'moment'" :data="item"></comMomentItem>
-        <comArticleItem v-else :data="item"></comArticleItem>
+        <comArticleItem v-else-if="item.type == 'article'" :data="item"></comArticleItem>
+        <comMomentItem v-else :data="item"></comMomentItem>
       </div>
       <LoadMore :loading="pagination.loading" :has-more="pagination.hasMore" @load-more="loadMore"> </LoadMore>
     </div>

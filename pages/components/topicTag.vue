@@ -31,7 +31,6 @@ function handleClick() {
   // background: #000;
   cursor: pointer;
   color: #3f51b5;
-  font-weight: bold;
   font-size: 14px;
   white-space: nowrap;
 

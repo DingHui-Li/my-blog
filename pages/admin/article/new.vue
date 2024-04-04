@@ -2,6 +2,7 @@
 .new-article()
   .actions
     .time(v-if="cacheTime") {{ moment(cacheTime).format('YYYY MMMM Do, hh:mm:ss') }}已缓存
+      el-button(text @click='clearCache') 清除缓存
     el-button.btn.confirm(type='primary' @click="save" :loading='loading') {{form._id?'保存':'发布'}}
   .container
     .form-item
@@ -26,9 +27,10 @@
     .form-item(v-if="form.type=='moment'")
       .label 电影
       div(style="display:flex;align-items:center;margin-bottom:15px;")
-        el-select(v-model="form.movie" v-loading="searching" value-key="link" style='flex:1;max-width:500px' filterable remote :remote-method="onMovieInput" reserve-keyword placeholder='搜索电影' :loading="searching")
+        el-select(v-model="form.movie" v-loading="searching" clearable value-key="link" style='flex:1;max-width:500px' filterable remote :remote-method="onMovieInput" reserve-keyword placeholder='搜索电影' :loading="searching")
           el-option(v-for="item in movieList" :label="item.title" :value="item")
         el-button(:disabled="!movieName" style="margin-left:15px" type="primary" :icon="Search" circle @click="searchMovie")
+    comLocation(v-model="form.location")
     .title(v-if='form.type=="article"')
       el-input.input(placeholder="请输入文章标题" v-model="form.title" :maxlength='100' show-word-limit)
     .content
@@ -55,23 +57,15 @@ import { PictureFilled, Plus, Loading, CircleCloseFilled, Search } from "@elemen
 import { uploadImage } from "@/utils/upload.js";
 import { ElMessage, ElMessageBox } from "element-plus";
 import comAddTopic from '../__com__/addTopic'
-import { movieName, movieList, searchMovie, searching, onMovieInput } from './create.js'
+import comLocation from './components/location.vue'
+import { movieName, movieList, searchMovie, searching, onMovieInput, Form } from './create.js'
 
 const route = useRoute();
 const router = useRouter();
 
 let richEditorEl = ref(null)
 let loading = ref(false);
-let form = ref({
-  cover: "",
-  title: "",
-  htmlContent: "",
-  textContent: "",
-  topics: [],
-  type: "moment",
-  imgs: [],
-  movie: {}
-});
+let form = ref(new Form());
 let cacheTime = ref()
 let topics = ref([]);
 let typeList = [
@@ -100,14 +94,16 @@ onMounted(() => {
     if (cache) {
       try {
         cache = JSON.parse(cache)
-        form.value = cache || form.value
-        window.localStorage['cache-article'] = ""
+        if (!cache._id) {
+          form.value = cache || form.value
+          window.localStorage['cache-article'] = ""
+        }
       } catch { }
     }
   }
   timer = setInterval(() => {
     let payload = getPayload()
-    if (payload.textContent) {
+    if (payload.textContent && !payload._id) {
       cacheTime.value = new Date()
       payload.cacheTime = cacheTime.value
       window.localStorage['cache-article'] = JSON.stringify(payload)
@@ -117,6 +113,12 @@ onMounted(() => {
 onBeforeUnmount(() => {
   clearInterval(timer)
 })
+
+function clearCache() {
+  form.value = new Form()
+  cacheTime.value = ""
+  window.localStorage['cache-article'] = ""
+}
 
 let selectedTopicsMap = computed(() => {
   let _t = {};
@@ -217,6 +219,9 @@ function save() {
 .new-article {
   height: 100%;
   overflow: auto;
+  overflow-x: hidden;
+  padding-bottom: 50px;
+  box-sizing: border-box;
 
   .actions {
     position: sticky;
@@ -228,6 +233,7 @@ function save() {
     background: rgba(255, 255, 255);
     padding: 15px;
     border-bottom: 1px solid #eee;
+    box-sizing: border-box;
 
     .time {
       color: #999;
@@ -245,6 +251,7 @@ function save() {
     padding: 15px;
     border-radius: 5px;
     background: #fff;
+    box-sizing: border-box;
   }
 
   .cover {

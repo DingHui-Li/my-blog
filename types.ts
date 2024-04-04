@@ -18,7 +18,7 @@ export type Article = {
   htmlContent: string;
   textContent: string;
   desc: string;
-  location: string;
+  location: Location;
   imgs: Array<string>;
   weather: any;
   movie: Movie;
@@ -30,4 +30,15 @@ export type Movie = {
   title: string;
   rate: string;
   meta: string;
+};
+export type Location = {
+  id: string;
+  name: string;
+  address: string;
+  location: LngLat;
+};
+
+type LngLat = {
+  lat: number;
+  lng: number;
 };

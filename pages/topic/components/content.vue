@@ -87,4 +87,13 @@ function getList(page = 1) {
     margin: 100px 0;
   }
 }
+
+@media screen and (max-width:750px) {
+  .list {
+    .item {
+      padding: 0 !important;
+      padding-bottom: 30px !important;
+    }
+  }
+}
 </style>

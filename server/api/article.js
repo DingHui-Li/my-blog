@@ -11,6 +11,9 @@ export let getArticleList = defineEventHandler(async (event) => {
     filter.topics = { $in: filter.topic };
     delete filter.topic;
   }
+  if (filter.type == 'moment') {
+    delete filter.type
+  }
   if (filter.type == 'photo') {
     filter.type = 'moment'
   }
@@ -74,23 +77,22 @@ export let searchArticleList = defineEventHandler(async (event) => {
 
 //添加
 export let addArticle = defineEventHandler(async (event) => {
-  const headers = event.node.req.headers
-  let ip = headers['remote-host']
-    || headers['x-client-source-ip']
-    || headers['x-real-ip']
-  let location = await getLocationByIp(ip)
-  let weather = {}
-  if (location) {
-    weather = await getWeather(location)
-  }
   const body = await readBody(event);
+  // const headers = event.node.req.headers
+  // let ip = headers['remote-host']
+  //   || headers['x-client-source-ip']
+  //   || headers['x-real-ip']
+  // let location = await getLocationByIp(ip)
+  let weather = {}
+  if (body.location) {
+    weather = await getWeather(body.location?.location)
+  }
   let validRes = validContent(body)
   if (validRes !== true) {
     return validRes
   }
   let res = await Article.create({
     ...body,
-    location,
     weather,
     desc: body.textContent?.slice(0, 50),
   });

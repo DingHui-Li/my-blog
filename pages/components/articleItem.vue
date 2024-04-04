@@ -26,6 +26,7 @@ function jumpArticle(id: String) {
 <style lang='scss' scoped>
 .article-item {
   display: flex;
+  align-items: center;
   width: 100%;
   // border-bottom: 1px solid #99999920;
   padding-bottom: 10px;

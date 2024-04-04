@@ -60,7 +60,7 @@ $max-width: 1080px;
     background-color: #fff;
     backdrop-filter: blur(5px);
     width: 100%;
-    border-bottom: 1px solid #eee;
+    border-bottom: 2px solid #555;
 
     .topbar {
       z-index: 2;

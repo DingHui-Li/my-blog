@@ -17,6 +17,11 @@ export const useSysStore = defineStore('sys', {
                 label: "相册",
                 key: "photo"
             },
+            // {
+            //     label: "足迹",
+            //     key: "map",
+            //     path: "map"
+            // },
             {
                 label: "电影",
                 key: "movie",

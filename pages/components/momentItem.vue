@@ -8,31 +8,37 @@
         <div class="name">{{ profile?.name }}</div>
         <div class="time">{{ moment(data.createTime).format('LLLL') }}</div>
       </div>
-      <div class="content">{{ data.textContent }}</div>
-      <div class="topics">
-        <TopicTag v-for="item in data.topics" :data="item"></TopicTag>
+      <div class="article" v-if="data.type == 'article'">
+        <comArticleItem :data="data" />
       </div>
-      <div class="imgs">
-        <Vimg :class="['img', data.imgs.length == 1 && 'single']" v-for="(item, index) in data.imgs"
-          :style="`width:${data.imgs.length == 1 ? 100 : data.imgs.length == 2 ? 50 : 33.33}%;`" :src="item"
-          :thumb='item + "?x-oss-process=image/resize,m_fill,w_355"' />
-      </div>
-      <div class="movie" v-if="data.movie && data.movie.link" @click="openMovie">
-        <img :src="data.movie.cover" crossOrigin="Anonmyous" referrer-policy="no-referrer" />
-        <div class="movie-info">
-          <div class="name">{{ data.movie.title }}</div>
-          <div class="rate">{{ data.movie.rate }}</div>
+      <template v-else>
+        <div class="content">{{ data.textContent }}</div>
+        <div class="topics">
+          <TopicTag v-for="item in data.topics" :data="item"></TopicTag>
         </div>
-      </div>
-      <div class="info">
-        <div class="location" v-if="data.location">
-          <el-icon class="icon">
-            <LocationFilled></LocationFilled>
-          </el-icon><span>{{ data.location }}</span>
+        <div class="imgs">
+          <Vimg :class="['img', data.imgs.length == 1 && 'single']" v-for="(item, index) in data.imgs"
+            :style="`width:${data.imgs.length == 1 ? 100 : data.imgs.length == 2 ? 50 : 33.33}%;`" :src="item"
+            :thumb='item + "?x-oss-process=image/resize,m_fill,w_355"' />
         </div>
-        <div class="weather" v-if="data.weather" @click="openWeather"> {{ data.weather.text }} {{ data.weather.temp }}°C
+        <div class="movie" v-if="data.movie && data.movie.link" @click="openMovie">
+          <img :src="data.movie.cover" crossOrigin="Anonmyous" referrerpolicy="no-referrer" />
+          <div class="movie-info">
+            <div class="name">{{ data.movie.title }}</div>
+            <div class="rate">{{ data.movie.rate }}</div>
+          </div>
         </div>
-      </div>
+        <div class="info">
+          <div class="location" v-if="data.location" @click="openMap">
+            <el-icon class="icon">
+              <LocationFilled></LocationFilled>
+            </el-icon><span>{{ data.location.name || data.location }}</span>
+          </div>
+          <div class="weather" v-if="data.weather" @click="openWeather"> {{ data.weather.text }} {{ data.weather.temp
+            }}°C
+          </div>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -42,6 +48,7 @@ import moment from "moment";
 import TopicTag from "./topicTag.vue";
 import { LocationFilled } from '@element-plus/icons-vue'
 import { Article } from '~/types';
+import comArticleItem from './articleItem.vue'
 
 const router = useRouter();
 const props = defineProps<{ data: Article }>();
@@ -56,6 +63,15 @@ function openWeather() {
 function openMovie() {
   if (props.data.movie?.link) {
     window.open(props.data.movie.link, '_blank')
+  }
+}
+function openMap() {
+  let latlng = props.data.location?.location
+  if (props.data.location.id) {
+    window.open(`https://uri.amap.com/poidetail?poiid=${props.data.location.id}&src=mypage&callnative=1`, "_blank")
+  }
+  else if (latlng) {
+    window.open(`https://ditu.amap.com/regeo?lng=${latlng.lng}&lat=${latlng.lat}&name=${props.data.location.name}`, '_blank')
   }
 }
 </script>
@@ -99,7 +115,7 @@ function openMovie() {
     }
 
     .topics {
-      margin-bottom: 5px;
+      margin-top: 10px;
     }
 
     .content {
@@ -112,6 +128,7 @@ function openMovie() {
     .imgs {
       max-width: 360px;
       margin-bottom: 5px;
+      margin-top: 5px;
 
       .img {
         display: inline-block;
@@ -130,6 +147,12 @@ function openMovie() {
           // border-radius: 8px;
         }
       }
+    }
+
+    .article {
+      background: #f5f5f5;
+      padding: 10px;
+      border-radius: 5px;
     }
 
     .movie {
@@ -174,13 +197,13 @@ function openMovie() {
     .info {
       display: flex;
       align-items: center;
-      margin-top: 10px;
+      margin-top: 5px;
 
       .location {
         display: flex;
         align-items: center;
         font-size: 13px;
-        color: #303F9F;
+        color: #666;
 
         .icon {
           margin-top: -1px;
@@ -190,7 +213,7 @@ function openMovie() {
 
       .weather {
         font-size: 13px;
-        color: #303F9F;
+        color: #666;
         margin-left: 10px;
       }
     }

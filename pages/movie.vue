@@ -2,7 +2,7 @@
   <div class="movie-page">
     <div class="info">
       <img v-if="list?.length && selected >= 0" class="bg" :src="list[selected].movie.cover"
-        referrer-policy="no-referrer">
+        referrerpolicy="no-referrer">
       <div class="content" v-if="list?.length && selected >= 0">
         <div class="rate">
           <el-icon color="#FF9800" :size="20">
@@ -19,7 +19,7 @@
     </div>
     <div class="list">
       <div class="item" v-for="(item, index) in list" @click="handleSelect(index)">
-        <img class="bg" :src="item.movie.cover" referrer-policy="no-referrer">
+        <img class="bg" :src="item.movie.cover" referrerpolicy="no-referrer">
         <div class="content">
           <div class="title">
             <div v-for="word in item.movie.title.split(' ')[0]">{{ word }}</div>
@@ -67,7 +67,9 @@ function handleSelect(index: number) {
     position: sticky;
     z-index: 9;
     width: 100%;
-    aspect-ratio: 16/9;
+    height: 50%;
+    max-height: 500px;
+    min-height: 200px;
     top: 0;
     overflow: hidden;
 

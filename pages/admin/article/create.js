@@ -27,3 +27,14 @@ export function searchMovie(query) {
   }
 }
 
+export class Form {
+  cover = ""
+  title = ""
+  htmlContent = ""
+  textContent = ""
+  topics = []
+  type = "moment"
+  imgs = []
+  movie = {}
+  location = {}
+}

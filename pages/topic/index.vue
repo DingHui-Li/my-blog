@@ -75,8 +75,11 @@ function updateChart(data: Array<any>) {
 </script>
 <style lang="scss" scoped>
 .topic-page {
+  height: 100%;
+  box-sizing: border-box;
   padding: 15px;
   box-sizing: border-box;
+  overflow: auto;
 
   .chart {
     margin-top: 100px;

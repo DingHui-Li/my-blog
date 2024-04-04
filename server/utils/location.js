@@ -22,12 +22,12 @@ export function getLocationByIp(ip) {
     })
 }
 
-export function getWeather(location = '') {
+export function getWeather(location = {}) {
     return new Promise(async (resolve, reject) => {
         try {
-            let latlon = await getGeocode(location)
+            // let latlon = await getGeocode(location)
             let chunks = []
-            let res = request(`https://devapi.qweather.com/v7/weather/now?location=${latlon.lon},${latlon.lat}&key=${config.qweather.key}`)
+            let res = request(`https://devapi.qweather.com/v7/weather/now?location=${location.lng},${location.lat}&key=${config.qweather.key}`)
             res.on('data', chunk => {
                 chunks.push(chunk)
             })

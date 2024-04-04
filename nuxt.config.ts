@@ -16,7 +16,6 @@ export default defineNuxtConfig({
   nitro: {
     rollupConfig: {
       external: ["ali-oss"],
-      plugins: [],
     },
   },
   imports: {
@@ -30,7 +29,13 @@ export default defineNuxtConfig({
     head: {
       script: [
         {
-          src: "https://api.map.baidu.com/api?v=3.0&ak=9sMw18GCO0oGECPgXreLCUm027j61Xe1",
+          src: "/amapInit.js",
+        },
+        {
+          src: "//webapi.amap.com/maps?v=2.0&key=50a9416f87740841a14bac5ab28ee96a",
+        },
+        {
+          src: "//webapi.amap.com/ui/1.1/main.js",
         },
       ],
     },

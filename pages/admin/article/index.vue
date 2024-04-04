@@ -110,6 +110,7 @@ function handleDelete(e) {
 .topic-list-page {
   padding: 15px;
   background-color: #fff;
+  box-sizing: border-box;
 
   .actions {
     margin-bottom: 15px;
@@ -129,7 +130,7 @@ function handleDelete(e) {
     flex-wrap: wrap;
 
     &:deep(.el-form-item) {
-      width: 400px;
+      max-width: 400px;
       margin-right: 15px;
 
       .el-form-item__label {
@@ -142,10 +143,11 @@ function handleDelete(e) {
   }
 
   .pagination {
+    width: 100%;
     margin-top: 15px;
     display: flex;
     justify-content: center;
+    overflow: hidden;
   }
 }
 </style>
-../../../hooks/useList.js

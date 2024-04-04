@@ -40,7 +40,7 @@ const menuList = [
 </script>
 <style lang="scss" scoped>
 .layout {
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   overflow: hidden;
   background: #dee0ed;
@@ -77,6 +77,7 @@ const menuList = [
     }
 
     .content {
+      position: relative;
       flex: 1;
       height: 100%;
       overflow: auto;

@@ -1,0 +1,329 @@
+<template>
+  <div class="choose-location" @click="handleChooseLocation">
+    <el-icon class="icon">
+      <Location />
+    </el-icon>
+    <div class="text">{{ modelValue?.name || "选择位置" }}</div>
+    <el-icon class="arrow">
+      <ArrowRight />
+    </el-icon>
+    <el-drawer v-model="popup" direction="btt" append-to-body size="fit-content" :with-header="false">
+      <div class="drawer">
+        <div class="header">
+          <h4>选择位置</h4>
+          <el-icon :size="25" @click="popup = false">
+            <Close />
+          </el-icon>
+        </div>
+        <div class="content">
+          <div class="map-container" ref="mapContainer"></div>
+          <div class="search-box">
+            <el-input v-model="input" @blur="handleSearch" placeholder="搜索位置"></el-input>
+          </div>
+          <div class="list">
+            <div :class="['item', selectedLocation.id == currentCity.id && 'active']" @click="handleChoose(currentCity)"
+              style="display: flex;align-items: center;">
+              {{ currentCity.name }}
+            </div>
+            <div :class="['item', selectedLocation.id == item.id && 'active']" v-for="item in poiList" :key="item.id"
+              @click="handleChoose(item)">
+              <div class="name">{{ item.name }}</div>
+              <div class="address" v-if="item.address">
+                <span v-if="item.distance">{{ item.distance }}m |</span>
+                {{ item.address }}
+              </div>
+            </div>
+            <div :class="['btn', !selectedLocation.id && 'disabled']" @click="confirm">确定</div>
+          </div>
+        </div>
+      </div>
+    </el-drawer>
+  </div>
+</template>
+<script setup>
+import { Location, ArrowRight, Close } from '@element-plus/icons-vue'
+const emits = defineEmits(['update:modelValue'])
+const props = defineProps({
+  'modelValue': Object
+})
+
+const mapContainer = ref()
+const popup = ref(false)
+const poiList = ref([])
+const currentCity = ref({})
+const route = useRoute()
+const input = ref('')
+let mapInstance = {}
+let positionPicker = {}
+const selectedLocation = ref({})
+let clickItem = false
+
+watch(popup, v => {
+  if (v) {
+    useRouter().push(route.fullPath + '#chooselocation')
+  } else {
+    useRouter().push(route.path)
+  }
+})
+watch(() => route.hash, v => {
+  if (!v) {
+    popup.value = false
+  }
+})
+
+function handleChooseLocation() {
+  popup.value = true
+  window?.AMapUI.loadUI(['misc/PositionPicker'], function (PositionPicker) {
+    mapInstance = new AMap.Map(mapContainer.value, {
+      zoom: 16
+    })
+    positionPicker = new PositionPicker({
+      mode: 'dragMap',
+      map: mapInstance
+    });
+    positionPicker.on('success', (result) => {
+      if (clickItem) {
+        setTimeout(() => {
+          clickItem = false
+        }, 1000);
+        return
+      }
+      console.log(result)
+      poiList.value = result?.regeocode?.pois
+      //搜索城市位置
+      let city = result.regeocode.addressComponent?.city
+      if (currentCity.value?.name !== city) {
+        searchAddress(city, 1).then(res => {
+          currentCity.value = res[0]
+        })
+      }
+    })
+    positionPicker.on('fail', (err) => {
+      console.log(err)
+    })
+    positionPicker.start()
+  });
+}
+
+function handleSearch() {
+  searchAddress(input.value, 20).then(res => {
+    poiList.value = res
+  })
+}
+function searchAddress(keyword, size = 30) {
+  return new Promise((resolve, reject) => {
+    console.log('searchAddress')
+    AMap.plugin('AMap.PlaceSearch', function () {
+      var autoOptions = {
+        pageSize: size,
+      }
+      var placeSearch = new AMap.PlaceSearch(autoOptions);
+      console.log('keyword=', keyword)
+      placeSearch.search(keyword, (status, result) => {
+        console.log(result)
+        if (status == 'complete') {
+          resolve(result.poiList?.pois || [])
+        } else {
+          reject(result)
+        }
+      })
+    })
+  })
+}
+
+function handleChoose(data) {
+  selectedLocation.value = data
+  clickItem = true
+  positionPicker.start(new AMap.LngLat(data.location.lng, data.location.lat))
+}
+
+function confirm() {
+  if (selectedLocation.value?.id) {
+    popup.value = false
+    let latlng = selectedLocation.value.location
+    emits('update:modelValue', { ...selectedLocation.value, location: { lat: latlng.lat, lng: latlng.lng } })
+  }
+}
+</script>
+<style lang="scss" scoped>
+.choose-location {
+  padding: 15px 0;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 15px;
+  margin-top: 15px;
+
+  &:active {
+    background-color: #eee;
+  }
+
+
+  .icon {
+    font-size: 18px;
+    margin-right: 15px;
+  }
+
+  .text {
+    flex: 1;
+    overflow: hidden;
+    font-size: 15px;
+    user-select: none;
+  }
+}
+
+.drawer {
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 20px 20px 0 0;
+}
+
+.header {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.content {
+  display: flex;
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+
+  .map-container {
+    flex: 1;
+    height: 100%;
+  }
+
+  .list {
+    position: absolute;
+    right: 0;
+    z-index: 2;
+    background-color: #fff;
+    width: 400px;
+    height: calc(100% - 20px);
+    overflow: auto;
+    box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin: 10px;
+    padding-bottom: 15px;
+    box-sizing: border-box;
+
+    .item {
+      padding: 15px 10px;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+      transition: all .2s;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+
+      .name {
+        font-size: 15px;
+      }
+
+      .address {
+        font-size: 12px;
+        color: #666;
+      }
+
+      &.active {
+        background-color: var(--primary-color);
+        color: #fff;
+
+        .address {
+          color: #fff;
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+
+  .search-box {
+    position: absolute;
+    z-index: 2;
+    top: 15px;
+    left: 30px;
+    width: 400px;
+    border-radius: 30px;
+    overflow: hidden;
+    padding: 5px 10px;
+    background-color: #fff;
+    box-sizing: border-box;
+    box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.05);
+
+    &:deep(.el-input) {
+      width: 100%;
+
+      .el-input__wrapper {
+        box-shadow: none;
+      }
+    }
+  }
+
+  .btn {
+    position: sticky;
+    bottom: 0;
+    margin: 0 15px;
+    margin-top: 15px;
+    padding: 14px;
+    width: calc(100% - 30px);
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: 30px;
+    font-size: 14px;
+    background-color: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 0 12px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    user-select: none;
+
+    &:active {
+      opacity: 0.8;
+    }
+
+    &.disabled {
+      background-color: #999;
+      cursor: not-allowed;
+
+      &:active {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+@media screen and (max-width:750px) {
+  .drawer {
+    height: 90vh;
+  }
+
+  .content {
+    flex-direction: column;
+
+    .list {
+      height: 50%;
+      width: 100%;
+    }
+  }
+
+  .search-box {
+    width: calc(100% - 60px) !important;
+    left: 50% !important;
+    transform: translateX(-50%);
+  }
+
+  .list {
+    position: relative !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    height: 50vh !important;
+  }
+}
+</style>
