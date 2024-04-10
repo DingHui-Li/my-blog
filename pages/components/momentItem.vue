@@ -67,11 +67,14 @@ function openMovie() {
 }
 function openMap() {
   let latlng = props.data.location?.location
-  if (props.data.location.id) {
-    window.open(`https://uri.amap.com/poidetail?poiid=${props.data.location.id}&src=mypage&callnative=1`, "_blank")
-  }
-  else if (latlng) {
-    window.open(`https://ditu.amap.com/regeo?lng=${latlng.lng}&lat=${latlng.lat}&name=${props.data.location.name}`, '_blank')
+  if (latlng) {
+    if (props.data.location?.type == 'road') {
+
+      window.open(`https://ditu.amap.com/regeo?lng=${latlng.lng}&lat=${latlng.lat}&name=${props.data.location.name}`, '_blank')
+    }
+    else if (props.data.location.id) {
+      window.open(`https://uri.amap.com/poidetail?poiid=${props.data.location.id}&src=mypage&callnative=1`, "_blank")
+    }
   }
 }
 </script>
@@ -204,6 +207,7 @@ function openMap() {
         align-items: center;
         font-size: 13px;
         color: #666;
+        cursor: pointer;
 
         .icon {
           margin-top: -1px;
@@ -215,6 +219,7 @@ function openMap() {
         font-size: 13px;
         color: #666;
         margin-left: 10px;
+        cursor: pointer;
       }
     }
   }

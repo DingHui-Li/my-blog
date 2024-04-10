@@ -18,9 +18,12 @@
         <div class="content">
           <div class="map-container" ref="mapContainer"></div>
           <div class="search-box">
-            <el-input v-model="input" @blur="handleSearch" placeholder="搜索位置"></el-input>
+            <el-input v-model="input" placeholder="搜索位置"></el-input>
+            <el-icon class="icon" @click="handleSearch">
+              <Search />
+            </el-icon>
           </div>
-          <div class="list">
+          <div class="list" v-loading="loading">
             <div :class="['item', selectedLocation.id == currentCity.id && 'active']" @click="handleChoose(currentCity)"
               style="display: flex;align-items: center;">
               {{ currentCity.name }}
@@ -41,7 +44,7 @@
   </div>
 </template>
 <script setup>
-import { Location, ArrowRight, Close } from '@element-plus/icons-vue'
+import { Location, ArrowRight, Close, Search } from '@element-plus/icons-vue'
 const emits = defineEmits(['update:modelValue'])
 const props = defineProps({
   'modelValue': Object
@@ -53,6 +56,7 @@ const poiList = ref([])
 const currentCity = ref({})
 const route = useRoute()
 const input = ref('')
+const loading = ref(false)
 let mapInstance = {}
 let positionPicker = {}
 const selectedLocation = ref({})
@@ -62,7 +66,7 @@ watch(popup, v => {
   if (v) {
     useRouter().push(route.fullPath + '#chooselocation')
   } else {
-    useRouter().push(route.path)
+    useRouter().back()
   }
 })
 watch(() => route.hash, v => {
@@ -89,7 +93,11 @@ function handleChooseLocation() {
         return
       }
       console.log(result)
-      poiList.value = result?.regeocode?.pois
+      result.regeocode.roads = result.regeocode.roads?.map(item => {
+        item.type = 'road'
+        return item
+      }) || []
+      poiList.value = [...result.regeocode.roads, ...result?.regeocode?.pois]
       //搜索城市位置
       let city = result.regeocode.addressComponent?.city
       if (currentCity.value?.name !== city) {
@@ -101,13 +109,24 @@ function handleChooseLocation() {
     positionPicker.on('fail', (err) => {
       console.log(err)
     })
-    positionPicker.start()
+    if (props.modelValue.location?.lat) {
+      let location = props.modelValue.location
+      positionPicker.start(new AMap.LngLat(location.lng, location.lat))
+    } else {
+      positionPicker.start()
+    }
   });
 }
 
 function handleSearch() {
+  if (!input.value) {
+    return
+  }
+  loading.value = true
   searchAddress(input.value, 20).then(res => {
     poiList.value = res
+  }).finally(() => {
+    loading.value = false
   })
 }
 function searchAddress(keyword, size = 30) {
@@ -256,13 +275,22 @@ function confirm() {
     background-color: #fff;
     box-sizing: border-box;
     box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
 
     &:deep(.el-input) {
-      width: 100%;
+      flex: 1;
 
       .el-input__wrapper {
         box-shadow: none;
       }
+    }
+
+    .icon {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--primary-color);
+      margin-right: 5px;
     }
   }
 

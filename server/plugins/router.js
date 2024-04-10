@@ -24,6 +24,8 @@ import * as LogApi from '../api/log.js'
 
 const router = createRouter();
 
+// router.options("/**", defineEventHandler(event => 'options request'))
+
 router.get("/api/topic", getTopicList);
 router.get("/api/topic/st", stTopic);
 router.get("/api/topic/:id", getTopic);

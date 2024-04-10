@@ -17,6 +17,17 @@ export default defineNuxtConfig({
     rollupConfig: {
       external: ["ali-oss"],
     },
+    // routeRules: {
+    //   "/api/**": {
+    //     cors: true,
+    //     // headers: {
+    //     //   "Access-Control-Allow-Origin": "*",
+    //     //   "Access-Control-Allow-Methods": "*",
+    //     //   "Access-Control-Allow-Headers": "*",
+    //     //   "Access-Control-Allow-credentials": "true",
+    //     // },
+    //   },
+    // },
   },
   imports: {
     dirs: ["composables/*/*.{ts,js,mjs,mts}"],

@@ -30,6 +30,7 @@ function loadMore() {
     font-style: oblique;
     margin-top: 10px;
     cursor: pointer;
+    user-select: none;
 
     &:active {
         opacity: 0.8;

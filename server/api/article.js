@@ -3,6 +3,7 @@ import parseQuery from "../utils/parseQuery";
 import Article from "../models/article";
 import { getLocationByIp, getWeather } from "../utils/location";
 import * as MovieService from '../services/movie'
+import * as ArticleService from '../services/article'
 
 //查询列表
 export let getArticleList = defineEventHandler(async (event) => {
@@ -16,6 +17,7 @@ export let getArticleList = defineEventHandler(async (event) => {
   }
   if (filter.type == 'photo') {
     filter.type = 'moment'
+    filter.imgs = { "$ne": null, "$not": { "$size": 0 } }
   }
   if (filter.type == 'movie') {
     filter = { 'movie.link': { $ne: null } }
@@ -91,6 +93,7 @@ export let addArticle = defineEventHandler(async (event) => {
   if (validRes !== true) {
     return validRes
   }
+  body.movie.cover = await ArticleService.saveNetworkImg(body.movie?.cover)
   let res = await Article.create({
     ...body,
     weather,
@@ -106,6 +109,7 @@ export let editArticle = defineEventHandler(async (event) => {
   if (validRes !== true) {
     return validRes
   }
+  body.movie.cover = await ArticleService.saveNetworkImg(body.movie?.cover)
   let res = await Article.updateOne(
     { _id: body._id },
     {

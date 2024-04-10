@@ -25,6 +25,9 @@ export function getLocationByIp(ip) {
 export function getWeather(location = {}) {
     return new Promise(async (resolve, reject) => {
         try {
+            if (!location?.lat) {
+                return resolve({})
+            }
             // let latlon = await getGeocode(location)
             let chunks = []
             let res = request(`https://devapi.qweather.com/v7/weather/now?location=${location.lng},${location.lat}&key=${config.qweather.key}`)
@@ -34,9 +37,13 @@ export function getWeather(location = {}) {
             res.on('end', () => {
                 let buffer = Buffer.concat(chunks);
                 zlib.gunzip(buffer, (err, d) => {
-                    let data = JSON.parse(d.toString())
-                    data.now.fxLink = data.fxLink
-                    resolve(data?.now || {})
+                    try {
+                        let data = JSON.parse(d.toString())
+                        data.now.fxLink = data?.fxLink
+                        resolve(data?.now || {})
+                    } catch (err) {
+                        throw err
+                    }
                 })
             })
         } catch (err) {
