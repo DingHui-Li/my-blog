@@ -5,8 +5,8 @@
       comMomentItem(v-if='item.type=="moment"' :data='item')
       comAlbumItem(v-else-if='item.type=="photo"' :showMonth='true' :data='item')
       comArticleItem(v-else :data='item')
-    .empty(v-if="!list.length&!pagation.loading") 无数据
-    LoadMore(:loading="pagation.loading" :hasMore="pagation.isMore" @loadMore="loadMore")
+    .empty(v-if="!list.length&!pagination.loading") 无数据
+    LoadMore(:loading="pagination.loading" :hasMore="pagination.isMore" @loadMore="loadMore")
 </template>
 <script setup>
 const router = useRouter();
@@ -17,7 +17,7 @@ import comAlbumItem from '../../components/albumItem'
 
 const route = useRoute();
 
-let pagation = ref({
+let pagination = ref({
   page: 1,
   size: 10,
   loading: false,
@@ -27,32 +27,32 @@ let list = ref([]);
 getList();
 
 function loadMore() {
-  if (!pagation.value.loading && pagation.value.isMore) {
-    getList(pagation.value.page + 1)
+  if (!pagination.value.loading && pagination.value.isMore) {
+    getList(pagination.value.page + 1)
   }
 }
 function getList(page = 1) {
-  if (pagation.value.loading) return;
+  if (pagination.value.loading) return;
   console.log("get list");
-  pagation.value.loading = true;
+  pagination.value.loading = true;
   if (page == 1) {
     list.value = []
   }
   $http
     .get("/api/article", {
       page,
-      size: pagation.value.size,
+      size: pagination.value.size,
       topic: route.params.id,
     })
     .then((res) => {
       if (res.data.list?.length) {
         list.value = [...list.value, ...res.data.list];
-        pagation.value.page = page;
-        pagation.value.isMore = page * pagation.value.size < res.data.total;
+        pagination.value.page = page;
+        pagination.value.isMore = page * pagination.value.size < res.data.total;
       }
     })
     .finally(() => {
-      pagation.value.loading = false;
+      pagination.value.loading = false;
     });
 }
 </script>

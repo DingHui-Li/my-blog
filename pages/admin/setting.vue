@@ -127,6 +127,9 @@ function handleSave() {
 </script>
 <style lang='scss' scoped>
 .setting-page {
+  height: 100%;
+  overflow: auto;
+  box-sizing: border-box;
   padding: 15px;
   background-color: #fff;
 

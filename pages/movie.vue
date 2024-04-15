@@ -1,8 +1,7 @@
 <template>
   <div class="movie-page">
     <div class="info">
-      <img v-if="list?.length && selected >= 0" class="bg" :src="list[selected].movie.cover"
-        referrerpolicy="no-referrer">
+      <img v-if="list?.length && selected >= 0" class="bg" :src="list[selected].movie.cover" referrerpolicy="no-referrer">
       <div class="content" v-if="list?.length && selected >= 0">
         <div class="rate">
           <el-icon color="#FF9800" :size="20">
@@ -37,13 +36,13 @@ import useList from "@/hooks/useList";
 import { Article } from "~/types";
 import moment from "moment";
 
-let { pagation, list, getList } = useList<Array<Article>>("/api/article");
+let { pagination, list, getList } = useList<Array<Article>>("/api/article");
 const selected = ref(0)
 
 getList({
   type: "movie",
-  page: pagation.value.page,
-  size: pagation.value.size
+  page: pagination.value.page,
+  size: pagination.value.size
 })
 
 function openMovie() {

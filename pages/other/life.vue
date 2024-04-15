@@ -48,6 +48,8 @@ onBeforeUnmount(() => {
     height: 100%;
     background-color: #fff;
     padding: 30px;
+    overflow: auto;
+    box-sizing: border-box;
 
     .title {
         font-size: 15px;

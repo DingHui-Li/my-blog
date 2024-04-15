@@ -4,7 +4,7 @@
       <div class="title">{{ data.title }}</div>
       <div class="subtitle">
         <TopicTag v-for="topic in data.topics" :data="topic"></TopicTag>
-        <div class="date">{{ moment(Number(data.updateTime)).fromNow() }}</div>
+        <div class="date">{{ moment(Number(data.createTime)).fromNow() }}</div>
       </div>
       <div class="desc">{{ data.desc }}...</div>
     </div><img class="cover" v-if="data.cover" :src="`${data.cover}?x-oss-process=image/resize,m_fill,w_400`" />

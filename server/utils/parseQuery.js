@@ -1,14 +1,14 @@
 export default function (query) {
-  let pagation = {
+  let pagination = {
     page: Number(query?.page || 1),
     size: Number(query?.size || 10),
   };
   let filter = {};
   Object.keys(query).forEach((key) => {
-    if (!pagation[key] && query[key] !== "") {
+    if (!pagination[key] && query[key] !== "") {
       filter[key] = query[key];
     }
   });
 
-  return { pagation, filter };
+  return { pagination, filter };
 }

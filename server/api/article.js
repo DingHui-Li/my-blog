@@ -7,7 +7,7 @@ import * as ArticleService from '../services/article'
 
 //查询列表
 export let getArticleList = defineEventHandler(async (event) => {
-  let { pagation, filter } = parseQuery(getQuery(event));
+  let { pagination, filter } = parseQuery(getQuery(event));
   if (filter.topic) {
     filter.topics = { $in: filter.topic };
     delete filter.topic;
@@ -24,15 +24,15 @@ export let getArticleList = defineEventHandler(async (event) => {
   }
   let res = await Article.find(filter)
     .select({ htmlContent: 0 })
-    .skip((pagation.page - 1) * pagation.size)
-    .limit(pagation.size)
+    .skip((pagination.page - 1) * pagination.size)
+    .limit(pagination.size)
     .sort({ createTime: -1 })
     .populate("topics");
   let total = await Article.find(filter).count();
   return new BaseResponse({
     data: {
       list: res,
-      ...pagation,
+      ...pagination,
       total,
     },
   });
@@ -61,7 +61,7 @@ export let getSameArticleList = defineEventHandler(async (event) => {
 
 //搜索
 export let searchArticleList = defineEventHandler(async (event) => {
-  let { pagation, filter } = parseQuery(getQuery(event));
+  let { pagination, filter } = parseQuery(getQuery(event));
   if (filter.keyword) {
     filter["$text"] = { $search: filter.keyword }
     delete filter.keyword
@@ -71,8 +71,8 @@ export let searchArticleList = defineEventHandler(async (event) => {
   }
   let res = await Article.find(filter)
     .select({ htmlContent: 0, textContent: 0 })
-    .skip((pagation.page - 1) * pagation.size)
-    .limit(pagation.size)
+    .skip((pagination.page - 1) * pagination.size)
+    .limit(pagination.size)
     .populate("topics");
   return new BaseResponse({ data: res });
 });
@@ -93,7 +93,9 @@ export let addArticle = defineEventHandler(async (event) => {
   if (validRes !== true) {
     return validRes
   }
-  body.movie.cover = await ArticleService.saveNetworkImg(body.movie?.cover)
+  if (body.movie) {
+    body.movie.cover = await ArticleService.saveNetworkImg(body.movie?.cover)
+  }
   let res = await Article.create({
     ...body,
     weather,
@@ -109,7 +111,9 @@ export let editArticle = defineEventHandler(async (event) => {
   if (validRes !== true) {
     return validRes
   }
-  body.movie.cover = await ArticleService.saveNetworkImg(body.movie?.cover)
+  if (body.movie) {
+    body.movie.cover = await ArticleService.saveNetworkImg(body.movie?.cover)
+  }
   let res = await Article.updateOne(
     { _id: body._id },
     {

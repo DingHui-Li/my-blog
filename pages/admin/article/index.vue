@@ -7,10 +7,10 @@
       el-form-item(label='文章内容')
         el-input(v-model="filter.content")
     el-button(@click='reset') 重置
-    el-button(type='primary' @click='pagation.page=1;_getList()') 搜索
+    el-button(type='primary' @click='pagination.page=1;_getList()') 搜索
   .actions
     el-button.btn(type='primary' @click="router.push('/admin/article/new')") 写文章
-  el-table(:data='list' stripe :loading='pagation.loading' @row-click='handleRowClick' :row-key='row=>row.id')  
+  el-table(:data='list' stripe :loading='pagination.loading' @row-click='handleRowClick' :row-key='row=>row.id')  
     //- el-table-column(type="selection" width="55")
     el-table-column(v-for="col in cols"  :prop='col.key' :label='col.label')
       template(#default="{row}")
@@ -29,11 +29,11 @@
   .pagination
     el-pagination(background 
       layout="sizes,prev, pager, next" 
-      :total="pagation.total"  
-      v-model:page-size='pagation.size' 
-      v-model:current-page='pagation.page' 
+      :total="pagination.total"  
+      v-model:page-size='pagination.size' 
+      v-model:current-page='pagination.page' 
       @current-change='getList' 
-      @size-change="pagation.page=1;_getList()")
+      @size-change="pagination.page=1;_getList()")
   </template>
 <script setup>
 import moment from "moment";
@@ -42,7 +42,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import $http from "@/utils/http.js";
 
 const router = useRouter();
-let { pagation, list, getList } = useList("/api/admin/articleList");
+let { pagination, list, getList } = useList("/api/admin/articleList");
 
 class Filter {
   title = null;
@@ -74,12 +74,12 @@ let filter = ref(new Filter());
 _getList();
 
 function reset() {
-  pagation.value.page = 1;
+  pagination.value.page = 1;
   filter.value = new Filter();
   _getList();
 }
 function _getList() {
-  getList(filter.value);
+  getList(filter.value, false);
 }
 function handleDelete(e) {
   ElMessageBox.confirm(
@@ -108,9 +108,12 @@ function handleDelete(e) {
 </script>
 <style lang="scss" scoped>
 .topic-list-page {
+  height: 100%;
+  box-sizing: border-box;
   padding: 15px;
   background-color: #fff;
   box-sizing: border-box;
+  overflow: auto;
 
   .actions {
     margin-bottom: 15px;

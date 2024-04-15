@@ -1,33 +1,53 @@
 import { ref } from "vue";
 import $http from "@/utils/http.js";
 
-export default function <T>(url: string) {
-  let pagation = ref(new Pagation());
-  let list = ref<T>();
+export default function <T>(url: string, series: boolean = true) {
+  let pagination = ref(new Pagination());
+  let list = ref<Array<T>>([]);
 
-  function getList<T>(filter = {}) {
-    pagation.value.loading = true;
+  function getList<T>(filter: {}) {
+    pagination.value.loading = true;
     return $http
       .get(url, {
         ...filter,
-        page: pagation.value.page,
-        size: pagation.value.size,
+        page: pagination.value.page,
+        size: pagination.value.size,
       })
       .then((res) => {
-        list.value = res.data?.list;
-        pagation.value.total = res.data?.total;
+        if (series) {//是否连续
+          if (pagination.value.page == 1) {
+            list.value = res.data?.list;
+          } else {
+            list.value = [...list.value!, ...res.data?.list]
+          }
+        } else {
+          list.value = res.data?.list;
+        }
+        pagination.value.total = res.data?.total;
+        pagination.value.hasMore = list.value!.length < res.data?.total;
+      }).catch(err => {
+        //加载错误，页码回滚
+        pagination.value.page = pagination.value.page == 1 ? 1 : (pagination.value.page - 1)
       })
       .finally(() => {
-        pagation.value.loading = false;
+        pagination.value.loading = false;
       });
   }
 
-  return { pagation, list, getList };
+  function loadMore(filter: {}) {
+    if (pagination.value.hasMore && !pagination.value.loading) {
+      pagination.value.page += 1
+      getList(filter)
+    }
+  }
+
+  return { pagination, list, getList, loadMore };
 }
 
-class Pagation {
+class Pagination {
   page = 1;
   size = 10;
   total = 0;
+  hasMore = false;
   loading = false;
 }

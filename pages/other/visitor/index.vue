@@ -30,8 +30,10 @@ function getList() {
 <style lang='scss' scoped>
 .visitor-page {
     height: 100%;
+    overflow: auto;
     background-color: #fff;
     padding: 30px;
+    box-sizing: border-box;
 
     .title {
         font-size: 20px;

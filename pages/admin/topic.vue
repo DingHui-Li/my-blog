@@ -75,6 +75,9 @@ function handleDelete(data, index) {
 </script>
 <style lang="scss" scoped>
 .topic-list-page {
+  height: 100%;
+  overflow: auto;
+  box-sizing: border-box;
   padding: 15px;
   background-color: #fff;
 

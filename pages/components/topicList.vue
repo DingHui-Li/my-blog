@@ -2,7 +2,7 @@
 .topic-list
   .header
     .title 主题列表
-    .pagation(v-if="topics.length>slidesPerView")
+    .pagination(v-if="topics.length>slidesPerView")
       .btn(@click="controlledSwiper.slidePrev()")
         el-icon
           ArrowLeft
@@ -45,18 +45,22 @@ onMounted(() => {
 <style lang="scss" scoped>
 .topic-list {
   padding: 30px;
+
   .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 15px;
+
     .title {
       font-size: 14px;
       font-weight: bold;
       color: #333;
     }
-    .pagation {
+
+    .pagination {
       display: flex;
+
       .btn {
         border: 1px solid #999;
         border-radius: 5px;
@@ -68,6 +72,7 @@ onMounted(() => {
         margin-left: 10px;
         cursor: pointer;
         transition: all 0.2s;
+
         &:hover {
           background: orangered;
           border-color: orangered;
@@ -75,11 +80,13 @@ onMounted(() => {
       }
     }
   }
+
   .list {
     white-space: nowrap;
     overflow: hidden;
-    .swiper {
-    }
+
+    .swiper {}
+
     .topic {
       position: relative;
       overflow: hidden;
@@ -87,6 +94,7 @@ onMounted(() => {
       cursor: pointer;
       width: 100%;
       height: calc(170px / 0.68);
+
       .img {
         position: absolute;
         z-index: 0;
@@ -97,11 +105,13 @@ onMounted(() => {
         object-fit: cover;
         transition: all 0.3s;
       }
+
       &:hover {
         .img {
           transform: scale(1.2);
         }
       }
+
       .content {
         width: 100%;
         height: 100%;
@@ -122,6 +132,7 @@ onMounted(() => {
           line-height: 20px;
           word-break: break-all;
         }
+
         .subtitle {
           font-size: 12px;
           line-height: 12px;
@@ -132,9 +143,11 @@ onMounted(() => {
     }
   }
 }
+
 @media screen and (max-width: 1080px) {
   .topic-list {
     padding: 15px;
+
     .list {
       .topic {
         &:hover {
@@ -145,5 +158,4 @@ onMounted(() => {
       }
     }
   }
-}
-</style>
+}</style>

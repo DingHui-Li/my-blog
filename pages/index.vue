@@ -1,6 +1,6 @@
 <template>
   <div style="overflow: auto;">
-    <div class="cover" v-if="website.cover">
+    <div class="cover" v-if="type == '' && website.cover">
       <div class="img-box">
         <img :src="website.cover" />
       </div>
@@ -12,84 +12,52 @@
       </div>
     </div>
     <div class="home">
-      <div class="item" :class="type" v-for="(item, index) in list" :key="item._id.toString()"
+      <div class="item" :class="type" v-for="(item, index) in _list" :key="item._id.toString()"
         :style="`animation-delay:${index % 10 * 100}ms`">
         <comAlbumItem v-if="type == 'photo'" :data="item"
-          :showYear="index == 0 || item.createTimeObj?.getFullYear() != list[index - 1]?.createTimeObj?.getFullYear()"
-          :showMonth="index == 0 || item.createTimeObj?.getFullYear() != list[index - 1].createTimeObj?.getFullYear() || item.createTimeObj?.getMonth() != list[index - 1].createTimeObj?.getMonth()">
+          :showYear="index == 0 || item.createTimeObj?.getFullYear() != _list[index - 1]?.createTimeObj?.getFullYear()"
+          :showMonth="index == 0 || item.createTimeObj?.getFullYear() != _list[index - 1].createTimeObj?.getFullYear() || item.createTimeObj?.getMonth() != _list[index - 1].createTimeObj?.getMonth()">
         </comAlbumItem>
         <comArticleItem v-else-if="item.type == 'article'" :data="item"></comArticleItem>
         <comMomentItem v-else :data="item"></comMomentItem>
       </div>
-      <LoadMore :loading="pagination.loading" :has-more="pagination.hasMore" @load-more="loadMore"> </LoadMore>
+      <LoadMore :loading="pagination.loading" :has-more="pagination.hasMore" @load-more="loadMore(searchFilter)">
+      </LoadMore>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import $http from "@/utils/http.js";
 import comArticleItem from './components/articleItem.vue'
 import comMomentItem from './components/momentItem.vue'
 import comAlbumItem from './components/albumItem.vue'
 import { Article } from "~/types";
-import { Console } from 'console';
+import useList from '~/hooks/useList';
 
 const { globalSetting } = storeToRefs(useSysStore())
 const website = computed(() => globalSetting.value.website || {})
 const profile = computed(() => globalSetting.value.profile || {})
 const route = useRoute()
-let type = ref(route.hash?.replace('#', ''))
-let list = ref<Array<Article>>([]);
+let type = ref('')
+let { pagination, list, getList, loadMore } = useList<Article>("/api/article");
 
-
-const pagination = ref({
-  loading: false,
-  hasMore: false,
-  page: 1,
-  size: 10
+const searchFilter = computed(() => {
+  return { type: type.value || "moment" }
+})
+watch(() => route.hash, (hash) => {
+  list.value = []
+  type.value = hash?.replace('#', '')
+  getList(searchFilter.value);
+}, {
+  immediate: true
 })
 
-watch(() => route.hash, v => {
-  type.value = v?.replace('#', '')
-  getArticleList()
-}, { immediate: true })
-
-function loadMore() {
-  console.log('loadMore')
-  getArticleList(pagination.value.page + 1)
-}
-function getArticleList(page = 1) {
-  if (page == 1) {
-    list.value = []
-    if (process.client) {
-      window.scrollTo(0, 0)
-    }
-  }
-  pagination.value.loading = true
-  $http.get("/api/article",
-    {
-      type: type.value || "moment",
-      page,
-      size: pagination.value.size
-    }).then(({ data: res }) => {
-      let t: Array<Article> = res.list
-      if (type.value == 'photo') {
-        t = t.filter(item => item.imgs.length > 0)
-      }
-      t = t?.map((item, index) => {
-        item.createTimeObj = new Date(Number(item.createTime))
-        return item
-      })
-      list.value = [...list.value, ...t];
-      pagination.value = {
-        ...pagination.value,
-        page,
-        hasMore: res.page * res.size < res.total
-      }
-    }).finally(() => {
-      pagination.value.loading = false
-    });
-}
+const _list = computed(() => {
+  return list.value.map((item: Article) => {
+    item.createTimeObj = new Date(Number(item.createTime))
+    return item
+  })
+})
 </script>
 <style lang="scss" scoped>
 .cover {

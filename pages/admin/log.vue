@@ -32,6 +32,9 @@ onBeforeUnmount(() => {
 </script>
 <style lang='scss' scoped>
 .log-page {
+    height: 100%;
+    overflow: auto;
+    box-sizing: border-box;
     padding: 15px;
     background-color: #fff;
 
