@@ -103,7 +103,7 @@ onMounted(() => {
   }
   timer = setInterval(() => {
     let payload = getPayload()
-    if (payload.textContent && !payload._id) {
+    if (payload.textContent) {
       cacheTime.value = new Date()
       payload.cacheTime = cacheTime.value
       window.localStorage['cache-article'] = JSON.stringify(payload)
