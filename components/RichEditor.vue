@@ -92,7 +92,11 @@ let editor = new Editor({
         Document,
         Paragraph,
         Text,
-        Image,
+        Image.configure({
+            HTMLAttributes: {
+                class: 'content-img',
+            },
+        }),
         Highlight,
         Link.configure({
 

@@ -39,8 +39,11 @@ export function getWeather(location = {}) {
                 zlib.gunzip(buffer, (err, d) => {
                     try {
                         let data = JSON.parse(d.toString())
-                        data.now.fxLink = data?.fxLink
-                        resolve(data?.now || {})
+                        resolve({
+                            fxLink: data?.fxLink,
+                            text: data.now?.text,
+                            temp: data.now?.temp,
+                        })
                     } catch (err) {
                         throw err
                     }

@@ -16,10 +16,6 @@ getArticle();
 
 function getArticle() {
   $http.get(`/api/article/${route.params.id}`).then((res) => {
-    res.data.htmlContent = res.data?.htmlContent?.replaceAll(
-      "<img",
-      '<img class="content-img" style="max-width:100%;cursor:zoom-in"'
-    );
     detail.value = res?.data;
   });
 }

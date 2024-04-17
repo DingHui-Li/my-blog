@@ -35,7 +35,7 @@
             </el-icon><span>{{ data.location.name || data.location }}</span>
           </div>
           <div class="weather" v-if="data.weather" @click="openWeather"> {{ data.weather.text }} {{ data.weather.temp
-            }}°C
+          }}°C
           </div>
         </div>
       </template>
@@ -68,13 +68,13 @@ function openMovie() {
 function openMap() {
   let latlng = props.data.location?.location
   if (latlng) {
-    if (props.data.location?.type == 'road') {
-
-      window.open(`https://ditu.amap.com/regeo?lng=${latlng.lng}&lat=${latlng.lat}&name=${props.data.location.name}`, '_blank')
-    }
-    else if (props.data.location.id) {
-      window.open(`https://uri.amap.com/poidetail?poiid=${props.data.location.id}&src=mypage&callnative=1`, "_blank")
-    }
+    window.open(`https://ditu.amap.com/regeo?lng=${latlng.lng}&lat=${latlng.lat}&name=${props.data.location.name}`, '_blank')
+    // if (props.data.location?.type == 'road') {
+    //   window.open(`https://ditu.amap.com/regeo?lng=${latlng.lng}&lat=${latlng.lat}&name=${props.data.location.name}`, '_blank')
+    // }
+    // else if (props.data.location.id) {
+    //   window.open(`https://uri.amap.com/poidetail?poiid=${props.data.location.id}&src=mypage&callnative=1`, "_blank")
+    // }
   }
 }
 </script>

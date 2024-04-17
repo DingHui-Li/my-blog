@@ -1,6 +1,7 @@
 <template lang="pug">
 NuxtLayout(:name="layout")
-  NuxtPage(keep-alive style="position:absolute;width:100%;height:100%")
+  NuxtPage(v-if="route.name.includes('webview')")
+  NuxtPage(v-else keep-alive style="position:absolute;width:100%;height:100%")
 </template>
 <script setup>
 import "./utils/momentCh.js";
@@ -14,7 +15,7 @@ store.getData()
 
 let layout = computed(() => {
   let routeName = route.name;
-  if (routeName.includes('inappwebview') || routeName.includes('login')) {
+  if (routeName.includes('webview') || routeName.includes('login')) {
     return 'none'
   }
   if (routeName.includes('admin')) {

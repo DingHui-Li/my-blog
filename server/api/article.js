@@ -23,7 +23,7 @@ export let getArticleList = defineEventHandler(async (event) => {
     filter = { 'movie.link': { $ne: null } }
   }
   let res = await Article.find(filter)
-    .select({ htmlContent: 0 })
+    .select({ htmlContent: 0, textContent: 0 })
     .skip((pagination.page - 1) * pagination.size)
     .limit(pagination.size)
     .sort({ createTime: -1 })
