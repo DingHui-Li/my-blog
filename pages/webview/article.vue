@@ -1,9 +1,6 @@
 <template>
     <div class="article-content" ref="editorEl">
         <RichEditor v-if="detail._id" :value="detail.htmlContent" readonly />
-        <div class="img-preview" v-if='previewImg.show' @click="previewImg.show = false">
-            <img :src='previewImg.url' />
-        </div>
     </div>
 </template>
 <script setup>
@@ -12,16 +9,14 @@ import $http from "@/utils/http.js";
 const route = useRoute();
 const editorEl = ref()
 let detail = ref({});
-let previewImg = ref({
-    show: false,
-    url: "",
-});
 onMounted(() => {
     getArticle();
-    window.getClientRect = () => {
-        let rect = editorEl.value.getBoundingClientRect()
-        return rect;
-    }
+    let rect = editorEl.value.getBoundingClientRect()
+    console.log(rect)
+    window.addEventListener("flutterInAppWebViewPlatformReady", function (event) {
+        console.log("flutterInAppWebViewPlatformReady")
+        window.flutter_inappwebview.callHandler('clientHeight', editorEl.value.getBoundingClientRect()?.height);
+    });
 })
 
 function getArticle() {
@@ -41,10 +36,7 @@ function addContentImgEvent() {
     for (let index = 0; index < imgs.length; index++) {
         let img = imgs[index];
         img.addEventListener("click", (e) => {
-            previewImg.value = {
-                show: true,
-                url: e.target.currentSrc,
-            };
+            window.flutter_inappwebview.callHandler('previewImg', e.target.currentSrc);
         });
     }
 }
