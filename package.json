@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "node  --max-old-space-size=4096 node_modules/nuxt/bin/nuxt.mjs build",
-    "dev": "nuxt dev",
+    "dev": "nuxt dev --host",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
