@@ -20,7 +20,7 @@ export let getArticleList = defineEventHandler(async (event) => {
     filter.imgs = { "$ne": null, "$not": { "$size": 0 } }
   }
   if (filter.type == 'movie') {
-    filter = { 'movie.link': { $ne: null } }
+    filter = { 'movie.link': { $ne: null }, 'movie.title': { $ne: "" } }
   }
   let select = { htmlContent: 0 }
   if (filter.type == 'article') {

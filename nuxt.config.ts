@@ -40,6 +40,9 @@ export default defineNuxtConfig({
     head: {
       script: [
         {
+          src: "https://unpkg.com/darkreader@4.9.84",
+        },
+        {
           src: "/amapInit.js",
         },
         {

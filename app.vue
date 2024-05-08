@@ -29,7 +29,7 @@ watch(() => route.fullPath, (v) => {
 })
 
 onMounted(() => {
-  store.setToken(window.localStorage['token'] || "")
+  store.init()
 })
 </script>
 <style>

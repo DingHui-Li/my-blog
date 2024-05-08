@@ -55,9 +55,16 @@ export const useSysStore = defineStore('sys', {
                 avatar: "",
                 brithday: ''
             }
-        }
+        },
+        theme: "light",//dark
     }),
     actions: {
+        init() {
+            if (process.client) {
+                this.setToken(window.localStorage['token'] || "")
+                this.changeTheme(window.localStorage['theme'] || 'light')
+            }
+        },
         login(params = {}) {
             return $http.post('/api/login', params).then(res => {
                 this.setToken(res.data?.token || "")
@@ -90,6 +97,12 @@ export const useSysStore = defineStore('sys', {
         },
         changeGlobalSetting(config) {
             this.globalSetting = config
+        },
+        changeTheme(theme) {
+            this.theme = theme
+            if (process.client) {
+                window.localStorage['theme'] = theme
+            }
         }
     }
 })

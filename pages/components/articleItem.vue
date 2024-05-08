@@ -76,7 +76,7 @@ function jumpArticle(id: String) {
     }
 
     .title {
-      font-size: 16px;
+      font-size: 20px;
       color: #333;
       font-weight: bold;
       transition: all 0.3s;

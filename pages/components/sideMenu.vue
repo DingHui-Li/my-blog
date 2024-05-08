@@ -5,9 +5,12 @@
     .label {{ item.label }}
   .website-info
     a(href='https://github.com/DingHui-Li/my-blog' target="_blank") Github
+    div(style="margin-top:10px")
+      el-switch(v-model="isLightTheme" width="50" inline-prompt active-text="黑暗" inactive-text="明亮"  style="--el-switch-on-color: #000;")
 </template>
 <script setup>
 import { storeToRefs } from 'pinia'
+
 const props = defineProps({
   'modelValue': {
     type: String,
@@ -16,7 +19,9 @@ const props = defineProps({
 })
 const router = useRouter()
 const eimts = defineEmits(['update:modelValue'])
-const { sideMenu: menuList } = storeToRefs(useSysStore())
+const sysStore = useSysStore()
+const { sideMenu: menuList, theme } = storeToRefs(sysStore)
+const isLightTheme = ref(true)
 
 let activeIndex = computed(() => {
   return menuList.value.findIndex(item => item.key == props.modelValue)
@@ -30,6 +35,28 @@ function handleClick(item) {
     router.replace('/#' + item.key)
   }
 }
+
+watch(theme, v => {
+  isLightTheme.value = v == 'light'
+}, {
+  immediate: true
+})
+
+watch(isLightTheme, (v) => {
+  sysStore.changeTheme(v ? 'light' : 'dark')
+  if (process.client) {
+    if (v) {
+      DarkReader.disable();
+    } else {
+      DarkReader.setFetchMethod(window.fetch)
+      DarkReader.enable({
+        brightness: 100,
+        contrast: 90,
+        sepia: 10
+      });
+    }
+  }
+})
 </script>
 <style lang='scss' scoped>
 .side-menu {

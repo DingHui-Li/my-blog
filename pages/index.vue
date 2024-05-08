@@ -64,8 +64,7 @@ const _list = computed(() => {
   position: relative;
   z-index: 9;
   width: 100%;
-  height: auto;
-  aspect-ratio: 16/9;
+  height: fit-content;
 
   &::before {
     content: '';
@@ -82,6 +81,7 @@ const _list = computed(() => {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    max-height: 40vh;
 
     img {
       width: 100%;
