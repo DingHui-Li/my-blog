@@ -11,12 +11,10 @@ const editorEl = ref()
 let detail = ref({});
 onMounted(() => {
     getArticle();
-    let rect = editorEl.value.getBoundingClientRect()
-    console.log(rect)
-    window.addEventListener("flutterInAppWebViewPlatformReady", function (event) {
-        console.log("flutterInAppWebViewPlatformReady")
-        window.flutter_inappwebview.callHandler('clientHeight', editorEl.value.getBoundingClientRect()?.height);
-    });
+    setTimeout(() => {
+        let rect = editorEl.value.getBoundingClientRect()
+        window.flutter_inappwebview.callHandler('clientHeight', rect.height);
+    }, 1000)
 })
 
 function getArticle() {
