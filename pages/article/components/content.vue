@@ -57,7 +57,6 @@ $topbar-height: 50px;
   .cover {
     width: 100%;
     overflow: hidden;
-    max-height: 60vh;
     height: auto;
 
     img {

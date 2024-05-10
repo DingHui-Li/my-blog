@@ -46,6 +46,7 @@ const searchFilter = computed(() => {
 })
 watch(() => route.hash, (hash) => {
   list.value = []
+  pagination.value.page = 1
   type.value = hash?.replace('#', '')
   getList(searchFilter.value);
 }, {

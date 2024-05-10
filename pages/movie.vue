@@ -1,7 +1,12 @@
 <template>
   <div class="movie-page">
-    <div class="info">
-      <img v-if="list?.length && selected >= 0" class="bg" :src="list[selected].movie.cover" referrerpolicy="no-referrer">
+    <div class="info" v-if="showInfo">
+      <div class="close" @click="showInfo = false">
+        <el-icon color="#fff" :size="20">
+          <Close />
+        </el-icon>
+      </div>
+      <img class="bg" v-if="list?.length && selected >= 0" :src="list[selected].movie.cover" referrerpolicy="no-referrer">
       <div class="content" v-if="list?.length && selected >= 0">
         <div class="rate">
           <el-icon color="#FF9800" :size="20">
@@ -31,13 +36,14 @@
   </div>
 </template>
 <script setup lang="ts">
-import { StarFilled } from "@element-plus/icons-vue";
+import { StarFilled, Close } from "@element-plus/icons-vue";
 import useList from "@/hooks/useList";
 import { Article } from "~/types";
 import moment from "moment";
 
-let { pagination, list, getList } = useList<Array<Article>>("/api/article");
+let { pagination, list, getList } = useList<Article>("/api/article");
 const selected = ref(0)
+const showInfo = ref(false)
 
 getList({
   type: "movie",
@@ -54,31 +60,33 @@ function handleSelect(index: number) {
   selected.value = -1
   nextTick(() => {
     selected.value = index
+    showInfo.value = true
   })
 }
 </script>
 <style lang="scss" scoped>
 .movie-page {
+  position: relative;
   height: 100%;
   overflow: auto;
 
   .info {
-    position: sticky;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 9;
-    width: 100%;
-    height: 50%;
-    max-height: 500px;
-    min-height: 200px;
-    top: 0;
+    width: 90%;
+    height: 50vh;
     overflow: hidden;
+    background-color: #fff;
 
-    &::before {
-      content: '';
+    .close {
       position: absolute;
-      z-index: 1;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 9;
+      top: 15px;
+      right: 15px;
+      color: #fff;
     }
 
     .bg {
@@ -97,7 +105,7 @@ function handleSelect(index: number) {
     .content {
       position: relative;
       height: 100%;
-      overflow: hidden;
+      overflow: auto;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
