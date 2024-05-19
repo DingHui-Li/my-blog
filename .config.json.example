@@ -18,12 +18,11 @@
 		"service":"My Blog", 
 		"secret":"xxx" 
 	},
-	"server":{//upload
-		"host": "",
-		"username": "",
-		"password": "",
-		"from":".output",
-		"to":"/root/webapp/myBlog/.output",
-		"command":"cd /root/webapp/myBlog\npm2 restart myBlog\nexit\n"
-	}
+	"deploy": {
+    "host": "",
+    "username": "",
+    "password": "",
+    "path": "/root/webapp/myBlog",
+    "name": "myBlog"
+  }
 }

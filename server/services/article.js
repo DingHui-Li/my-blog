@@ -9,6 +9,7 @@ export function saveNetworkImg(url = "") {
     if (url?.includes('blog465467.oss-cn-guangzhou.aliyuncs.com')) {
       return resolve(url)
     }
+    url = url.replace('img2.doubanio.com', 'img3.doubanio.com')
     let req = request({
       url,
       method: "GET",
@@ -23,7 +24,7 @@ export function saveNetworkImg(url = "") {
     req.on('data', chunk => {
       chunks.push(chunk)
     })
-    req.on('end', async () => {
+    req.on('end', async (res) => {
       try {
         let buffer = Buffer.concat(chunks);
         let fileName = FileService.getFileHash(buffer) + '.jpg'

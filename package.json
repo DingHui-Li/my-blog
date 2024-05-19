@@ -11,9 +11,11 @@
   },
   "devDependencies": {
     "@element-plus/nuxt": "^1.0.5",
+    "@inquirer/prompts": "^5.0.4",
     "@nuxt/devtools": "latest",
     "@types/node": "^18",
     "chalk": "^5.3.0",
+    "compressing": "^1.10.0",
     "element-plus": "^2.3.6",
     "node-sass": "^8.0.0",
     "nuxt": "^3.7.0",
