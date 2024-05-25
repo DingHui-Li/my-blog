@@ -14,9 +14,9 @@
       comSideMenu(v-model='type')
     .content 
       slot()
-  //- .footer-container
-  //-   .footer
-  //-     a(href='https://github.com/DingHui-Li/my-blog' target="_blank") github
+  .footer-container
+    .footer
+      a(href='https://beian.miit.gov.cn' target="_blank") {{ beian }}
 
 </template>
 <script setup>
@@ -25,7 +25,7 @@ import { Search, Menu } from "@element-plus/icons-vue";
 import comSideMenu from '@/pages/components/sideMenu.vue'
 const router = useRouter();
 const route = useRoute();
-const { globalSetting } = storeToRefs(useSysStore())
+const { globalSetting, beian } = storeToRefs(useSysStore())
 const website = computed(() => globalSetting.value.website || {})
 
 let showSideMenu = ref(false)
@@ -142,26 +142,7 @@ $max-width: 1080px;
   }
 
   .footer-container {
-    // border-top: 1px solid #000;
-    // background: #ecf0f3;
-    min-height: 100px;
-    max-width: $max-width;
-    background-color: #fff;
-    margin: 0 auto;
-
-    .footer {
-      margin: 0 auto;
-      max-width: $max-width;
-      width: 100%;
-      padding: 15px;
-      box-sizing: border-box;
-      text-align: center;
-
-      a {
-        color: var(--primary-color);
-        text-decoration: none;
-      }
-    }
+    display: none
   }
 }
 
@@ -177,12 +158,12 @@ $max-width: 1080px;
           padding: 10px;
         }
 
-        .host {
-          margin-left: 80px;
-        }
-
         .search {
-          width: 80px !important;
+          max-width: 20px;
+
+          .placeholder {
+            display: none;
+          }
         }
       }
     }
@@ -203,6 +184,26 @@ $max-width: 1080px;
         &.show {
           transform: translateX(0);
           opacity: 1;
+        }
+      }
+    }
+
+    .footer-container {
+      height: fit-content;
+      position: relative;
+      z-index: 9;
+      display: block;
+      background-color: #fff;
+      width: 100%;
+      padding: 15px;
+      text-align: center;
+      box-sizing: border-box;
+
+      .footer {
+        font-size: 12px;
+
+        a {
+          color: #333;
         }
       }
     }

@@ -57,6 +57,7 @@ export const useSysStore = defineStore('sys', {
             }
         },
         theme: "light",//dark
+        beian: "陕ICP备2024039659号-1"
     }),
     actions: {
         init() {

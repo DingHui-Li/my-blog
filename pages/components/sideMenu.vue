@@ -1,12 +1,15 @@
 <template lang="pug">
 .side-menu
   .active-box(:style="`transform:translateY(${activeIndex*51}px)`")
-  .item(v-for='item in menuList' @click="handleClick(item)" :class="item.key==modelValue&&'active'")
-    .label {{ item.label }}
+  .list
+    .item(v-for='item in menuList' @click="handleClick(item)" :class="item.key==modelValue&&'active'")
+      .label {{ item.label }}
   .website-info
     a(href='https://github.com/DingHui-Li/my-blog' target="_blank") Github
     div(style="margin-top:10px")
       el-switch(v-model="isLightTheme" width="50" inline-prompt active-text="黑暗" inactive-text="明亮"  style="--el-switch-on-color: #000;")
+  .beian
+    a(href='https://beian.miit.gov.cn' target="_blank") {{ beian }}
 </template>
 <script setup>
 import { storeToRefs } from 'pinia'
@@ -20,7 +23,7 @@ const props = defineProps({
 const router = useRouter()
 const eimts = defineEmits(['update:modelValue'])
 const sysStore = useSysStore()
-const { sideMenu: menuList, theme } = storeToRefs(sysStore)
+const { sideMenu: menuList, theme, beian } = storeToRefs(sysStore)
 const isLightTheme = ref(true)
 
 let activeIndex = computed(() => {
@@ -62,7 +65,11 @@ watch(isLightTheme, (v) => {
 .side-menu {
   position: relative;
   position: sticky;
-  top: 68px;
+  padding-bottom: 30px;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 
   .active-box {
     position: absolute;
@@ -76,24 +83,28 @@ watch(isLightTheme, (v) => {
     transition: all .3s;
   }
 
-  .item {
-    position: relative;
-    z-index: 2;
-    height: 21px;
-    padding: 15px 30px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #333;
-    cursor: pointer;
-    user-select: none;
-    text-align: center;
-    transition: all .3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .list {
+    flex: 1;
 
-    &.active {
-      color: #fff;
+    .item {
+      position: relative;
+      z-index: 2;
+      height: 21px;
+      padding: 15px 30px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #333;
+      cursor: pointer;
+      user-select: none;
+      text-align: center;
+      transition: all .3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &.active {
+        color: #fff;
+      }
     }
   }
 }
@@ -108,6 +119,18 @@ watch(isLightTheme, (v) => {
     font-weight: bold;
     color: var(--primary-color);
     text-decoration: none;
+  }
+}
+
+.beian {
+  font-size: 12px;
+  word-break: break-all;
+  margin-top: 15px;
+  border-top: 1px solid #eeeeee;
+  padding: 15px;
+
+  a {
+    color: #333;
   }
 }
 </style>
