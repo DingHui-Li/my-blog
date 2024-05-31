@@ -206,6 +206,14 @@ function setLink() {
         >*+* {
             margin-top: 0.75em;
         }
+
+        .content-img {
+            width: 100%;
+            max-width: 500px;
+            display: block;
+            margin: 5px auto;
+            border-radius: 10px;
+        }
     }
 
     &.readonly {

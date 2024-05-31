@@ -1,7 +1,7 @@
 <template lang="pug">
 NuxtLayout(:name="layout")
   NuxtPage(v-if="route.name.includes('webview')")
-  NuxtPage(v-else keep-alive style="position:absolute;width:100%;height:100%")
+  NuxtPage(v-else keepalive style="position:absolute;width:100%;height:100%")
 </template>
 <script setup>
 import "./utils/momentCh.js";
@@ -22,10 +22,6 @@ let layout = computed(() => {
     return 'admin'
   }
   return 'default'
-})
-
-watch(() => route.fullPath, (v) => {
-  console.log(route)
 })
 
 onMounted(() => {

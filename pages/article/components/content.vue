@@ -10,7 +10,7 @@
     h1.title {{data.title}}
   .container(:class="data.cover&&'has-cover'")
     //- .content(v-html='data.htmlContent')
-    div(style="padding:15px")
+    div(style="padding:15px" v-if='data.htmlContent')
       RichEditor(:value="data.htmlContent" readonly)
 .img-preview(v-if='previewImg.show' @click="previewImg.show=false")
   img(:src='previewImg.url')

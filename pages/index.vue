@@ -1,5 +1,5 @@
 <template>
-  <div style="overflow: auto;">
+  <div class="home-page" @scroll="onScroll" ref="pageEl">
     <div class="cover" v-if="type == '' && website.cover">
       <div class="img-box">
         <img :src="website.cover" />
@@ -34,6 +34,7 @@ import comAlbumItem from './components/albumItem.vue'
 import { Article } from "~/types";
 import useList from '~/hooks/useList';
 
+const pageEl = ref<any>(null)
 const { globalSetting } = storeToRefs(useSysStore())
 const website = computed(() => globalSetting.value.website || {})
 const profile = computed(() => globalSetting.value.profile || {})
@@ -47,10 +48,17 @@ const searchFilter = computed(() => {
 watch(() => route.hash, (hash) => {
   list.value = []
   pagination.value.page = 1
+  if (process.client) {
+    sessionStorage['home-page-scroll-top'] = 0
+  }
   type.value = hash?.replace('#', '')
   getList(searchFilter.value);
 }, {
   immediate: true
+})
+
+onActivated(() => {
+  pageEl.value?.scrollTo(0, sessionStorage['home-page-scroll-top'])
 })
 
 const _list = computed(() => {
@@ -59,8 +67,18 @@ const _list = computed(() => {
     return item
   })
 })
+
+function onScroll(e: any) {
+  sessionStorage['home-page-scroll-top'] = e.target.scrollTop
+}
 </script>
 <style lang="scss" scoped>
+.home-page {
+  height: 100%;
+  overflow: auto;
+  scroll-behavior: smooth;
+}
+
 .cover {
   position: relative;
   z-index: 9;
