@@ -10,7 +10,7 @@
   .imgs
     .item(v-for="(item,index) in data.imgs")
       .img
-        Vimg(ref='imgsEl' :preview-teleported='true' :src='item' :thumb='item+"?x-oss-process=image/resize,m_fill,w_1000"')
+        Vimg(ref='imgsEl' :preview-teleported='true' :src='item' :thumb='item+"?x-oss-process=image/resize,m_mfit,w_1000"')
         .info(v-if='exifList[index]')
           .text.left {{exifList[index].Make||""}} {{exifList[index].Model||"" }}
             .date {{ moment(exifList[index].CreateDate||"").format('YYYY/MM/DD HH:mm') }}

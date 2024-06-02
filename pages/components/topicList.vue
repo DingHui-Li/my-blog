@@ -17,7 +17,7 @@
     @swiper='e=>controlledSwiper=e')
       SwiperSlide(v-for="item in topics" height='250px' style='border-radius: 10px;overflow: hidden;')
         .topic(ref='topicEls' @click="router.push(`/topic/${item._id}`)")
-          img.img(draggable="false" :src='`${item.cover}?x-oss-process=image/resize,m_fill,w_600`')
+          img.img(draggable="false" :src='`${item.cover}?x-oss-process=image/resize,m_mfit,w_600`')
           .content
             .title {{item.name}}
             //- .subtitle aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -158,4 +158,5 @@ onMounted(() => {
       }
     }
   }
-}</style>
+}
+</style>

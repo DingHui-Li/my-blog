@@ -6,9 +6,9 @@
             <!-- <div class="indicator">
                 {{ currentIndex + 1 }}/{{ imgList.length }}
             </div> -->
-            <img ref="zoomImg" class="zoom-img" @wheel="onMouseWheel" :src="src" :draggable="false" @mousedown="touchStart"
-                @touchstart="touchStart" @mousemove="touchMove" @touchmove="touchMove" @touchend="touchEnd"
-                @mouseup="touchEnd" @mouseover="touchcancel" @touchcancel="touchcancel" />
+            <img ref="zoomImg" class="zoom-img" @wheel="onMouseWheel" :src="src" :draggable="false"
+                @mousedown="touchStart" @touchstart="touchStart" @mousemove="touchMove" @touchmove="touchMove"
+                @touchend="touchEnd" @mouseup="touchEnd" @mouseover="touchcancel" @touchcancel="touchcancel" />
             <div ref="mask" class="v-img-mask"></div>
             <!-- <div ref="imglist" class="img-list" @mousedown="imgListTouchStart" @touchstart="imgListTouchStart"
                 @mousemove="imgListTouchMove" @touchmove="imgListTouchMove" @touchend="imgListTouchEnd"
@@ -31,6 +31,7 @@ export default {
         alt: String,
         w: Number | String,
         h: Number | String,
+        aspectRatio: Number | String,
         fit: {
             type: String,
             default: "cover"
@@ -109,14 +110,15 @@ export default {
         imgStyle() {
             let w = isNaN(this.w) ? this.w : (this.w + 'px')
             let h = isNaN(this.h) ? this.h : (this.h + 'px')
-            return `object-fit:${this.fit};width:${w || '100%'};height:${h || 'auto'};`
+            let t = `object-fit:${this.fit};width:${w || '100%'};height:${h || 'auto'};aspect-ratio:${this.aspectRatio}`
+            return t
         },
         originImgEl() {
             return this.imgNodeList[this.currentIndex]
                 .children[0]
         },
         zoomImgCenterRect() {
-            console.log(document.body.clientHeight)
+            // console.log(document.body.clientHeight)
             let height = this.$refs.el.clientHeight
             let width = this.$refs.el.clientWidth
             let imgHeight = this.zoomImgEl.naturalHeight
@@ -412,6 +414,8 @@ export default {
     position: relative;
     transition: all .5s;
     transform: translateZ(0);
+    transform: scaleY(1.02);
+    transform-origin: top center;
 }
 
 .v-img>.img {

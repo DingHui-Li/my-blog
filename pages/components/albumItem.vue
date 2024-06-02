@@ -12,7 +12,7 @@
         </div>
         <div class="imgs" @click="router.push('/article/' + data._id + '#photo')">
           <div class="img" v-for="(item, index) in data.imgs"><img
-              :src="item + '?x-oss-process=image/resize,m_fill,w_400'" /></div>
+              :src="item + '?x-oss-process=image/resize,m_mfit,w_400'" /></div>
         </div>
       </div>
     </div>

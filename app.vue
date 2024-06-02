@@ -9,6 +9,8 @@ import "@/style/reset.css";
 import "@/style/color.css";
 import '@/style/iconfont.css';
 import '@/utils/util'
+import $http from "@/utils/http.js";
+
 const route = useRoute();
 const store = useSysStore()
 store.getData()
@@ -23,6 +25,10 @@ let layout = computed(() => {
   }
   return 'default'
 })
+
+watch(() => route.fullPath, v => {
+  store.pushLog()
+}, { deep: true, immediate: true })
 
 onMounted(() => {
   store.init()

@@ -3,7 +3,7 @@
   .title 选择主题（多选）
   .list
     .item(v-for="item in topics" @click="handleSelect(item)")
-      img.bg(:src='`${item.cover}?x-oss-process=image/resize,m_fill,w_500`')
+      img.bg(:src='`${item.cover}?x-oss-process=image/resize,m_mfit,w_500`')
       .name {{ item.name }}
       el-icon.selected(v-if="selected[item._id]")
         SuccessFilled
@@ -39,9 +39,11 @@ function handleSelect(topic) {
     margin-bottom: 10px;
     font-weight: bold;
   }
+
   .list {
     display: flex;
     flex-wrap: wrap;
+
     .item {
       position: relative;
       width: 100px;
@@ -50,11 +52,13 @@ function handleSelect(topic) {
       align-items: center;
       justify-content: center;
       cursor: pointer;
+
       &:hover {
         &::after {
           background: rgba(0, 0, 0, 0.8);
         }
       }
+
       &::after {
         content: "";
         position: absolute;
@@ -66,6 +70,7 @@ function handleSelect(topic) {
         background: rgba(0, 0, 0, 0.7);
         transition: all 0.3s;
       }
+
       .bg {
         position: absolute;
         top: 0;
@@ -74,6 +79,7 @@ function handleSelect(topic) {
         height: 100%;
         object-fit: cover;
       }
+
       .name {
         position: relative;
         z-index: 2;
@@ -81,6 +87,7 @@ function handleSelect(topic) {
         color: #fff;
         font-weight: bold;
       }
+
       .selected {
         position: absolute;
         z-index: 3;

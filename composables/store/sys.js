@@ -104,6 +104,15 @@ export const useSysStore = defineStore('sys', {
             if (process.client) {
                 window.localStorage['theme'] = theme
             }
+        },
+        pushLog() {
+            if (process.client) {
+                $http.post('/api/log/push', {
+                    ip: window.ip,
+                    url: window.location.href,
+                    ua: window.navigator.userAgent
+                })
+            }
         }
     }
 })

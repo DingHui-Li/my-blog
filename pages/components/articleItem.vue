@@ -7,7 +7,7 @@
         <div class="date">{{ moment(Number(data.createTime)).fromNow() }}</div>
       </div>
       <div class="desc">{{ data.desc }}...</div>
-    </div><img class="cover" v-if="data.cover" :src="`${data.cover}?x-oss-process=image/resize,m_fill,w_400`" />
+    </div><img class="cover" v-if="data.cover" :src="`${data.cover}?x-oss-process=image/resize,m_mfit,w_400`" />
   </div>
 </template>
 <script setup lang="ts">

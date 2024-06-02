@@ -54,6 +54,7 @@ router.get("/api/money/test", test);
 
 router.get("/api/log", LogApi.get);
 router.get("/api/log/st", LogApi.st);
+router.post("/api/log/push", LogApi.push);
 
 export default defineNitroPlugin(async (nitroApp) => {
   nitroApp.h3App.stack.unshift({

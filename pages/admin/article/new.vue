@@ -42,7 +42,7 @@
         .loading(v-if="!item")
           el-icon.icon(size='25')
             Loading
-        el-image(v-else :preview-teleported='true' :initial-index="index" style="width: 100%; height: 100%" fit='cover'  :src='item+"?x-oss-process=image/resize,m_fill,w_400"' :preview-src-list='form.imgs')
+        el-image(v-else :preview-teleported='true' :initial-index="index" style="width: 100%; height: 100%" fit='cover'  :src='item+"?x-oss-process=image/resize,m_mfit,w_400"' :preview-src-list='form.imgs')
         el-icon.clear(:size="30" v-if='item' @click.stop="form.imgs.splice(index,1)")
           CircleCloseFilled
       .item(v-if="form.imgs.length<maxImgs")

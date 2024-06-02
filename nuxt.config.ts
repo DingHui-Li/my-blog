@@ -51,6 +51,13 @@ export default defineNuxtConfig({
         {
           src: "//webapi.amap.com/ui/1.1/main.js",
         },
+        {
+          src: "/ipify.js",
+        },
+        {
+          type: "application/javascript",
+          src: "https://api.ipify.org?format=jsonp&callback=getIP",
+        },
       ],
     },
   },

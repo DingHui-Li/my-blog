@@ -1,7 +1,7 @@
 <template>
   <div class="moment-item">
     <div class="avatar">
-      <img :src='profile?.avatar + "?x-oss-process=image/resize,m_fill,w_100"' />
+      <img :src='profile?.avatar + "?x-oss-process=image/resize,m_mfit,w_100"' />
     </div>
     <div class="right">
       <div class="user-info">
@@ -19,7 +19,8 @@
         <div class="imgs">
           <Vimg :class="['img', data.imgs.length == 1 && 'single']" v-for="(item, index) in data.imgs"
             :style="`width:${data.imgs.length == 1 ? 100 : data.imgs.length == 2 ? 50 : 33.33}%;`" :src="item"
-            :thumb='item + "?x-oss-process=image/resize,m_fill,w_355"' />
+            :thumb='item + "?x-oss-process=image/resize,m_mfit,w_355"'
+            :aspect-ratio="data.imgs.length == 1 ? 'auto' : 1" />
         </div>
         <div class="movie" v-if="data.movie && data.movie.link" @click="openMovie">
           <img :src="data.movie.cover" crossOrigin="Anonmyous" referrerpolicy="no-referrer" />
@@ -35,7 +36,7 @@
             </el-icon><span>{{ data.location.name || data.location }}</span>
           </div>
           <div class="weather" v-if="data.weather" @click="openWeather"> {{ data.weather.text }} {{ data.weather.temp
-          }}°C
+            }}°C
           </div>
         </div>
       </template>
@@ -129,25 +130,67 @@ function openMap() {
     }
 
     .imgs {
-      max-width: 360px;
       margin-bottom: 5px;
       margin-top: 5px;
+      border-radius: 15px;
+      overflow: hidden;
+      max-width: 500px;
 
       .img {
+        position: relative;
         display: inline-block;
         width: 33.333%;
+        max-width: 350px;
         aspect-ratio: 1;
         overflow: hidden;
-        padding-right: 5px;
         box-sizing: border-box;
+
+        // &::before {
+        //   content: '';
+        //   position: absolute;
+        //   bottom: 0;
+        //   left: 0;
+        //   width: 100%;
+        //   height: 1px;
+        //   background-color: #fff;
+        // }
+
+        // &::after {
+        //   content: '';
+        //   position: absolute;
+        //   z-index: 2;
+        //   top: 0;
+        //   right: 0;
+        //   width: 1px;
+        //   height: 100%;
+        //   background-color: #fff;
+        // }
+
+        &:nth-child(3n) {
+          &::after {
+            display: none;
+          }
+        }
+
+        &:last-child {
+          &::after {
+            display: none;
+          }
+        }
 
         &.single {
           width: 100%;
-          height: fit-content;
-        }
+          max-width: 100%;
+          height: auto;
+          aspect-ratio: auto;
 
-        &:deep(.el-image) {
-          // border-radius: 8px;
+          &::before {
+            display: none;
+          }
+
+          &::after {
+            display: none;
+          }
         }
       }
     }
