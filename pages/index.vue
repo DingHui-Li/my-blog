@@ -27,11 +27,12 @@
   </div>
 </template>
 <script setup lang="ts">
+defineOptions({ name: 'index' })
 import { storeToRefs } from 'pinia'
 import comArticleItem from './components/articleItem.vue'
 import comMomentItem from './components/momentItem.vue'
 import comAlbumItem from './components/albumItem.vue'
-import { Article } from "~/types";
+import { type Article } from "~/types";
 import useList from '~/hooks/useList';
 
 const pageEl = ref<any>(null)
@@ -45,11 +46,12 @@ let { pagination, list, getList, loadMore } = useList<Article>("/api/article");
 const searchFilter = computed(() => {
   return { type: type.value || "moment" }
 })
-watch(() => route.hash, (hash) => {
+watch(() => route.hash, (hash: any) => {
   list.value = []
   pagination.value.page = 1
   if (process.client) {
     sessionStorage['home-page-scroll-top'] = 0
+    pageEl.value?.scrollTo(0, 0)
   }
   type.value = hash?.replace('#', '')
   getList(searchFilter.value);

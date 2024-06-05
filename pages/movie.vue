@@ -6,7 +6,8 @@
           <Close />
         </el-icon>
       </div>
-      <img class="bg" v-if="list?.length && selected >= 0" :src="list[selected].movie.cover" referrerpolicy="no-referrer">
+      <img class="bg" v-if="list?.length && selected >= 0" :src="list[selected].movie.cover"
+        referrerpolicy="no-referrer">
       <div class="content" v-if="list?.length && selected >= 0">
         <div class="rate">
           <el-icon color="#FF9800" :size="20">

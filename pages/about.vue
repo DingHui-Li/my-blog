@@ -14,14 +14,14 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import $http from "@/utils/http.js";
-import { Article } from "~/types";
+import { type Article } from "~/types";
 
 const { globalSetting } = storeToRefs(useSysStore())
 const website = computed(() => globalSetting.value.website || {})
 const aboutmeArticle = ref<Article>()
 const aboutArticle = ref<Article>()
 
-watch(() => website, v => {
+watch(() => website, () => {
     if (website.value.about) {
         $http.get(`/api/article/${website.value.about}`).then(res => {
             aboutArticle.value = res.data

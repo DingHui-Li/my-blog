@@ -17,9 +17,16 @@ import moment from "moment";
 
 let list = ref([])
 getList()
-let timer = setInterval(() => {
-    getList()
-}, 5000);
+let timer;
+
+onActivated(() => {
+    timer = setInterval(() => {
+        getList()
+    }, 5000);
+})
+onDeactivated(() => {
+    clearInterval(timer)
+})
 
 function getList() {
     $http.get('/api/log?type=client', { size: 100 }).then(res => {

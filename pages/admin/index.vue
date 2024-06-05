@@ -2,6 +2,9 @@
 .admin
 </template>
 <script setup>
+definePageMeta({
+  keepalive: true
+})
 const router = useRouter();
 onMounted(() => {
   router.replace("/admin/article");

@@ -1,7 +1,7 @@
 <template lang="pug">
 NuxtLayout(:name="layout")
   NuxtPage(v-if="route.name.includes('webview')")
-  NuxtPage(v-else keepalive style="position:absolute;width:100%;height:100%")
+  NuxtPage(v-else :keepalive="{include:['index','adminArticleList'].join(',')}" style="position:absolute;width:100%;height:100%")
 </template>
 <script setup>
 import "./utils/momentCh.js";
@@ -14,6 +14,7 @@ import $http from "@/utils/http.js";
 const route = useRoute();
 const store = useSysStore()
 store.getData()
+store.pushLog()
 
 let layout = computed(() => {
   let routeName = route.name;
@@ -26,9 +27,9 @@ let layout = computed(() => {
   return 'default'
 })
 
-watch(() => route.fullPath, v => {
-  store.pushLog()
-}, { deep: true, immediate: true })
+// watch(() => route.fullPath, v => {
+//   store.pushLog()
+// }, { deep: true, immediate: true })
 
 onMounted(() => {
   store.init()

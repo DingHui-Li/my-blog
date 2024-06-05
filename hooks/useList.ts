@@ -14,20 +14,24 @@ export default function <T>(url: string, series: boolean = true) {
         size: pagination.value.size,
       })
       .then((res) => {
-        if (series) {//是否连续
+        console.log("series=", series);
+        if (series) {
+          //是否连续
           if (pagination.value.page == 1) {
             list.value = res.data?.list;
           } else {
-            list.value = [...list.value!, ...res.data?.list]
+            list.value = [...list.value!, ...res.data?.list];
           }
         } else {
           list.value = res.data?.list;
         }
         pagination.value.total = res.data?.total;
         pagination.value.hasMore = list.value!.length < res.data?.total;
-      }).catch(err => {
+      })
+      .catch((err) => {
         //加载错误，页码回滚
-        pagination.value.page = pagination.value.page == 1 ? 1 : (pagination.value.page - 1)
+        pagination.value.page =
+          pagination.value.page == 1 ? 1 : pagination.value.page - 1;
       })
       .finally(() => {
         pagination.value.loading = false;
@@ -36,8 +40,8 @@ export default function <T>(url: string, series: boolean = true) {
 
   function loadMore(filter: {}) {
     if (pagination.value.hasMore && !pagination.value.loading) {
-      pagination.value.page += 1
-      getList(filter)
+      pagination.value.page += 1;
+      getList(filter);
     }
   }
 

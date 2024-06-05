@@ -414,8 +414,7 @@ export default {
     position: relative;
     transition: all .5s;
     transform: translateZ(0);
-    transform: scaleY(1.02);
-    transform-origin: top center;
+    font-size: 0;
 }
 
 .v-img>.img {

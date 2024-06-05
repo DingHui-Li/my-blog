@@ -36,13 +36,14 @@
       @size-change="pagination.page=1;_getList()")
   </template>
 <script setup>
+defineOptions({ name: 'adminArticleList' })
 import moment from "moment";
 import useList from "@/hooks/useList";
 import { ElMessage, ElMessageBox } from 'element-plus'
 import $http from "@/utils/http.js";
 
 const router = useRouter();
-let { pagination, list, getList } = useList("/api/admin/articleList");
+let { pagination, list, getList } = useList("/api/admin/articleList", false);
 
 class Filter {
   title = null;
@@ -79,7 +80,7 @@ function reset() {
   _getList();
 }
 function _getList() {
-  getList(filter.value, false);
+  getList(filter.value);
 }
 function handleDelete(e) {
   ElMessageBox.confirm(

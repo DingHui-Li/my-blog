@@ -33,7 +33,11 @@
           <div class="location" v-if="data.location" @click="openMap">
             <el-icon class="icon">
               <LocationFilled></LocationFilled>
-            </el-icon><span>{{ data.location.name || data.location }}</span>
+            </el-icon>
+            <span v-if="data.location.city">
+              {{ data.location.city }}·
+            </span>
+            <span>{{ data.location.name || data.location }}</span>
           </div>
           <div class="weather" v-if="data.weather" @click="openWeather"> {{ data.weather.text }} {{ data.weather.temp
             }}°C
@@ -135,6 +139,7 @@ function openMap() {
       border-radius: 15px;
       overflow: hidden;
       max-width: 500px;
+      font-size: 0;
 
       .img {
         position: relative;

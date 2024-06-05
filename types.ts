@@ -37,6 +37,7 @@ export type Location = {
   address: string;
   location: LngLat;
   type: string;
+  city: String;
 };
 
 type LngLat = {

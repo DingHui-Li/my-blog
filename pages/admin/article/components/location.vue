@@ -160,7 +160,11 @@ function confirm() {
   if (selectedLocation.value?.id) {
     popup.value = false
     let latlng = selectedLocation.value.location
-    emits('update:modelValue', { ...selectedLocation.value, location: { lat: latlng.lat, lng: latlng.lng } })
+    emits('update:modelValue', {
+      ...selectedLocation.value,
+      city: selectedLocation.value.name == currentCity.value.name ? '' : currentCity.value.name,
+      location: { lat: latlng.lat, lng: latlng.lng }
+    })
   }
 }
 </script>

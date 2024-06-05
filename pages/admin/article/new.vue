@@ -94,11 +94,7 @@ onMounted(() => {
     if (cache) {
       try {
         cache = JSON.parse(cache)
-        if (!cache._id) {
-          form.value = cache || form.value
-        } else {
-          window.localStorage['cache-article'] = ""
-        }
+        form.value = cache || form.value
       } catch { }
     }
   }
