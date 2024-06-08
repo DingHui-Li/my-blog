@@ -11,6 +11,13 @@
         </div>
       </div>
     </div>
+    <comPublishCount v-if="type != 'photo'" :type='type' @choosedDate="onChoosedDate" />
+    <div class="date" v-if="date">
+      已筛选 {{ new Date(date).format('yyyy年M月d日') }} 的内容
+      <el-icon class="icon" @click="onChoosedDate('')">
+        <CircleCloseFilled />
+      </el-icon>
+    </div>
     <div class="home">
       <div class="item" :class="type" v-for="(item, index) in _list" :key="item._id.toString()"
         :style="`animation-delay:${index % 10 * 100}ms`">
@@ -32,8 +39,10 @@ import { storeToRefs } from 'pinia'
 import comArticleItem from './components/articleItem.vue'
 import comMomentItem from './components/momentItem.vue'
 import comAlbumItem from './components/albumItem.vue'
+import comPublishCount from './components/publishCount.vue'
 import { type Article } from "~/types";
 import useList from '~/hooks/useList';
+import { CircleCloseFilled } from '@element-plus/icons-vue'
 
 const pageEl = ref<any>(null)
 const { globalSetting } = storeToRefs(useSysStore())
@@ -41,20 +50,17 @@ const website = computed(() => globalSetting.value.website || {})
 const profile = computed(() => globalSetting.value.profile || {})
 const route = useRoute()
 let type = ref('')
+let date = ref<string>('')
 let { pagination, list, getList, loadMore } = useList<Article>("/api/article");
 
+
 const searchFilter = computed(() => {
-  return { type: type.value || "moment" }
+  return { type: type.value || "moment", date: date.value }
 })
 watch(() => route.hash, (hash: any) => {
-  list.value = []
-  pagination.value.page = 1
-  if (process.client) {
-    sessionStorage['home-page-scroll-top'] = 0
-    pageEl.value?.scrollTo(0, 0)
-  }
+  date.value = ''
   type.value = hash?.replace('#', '')
-  getList(searchFilter.value);
+  initList()
 }, {
   immediate: true
 })
@@ -70,8 +76,23 @@ const _list = computed(() => {
   })
 })
 
+function initList() {
+  list.value = []
+  pagination.value.page = 1
+  if (process.client) {
+    sessionStorage['home-page-scroll-top'] = 0
+    pageEl.value?.scrollTo(0, 0)
+  }
+  getList(searchFilter.value);
+}
+
 function onScroll(e: any) {
   sessionStorage['home-page-scroll-top'] = e.target.scrollTop
+}
+
+function onChoosedDate(e: string) {
+  date.value = e;
+  initList()
 }
 </script>
 <style lang="scss" scoped>
@@ -145,6 +166,22 @@ function onScroll(e: any) {
         object-fit: cover;
       }
     }
+  }
+}
+
+.date {
+  font-size: 15px;
+  padding: 0 30px;
+  color: var(--primary-color);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+
+  .icon {
+    color: #D32F2F;
+    font-size: 18px;
+    margin-left: 10px;
+    cursor: pointer;
   }
 }
 

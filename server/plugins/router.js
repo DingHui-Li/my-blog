@@ -16,7 +16,8 @@ import {
   getSameArticleList,
   searchArticleList,
   deleteArticle,
-  searchMovie
+  searchMovie,
+  stArticleByDate,
 } from "../api/article.js";
 import { getGlobalSetting, setGlobalSetting, login, getTOTPQR } from '../api/sys.js'
 import { test } from '../api/money.js'
@@ -34,6 +35,7 @@ router.put("/api/admin/topic", editTopic);
 router.delete("/api/admin/topic/:id", deleteTopic);
 
 router.get("/api/article", getArticleList);
+router.get("/api/article/st/date", stArticleByDate);
 router.get("/api/admin/articleList", getArticleList);
 router.get("/api/article/:id", getArticle);
 router.get("/api/article/:id/same", getSameArticleList);

@@ -1,5 +1,6 @@
 import request from 'request'
 import * as FileService from './file'
+import Article from "../models/article";
 
 export function saveNetworkImg(url = "") {
   return new Promise((resolve) => {
@@ -35,4 +36,47 @@ export function saveNetworkImg(url = "") {
       }
     })
   })
+}
+
+export async function stByDate({ year, type } = {}) {
+  if (!year) {
+    year = new Date().getFullYear()
+  }
+  let aggregate = [];
+  if (type) {
+    aggregate = [
+      {
+        $match: { 'type': { $regex: type } }
+      },
+    ]
+  }
+  aggregate = [
+    ...aggregate,
+    {
+      $project: {
+        "createTime": {
+          $toDate: "$createTime"
+        },
+        "_id": 1
+      }
+    },
+    {
+      $project: {
+        "date": {
+          $dateToString: { format: '%Y-%m-%d', date: '$createTime' }
+        }
+      }
+    },
+    {
+      "$match": { date: { $regex: `${year}` } }
+    },
+    {
+      $group: {
+        _id: '$date', count: { $sum: 1 }
+      }
+    },
+    { $project: { date: '$_id', _id: 0, count: 1 } }
+  ]
+  let res = await Article.aggregate(aggregate)
+  return res
 }

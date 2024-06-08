@@ -1,9 +1,10 @@
 <template>
   <div class="movie-page">
-    <div class="info" v-if="showInfo">
+    <div class="mask" v-if="showInfo" @click="showInfo = false"></div>
+    <div :class="['info', showInfo && 'show']">
       <div class="close" @click="showInfo = false">
-        <el-icon color="#fff" :size="20">
-          <Close />
+        <el-icon color="#fff" :size="30">
+          <CloseBold />
         </el-icon>
       </div>
       <img class="bg" v-if="list?.length && selected >= 0" :src="list[selected].movie.cover"
@@ -37,7 +38,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { StarFilled, Close } from "@element-plus/icons-vue";
+import { StarFilled, CloseBold } from "@element-plus/icons-vue";
 import useList from "@/hooks/useList";
 import { Article } from "~/types";
 import moment from "moment";
@@ -71,16 +72,47 @@ function handleSelect(index: number) {
   height: 100%;
   overflow: auto;
 
+  .mask {
+    position: fixed;
+    z-index: 9;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+  }
+
   .info {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(0.6);
     z-index: 9;
     width: 90%;
-    height: 50vh;
+    min-height: 50vh;
+    max-height: 70vh;
     overflow: hidden;
     background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 10px 10px 20px 10px rgba(0, 0, 0, 0.1);
+    transition: all .3s;
+    opacity: 0;
+    pointer-events: none;
+
+
+    &::before {
+      content: '';
+      position: absolute;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    &.show {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+      pointer-events: all;
+    }
 
     .close {
       position: absolute;
@@ -88,6 +120,7 @@ function handleSelect(index: number) {
       top: 15px;
       right: 15px;
       color: #fff;
+      cursor: pointer;
     }
 
     .bg {
@@ -107,9 +140,6 @@ function handleSelect(index: number) {
       position: relative;
       height: 100%;
       overflow: auto;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
       z-index: 2;
       color: #fff;
       padding: 30px;
@@ -135,7 +165,7 @@ function handleSelect(index: number) {
 
       .text {
         margin: 5px 0;
-        color: #999;
+        color: #fff;
       }
 
       .time {
@@ -170,7 +200,7 @@ function handleSelect(index: number) {
       display: inline-block;
       position: relative;
       width: 80px;
-      aspect-ratio: 10/50;
+      aspect-ratio: 1/7;
       background-size: cover;
       overflow: hidden;
       margin-right: 10px;

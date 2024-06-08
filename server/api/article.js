@@ -22,6 +22,13 @@ export let getArticleList = defineEventHandler(async (event) => {
   if (filter.type == 'movie') {
     filter = { 'movie.link': { $ne: null }, 'movie.title': { $ne: "" } }
   }
+  if (filter.date) {
+    let date = new Date(filter.date)
+    let start = date.getTime()
+    let end = new Date(`${filter.date} 23:59:59`).getTime()
+    filter.createTime = { $gte: start, $lte: end }
+    delete filter.date
+  }
   let select = { htmlContent: 0 }
   if (filter.type == 'article') {
     select['textContent'] = 0
@@ -154,5 +161,12 @@ function validContent(body) {
 export let searchMovie = defineEventHandler(async (event) => {
   let query = getQuery(event);
   let res = await MovieService.searchMovie(query.name)
+  return new BaseResponse({ data: res });
+});
+
+
+export let stArticleByDate = defineEventHandler(async (event) => {
+  let query = getQuery(event);
+  let res = await ArticleService.stByDate(parseQuery(query)?.filter)
   return new BaseResponse({ data: res });
 });
