@@ -1,10 +1,10 @@
 <template lang="pug">
-.topic-list-page
+.article-list-page
   .filter-container
     el-form
-      el-form-item(label='文章标题')
+      el-form-item(label='标题')
         el-input(v-model="filter.title")
-      el-form-item(label='文章内容')
+      el-form-item(label='内容')
         el-input(v-model="filter.content")
     el-button(@click='reset') 重置
     el-button(type='primary' @click='pagination.page=1;_getList()') 搜索
@@ -14,18 +14,18 @@
     //- el-table-column(type="selection" width="55")
     el-table-column(v-for="col in cols"  :prop='col.key' :label='col.label')
       template(#default="{row}")
-        span(v-if="col.key=='createTime'") {{ moment(row.createTime).format('YYYY-MM-DD HH:mm') }}
-        span(v-else-if="col.key=='updateTime'") {{ moment(row.updateTime).format('YYYY-MM-DD HH:mm') }}
+        .time(v-if="col.key=='createTime'") {{ moment(row.createTime).format('YYYY-MM-DD HH:mm') }}
+        .time(v-else-if="col.key=='updateTime'") {{ moment(row.updateTime).format('YYYY-MM-DD HH:mm') }}
         span(v-else-if="col.key=='type'")
           el-tag(:type="row.type=='moment'?'success':''") {{ row.type }}
         span(v-else-if="col.key=='title'") 
           span(v-if='row.type=="moment"') {{ row.desc }}
           span(v-else) {{ row.title }}
         span(v-else) {{ row[col.key] }}
-    el-table-column
+    el-table-column(fixed="right")
       template(#default="{row}")
-        el-button(type="primary" @click='router.push({path:"/admin/article/new",query:{id:row._id}})') 编辑
-        el-button.btn(type='danger' @click="handleDelete(row)") 删除
+        el-button.btn(type="primary" size='small' @click='router.push({path:"/admin/article/new",query:{id:row._id}})') 编辑
+        el-button.btn(type='danger' size='small' @click="handleDelete(row)") 删除
   .pagination
     el-pagination(background 
       layout="sizes,prev, pager, next" 
@@ -108,7 +108,7 @@ function handleDelete(e) {
 }
 </script>
 <style lang="scss" scoped>
-.topic-list-page {
+.article-list-page {
   height: 100%;
   box-sizing: border-box;
   padding: 15px;
@@ -143,6 +143,19 @@ function handleDelete(e) {
         font-weight: bold;
         width: 100px;
       }
+
+
+    }
+  }
+
+  &:deep(.el-table) {
+    .time {
+      font-size: 12px;
+    }
+
+    .btn {
+      margin: 0;
+      margin-right: 5px;
     }
   }
 

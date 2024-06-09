@@ -13,7 +13,7 @@
             span {{item.title}}
       .debug  
         div 打开调试
-          .tip 刷新后生效
+          .tip 刷新页面生效
         el-switch(v-model="isDebug")
 
     .content
@@ -100,6 +100,7 @@ watch(isDebug, v => {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        margin-bottom: 50px;
 
         .tip {
           font-size: 12px;

@@ -17,10 +17,9 @@ onMounted(() => {
   chartIns.value.on("click", (params: any) => {
     useRouter().push(`/topic/${params.data._id}#topic`)
   })
-})
-
-$http.get('/api/topic/st').then(res => {
-  updateChart(res.data)
+  $http.get('/api/topic/st').then(res => {
+    updateChart(res.data)
+  })
 })
 
 function updateChart(data: Array<any>) {

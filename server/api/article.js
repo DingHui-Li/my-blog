@@ -22,6 +22,13 @@ export let getArticleList = defineEventHandler(async (event) => {
   if (filter.type == 'movie') {
     filter = { 'movie.link': { $ne: null }, 'movie.title': { $ne: "" } }
   }
+  if (filter.title) {
+    filter.title = new RegExp(filter.title)
+  }
+  if (filter.content) {
+    filter.textContent = new RegExp(filter.content)
+    delete filter.content
+  }
   if (filter.date) {
     let date = new Date(filter.date)
     let start = date.getTime()

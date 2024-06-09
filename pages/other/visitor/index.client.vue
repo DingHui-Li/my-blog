@@ -2,6 +2,7 @@
 .visitor-page 
     .title 访问记录
     comEarth
+    .time 更新时间 {{ updateTime.format('yyyy-MM-dd hh:mm:ss') }}
     .list
         .item(v-for='item in list')
             .col.ip {{ item.ip }}
@@ -16,19 +17,17 @@ import $http from "@/utils/http.js";
 import moment from "moment";
 
 let list = ref([])
+let updateTime = ref(new Date())
 getList()
-let timer;
-
-onActivated(() => {
-    timer = setInterval(() => {
-        getList()
-    }, 5000);
-})
-onDeactivated(() => {
+let timer = setInterval(() => {
+    getList()
+}, 1000 * 30);
+onUnmounted(() => {
     clearInterval(timer)
 })
 
 function getList() {
+    updateTime.value = new Date()
     $http.get('/api/log?type=client', { size: 100 }).then(res => {
         list.value = res?.data?.list
     })
@@ -46,6 +45,12 @@ function getList() {
         font-size: 20px;
         font-weight: bold;
         margin-bottom: 15px;
+    }
+
+    .time {
+        text-align: right;
+        font-size: 12px;
+        color: #999;
     }
 
     .list {
