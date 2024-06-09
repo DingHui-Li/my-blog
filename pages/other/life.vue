@@ -1,5 +1,5 @@
 <template lang="pug">
-.life-page
+.life-page(v-loading='loading')
     .title 人生不过30000天，如白驹过隙，请及时行乐
     .title 现在已经
         .num {{ (lifeDays / 365).toFixed(8) }}
@@ -26,14 +26,18 @@ import { storeToRefs } from 'pinia'
 const { globalSetting } = storeToRefs(useSysStore())
 
 const totalDays = 365 * 80
-const birthday = computed(() => new Date(globalSetting.value.profile.birthday || ""))
-
+let loading = ref(true)
 let lifeTime = ref(0)//秒
+
 
 let timer = setInterval(() => {
     lifeTime.value = (new Date().getTime() - birthday.value.getTime()) / 1000
 }, 1000)
 
+let birthday = computed(() => {
+    loading.value = false
+    return new Date(globalSetting.value.profile.birthday || "")
+})
 let lifeDays = computed(() => {
     return lifeTime.value / 86400
 })

@@ -11,6 +11,7 @@ import '@/style/iconfont.css';
 import '@/utils/util'
 import $http from "@/utils/http.js";
 
+
 const route = useRoute();
 const store = useSysStore()
 store.getData()

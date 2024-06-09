@@ -7,9 +7,9 @@ export default defineEventHandler(function (event) {
   //   "Access-Control-Allow-Headers": '*',
   //   "Access-Control-Expose-Headers": '*'
   // })
-  if (event.method === 'OPTIONS') {
-    event.node.res.statusCode = 204
-    event.node.res.statusMessage = "No Content."
-    return 'OK'
-  }
+  // if (event.method === 'OPTIONS') {
+  //   event.node.res.statusCode = 204
+  //   event.node.res.statusMessage = "No Content."
+  //   return 'OK'
+  // }
 })

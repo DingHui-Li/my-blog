@@ -16,7 +16,7 @@
         <div class="topics">
           <TopicTag v-for="item in data.topics" :data="item"></TopicTag>
         </div>
-        <div class="imgs">
+        <div class="imgs" v-if="data.imgs.length">
           <Vimg :class="['img', data.imgs.length == 1 && 'single']" v-for="(item, index) in data.imgs"
             :style="`width:${data.imgs.length == 1 ? 100 : data.imgs.length == 2 ? 50 : 33.33}%;`" :src="item"
             :thumb='item + "?x-oss-process=image/resize,m_mfit,w_355"'
@@ -122,10 +122,6 @@ function openMap() {
       }
     }
 
-    .topics {
-      margin-top: 10px;
-    }
-
     .content {
       font-size: 16px;
       color: #333;
@@ -133,13 +129,18 @@ function openMap() {
       white-space: pre-wrap;
     }
 
+    .topics {
+      margin-top: 10px;
+      margin-bottom: 5px;
+    }
+
     .imgs {
       margin-bottom: 5px;
-      margin-top: 5px;
       border-radius: 15px;
       overflow: hidden;
       max-width: 500px;
       font-size: 0;
+      border: 1px solid #eee;
 
       .img {
         position: relative;

@@ -5,11 +5,17 @@
       Menu
   .content-container(@click="showSideMenu=false")
     .sidebar(:class="`${showSideMenu&&'show'}`")
-      el-menu
-        el-menu-item(v-for="(item) in  menuList" 
-          :index="item.path" 
-          @click="router.replace(item.path)")
-          span {{item.title}}
+      .menu
+        el-menu
+          el-menu-item(v-for="(item) in  menuList" 
+            :index="item.path" 
+            @click="router.replace(item.path)")
+            span {{item.title}}
+      .debug  
+        div 打开调试
+          .tip 刷新后生效
+        el-switch(v-model="isDebug")
+
     .content
       slot
 </template>
@@ -36,6 +42,11 @@ const menuList = [
     path: "/admin/log",
   },
 ];
+
+let isDebug = ref(sessionStorage['debug'] == 1)
+watch(isDebug, v => {
+  sessionStorage['debug'] = v ? 1 : 0
+})
 
 </script>
 <style lang="scss" scoped>
@@ -74,6 +85,28 @@ const menuList = [
       height: 100%;
       background: #fff;
       border-right: 2px solid #eee;
+      display: flex;
+      flex-direction: column;
+
+      .menu {
+        flex: 1;
+        overflow: auto;
+      }
+
+      .debug {
+        border-top: 1px solid #eee;
+        padding: 15px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .tip {
+          font-size: 12px;
+          text-align: center;
+          color: #999;
+        }
+      }
     }
 
     .content {

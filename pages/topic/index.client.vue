@@ -6,7 +6,6 @@
 <script setup lang='ts'>
 import { shallowRef } from 'vue'
 import $http from "@/utils/http.js";
-import { Topic } from "~/types";
 import * as echarts from 'echarts';
 
 const chartEl = ref()
@@ -60,7 +59,7 @@ function updateChart(data: Array<any>) {
         // },
         itemStyle: {
           borderWidth: 1,
-          borderRadius: 10,
+          borderRadius: 50,
           gapWidth: 5,
         },
         breadcrumb: {

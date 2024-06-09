@@ -2,10 +2,18 @@
   <div v-if="data.imgs.length">
     <div class="year" v-if="showYear">{{ createTime.getFullYear() }}年</div>
     <div class="moment-item">
-      <div class="month"><span v-if="showMonth">{{ createTime.getMonth() + 1 }}月</span></div>
+      <div class="month"><span v-if="showMonth">{{ createTime.getMonth() + 1 }}月</span>
+      </div>
       <div class="right">
         <div class="info">
           <div class="time">{{ createTime.getDate() }}日</div>
+          <div class="location">
+            -
+            <span v-if="data.location.city">
+              {{ data.location.city }} ·
+            </span>
+            {{ data.location.name || data.location }}
+          </div>
         </div>
         <div class="topics">
           <TopicTag v-for="item in data.topics" :data="item"></TopicTag>
@@ -54,24 +62,17 @@ let createTime = computed(() => new Date(Number(props.data.createTime)))
     overflow: hidden;
 
     .info {
-
-      .title {
-        font-size: 14px;
-        color: #3f51b5;
-        word-break: break-all;
-        font-weight: bold;
-        color: 3f51b5;
-
-        span {
-          font-size: 12px;
-          color: #333;
-          margin-left: 5px;
-        }
-      }
+      display: flex;
+      align-items: center;
 
       .time {
         font-size: 20px;
         color: #333;
+        margin-right: 5px;
+      }
+
+      .location {
+        font-size: 12px;
       }
     }
 
@@ -98,6 +99,7 @@ let createTime = computed(() => new Date(Number(props.data.createTime)))
         transform-origin: 0 0;
         display: inline-block;
         margin-right: 1px;
+        border-radius: 10px;
 
         img {
           width: 100%;

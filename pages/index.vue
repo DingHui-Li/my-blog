@@ -190,7 +190,7 @@ function onChoosedDate(e: string) {
   // top: -5px;
   background: #fff;
   min-height: 100vh;
-  padding-top: 50px;
+  padding-top: 10px;
   padding-bottom: 60px;
 
   .item {

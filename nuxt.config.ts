@@ -10,6 +10,13 @@ export default defineNuxtConfig({
     "/about": { ssr: false },
     "/inappwebview/*": { ssr: false },
   },
+  plugins: [
+    {
+      src: "~/plugins/vconsole",
+      ssr: false,
+      mode: "client",
+    },
+  ],
   typescript: {
     tsConfig: {
       compilerOptions: {

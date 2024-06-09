@@ -6,13 +6,14 @@
   </div>
   <div class="publish-count">
     <div class="chart">
-      <div style="display: flex;overflow: auto;">
+      <div style="display: flex;overflow: auto;padding-bottom: 10px;">
         <div class="week-indicate">
           <div class="item">周一</div>
           <div class="item">周四</div>
           <div class="item">周日</div>
         </div>
-        <div class="week" v-for="(week, index) in weekListOfYear" @click="handleClick">
+        <div class="week" v-for="(week, index) in weekListOfYear" @click="handleClick"
+          :style="`justify-content: ${index == 0 ? 'flex-end' : 'flex-start'};`">
           <div class="day indicate">
             <span v-if="index % 10 == 1">{{ week[0].month }}</span>
           </div>
@@ -38,7 +39,8 @@ const props = defineProps({
   type: String
 })
 
-let selectYear = ref(new Date().getFullYear())
+let selectYear = ref()
+selectYear.value = new Date().getFullYear()
 let data = ref<{ [key: string]: number }>({})
 let totalCountOfYear = ref<Number>(0)
 
@@ -72,7 +74,7 @@ let weekListOfYear = computed(() => {
     }
   }
   t.push(week)
-  console.log(t)
+  // console.log(t)
   return t
 })
 
@@ -148,6 +150,7 @@ function handleClick(e: any) {
     display: flex;
     border: 1px solid #e0e0e0;
     padding: 15px;
+    padding-bottom: 5px;
     border-radius: 5px;
     margin-right: 10px;
     justify-content: center;
@@ -156,7 +159,6 @@ function handleClick(e: any) {
     .week {
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
 
       .day {
         position: relative;
