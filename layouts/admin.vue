@@ -11,10 +11,10 @@
             :index="item.path" 
             @click="router.replace(item.path)")
             span {{item.title}}
-      .debug  
-        div 打开调试
-          .tip 刷新页面生效
-        el-switch(v-model="isDebug")
+      //- .debug  
+      //-   div 打开调试
+      //-     .tip 刷新页面生效
+      //-   el-switch(v-model="isDebug")
 
     .content
       slot
@@ -43,7 +43,10 @@ const menuList = [
   },
 ];
 
-let isDebug = ref(sessionStorage['debug'] == 1)
+let isDebug = ref(false)
+onMounted(() => {
+  isDebug.value = sessionStorage['debug'] == 1
+})
 watch(isDebug, v => {
   sessionStorage['debug'] = v ? 1 : 0
 })

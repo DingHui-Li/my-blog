@@ -30,7 +30,7 @@ function handleClick() {
   margin-right: 10px;
   // background: #000;
   cursor: pointer;
-  color: #3f51b5;
+  color: var(--primary-color);
   font-size: 14px;
   white-space: nowrap;
 

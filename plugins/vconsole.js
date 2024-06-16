@@ -1,7 +1,7 @@
-import VConsole from 'vconsole';
+// import VConsole from 'vconsole';
 
-export default defineNuxtPlugin({
-  setup() {
-    sessionStorage['debug'] == 1 ? new VConsole() : ''
-  }
-})
+// export default defineNuxtPlugin({
+//   setup() {
+//     sessionStorage['debug'] == 1 ? new VConsole() : ''
+//   }
+// })

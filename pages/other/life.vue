@@ -18,8 +18,8 @@
             .label 分钟
         .item {{ parseInt(lifeTime) }} 
             .label 秒
-    .table(v-if='lifeDays')
-        .cell(v-for="item in totalDays" :class="item<lifeDays&&'gone'")
+    //- .table(v-if='lifeDays')
+    //-     .cell(v-for="item in totalDays" :class="item<lifeDays&&'gone'")
 </template>
 <script setup>
 import { storeToRefs } from 'pinia'
@@ -49,21 +49,26 @@ onBeforeUnmount(() => {
 </script>
 <style lang='scss' scoped>
 .life-page {
+    width: 100%;
     height: 100%;
     background-color: #fff;
     padding: 30px;
     overflow: auto;
+    overflow-x: hidden;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
     .title {
-        font-size: 15px;
+        font-size: 25px;
         color: #333;
         text-align: center;
         margin-bottom: 15px;
 
         .num {
             display: inline;
-            font-size: 22px;
+            font-size: 40px;
             font-weight: bold;
             color: #000;
             margin: 0 4px;
@@ -72,7 +77,7 @@ onBeforeUnmount(() => {
 
     .text {
         text-align: center;
-        font-size: 12px;
+        font-size: 15px;
         color: #999;
         margin-bottom: 10px;
         margin-top: 30px;
@@ -100,6 +105,7 @@ onBeforeUnmount(() => {
     }
 
     .detail {
+        width: 100%;
         max-width: 600px;
         margin: 0 auto;
         margin-bottom: 20px;
@@ -107,6 +113,7 @@ onBeforeUnmount(() => {
         padding: 10px;
         box-shadow: inset 20px 20px 60px #bebebe,
             inset -20px -20px 60px #ffffff;
+        box-sizing: border-box;
 
         .item {
             display: inline-block;
@@ -114,7 +121,8 @@ onBeforeUnmount(() => {
             text-align: center;
             box-sizing: border-box;
             padding: 20px 0;
-            font-size: 15px;
+            font-size: 20px;
+            overflow: hidden;
 
             &:nth-child(1) {
                 border-right: 1px solid #e0e0e090;

@@ -1,23 +1,36 @@
-<template lang="pug">
-.layout
-  .topbar-container
-    .topbar
-      el-icon.menu(:size='20' @click='showSideMenu=!showSideMenu')
-        Menu
-      .host(@click="router.replace('/')") {{ website?.name }}
-      .search(@click="router.push('/search')" v-if="route.name!='search'")
-        .placeholder 搜索
-        el-icon.icon
-          Search
-  .content-container(@click="showSideMenu=false")
-    .side(:class="`${showSideMenu&&'show'}`")
-      comSideMenu(v-model='type')
-    .content 
-      slot()
-  .footer-container
-    .footer
-      a(href='https://beian.miit.gov.cn' target="_blank") {{ beian }}
-
+<template>
+  <div class="layout">
+    <div class="topbar-container">
+      <div class="topbar">
+        <el-icon class="menu" :size="20" @click="showSideMenu = !showSideMenu">
+          <Menu></Menu>
+        </el-icon>
+        <div class="host" @click="router.replace('/')">{{ website?.name }}</div>
+        <div class="search" @click="router.push('/search')" v-if="route.name != 'search'">
+          <div class="placeholder">搜索</div>
+          <el-icon class="icon">
+            <Search></Search>
+          </el-icon>
+        </div>
+      </div>
+    </div>
+    <div class="content-container">
+      <div class="mask" v-if="showSideMenu" @click="showSideMenu = false"></div>
+      <div class="side" :class="`${showSideMenu && 'show'}`" @click="showSideMenu = false">
+        <comSideMenu v-model="type"></comSideMenu>
+        <div :class="['bg']">
+          <img :src="`/icon/${theme == 'dark' ? 'wave_dark' : 'wave'}.png`" v-for="item in 30"
+            onerror="this.style.display='none';">
+        </div>
+      </div>
+      <div class="content">
+        <slot></slot>
+      </div>
+    </div>
+    <div class="footer-container">
+      <div class="footer"><a href="https://beian.miit.gov.cn" target="_blank">{{ beian }}</a></div>
+    </div>
+  </div>
 </template>
 <script setup>
 import { storeToRefs } from 'pinia'
@@ -25,17 +38,19 @@ import { Search, Menu } from "@element-plus/icons-vue";
 import comSideMenu from '@/pages/components/sideMenu.vue'
 const router = useRouter();
 const route = useRoute();
-const { globalSetting, beian } = storeToRefs(useSysStore())
+const { globalSetting, beian, theme } = storeToRefs(useSysStore())
 const website = computed(() => globalSetting.value.website || {})
 
 let showSideMenu = ref(false)
 let type = ref('')
 onMounted(() => {
   type.value = route.hash?.replace('#', '')
+
 })
 </script>
 <style lang="scss" scoped>
 $max-width: 1080px;
+
 
 .layout {
   width: 100%;
@@ -124,14 +139,42 @@ $max-width: 1080px;
     margin: 0 auto;
     display: flex;
     background: #fff;
+    transform: scale(1);
+    box-sizing: border-box;
+
+    .mask {
+      position: absolute;
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
 
     .side {
       position: relative;
-      z-index: 9;
+      z-index: 11;
       background-color: #f5f5f5;
       padding-right: 5px;
       padding-left: 5px;
       padding-top: 15px;
+      overflow: hidden;
+      box-sizing: border-box;
+
+      .bg {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        right: 0;
+        width: 30px;
+        height: 100%;
+        font-size: 0;
+
+        img {
+          width: 100%;
+          height: auto;
+        }
+      }
     }
 
     .content {

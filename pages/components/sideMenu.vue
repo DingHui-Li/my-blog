@@ -1,15 +1,22 @@
-<template lang="pug">
-.side-menu
-  .active-box(:style="`transform:translateY(${activeIndex*51}px)`")
-  .list
-    .item(v-for='item in menuList' @click="handleClick(item)" :class="item.key==modelValue&&'active'")
-      .label {{ item.label }}
-  .website-info
-    a(href='https://github.com/DingHui-Li/my-blog' target="_blank") Github
-    div(style="margin-top:10px")
-      el-switch(v-model="isLightTheme" width="50" inline-prompt active-text="黑暗" inactive-text="明亮"  style="--el-switch-on-color: #000;")
-  .beian
-    a(href='https://beian.miit.gov.cn' target="_blank") {{ beian }}
+<template>
+  <div class="side-menu">
+    <div class="active-box" :style="`transform:translateY(${activeIndex * 51}px)`"></div>
+    <div class="list">
+      <div class="item" v-for="item in menuList" @click="handleClick(item)" :class="item.key == modelValue && 'active'">
+        <div class="label">{{ item.label }}</div>
+      </div>
+    </div>
+    <div class="website-info">
+      <a href="https://github.com/DingHui-Li/my-blog" target="_blank">源码</a>
+      <div style="margin:10px">
+        <el-switch v-model="isLightTheme" width="50" inline-prompt="inline-prompt" active-text="黑暗" inactive-text="明亮"
+          style="--el-switch-on-color: #000;">
+        </el-switch>
+      </div>
+      <el-color-picker v-model="themeColor" show-alpha :predefine="predefineColors" />
+    </div>
+    <div class="beian"><a href="https://beian.miit.gov.cn" target="_blank">{{ beian }}</a></div>
+  </div>
 </template>
 <script setup>
 import { storeToRefs } from 'pinia'
@@ -23,8 +30,29 @@ const props = defineProps({
 const router = useRouter()
 const eimts = defineEmits(['update:modelValue'])
 const sysStore = useSysStore()
-const { sideMenu: menuList, theme, beian } = storeToRefs(sysStore)
+const { sideMenu: menuList, theme, beian, themeColor } = storeToRefs(sysStore)
 const isLightTheme = ref(true)
+const predefineColors = ref([
+  '#D32F2F',
+  '#FF4081',
+  '#7B1FA2',
+  '#7C4DFF',
+  '#3f51b5',
+  '#1976D2',
+  '#2196F3',
+  '#0097A7',
+  '#009688',
+  '#388E3C',
+  '#8BC34A',
+  '#AFB42B',
+  '#FFEB3B',
+  '#F57C00',
+  '#FFC107',
+  '#E64A19',
+  '#795548',
+  '#616161',
+  '#607D8B'
+])
 
 let activeIndex = computed(() => {
   return menuList.value.findIndex(item => item.key == props.modelValue)
@@ -43,6 +71,9 @@ watch(theme, v => {
   isLightTheme.value = v == 'light'
 }, {
   immediate: true
+})
+watch(themeColor, v => {
+  sysStore.changeThemeColor(v)
 })
 
 watch(isLightTheme, (v) => {
@@ -64,6 +95,7 @@ watch(isLightTheme, (v) => {
 <style lang='scss' scoped>
 .side-menu {
   position: relative;
+  z-index: 9;
   position: sticky;
   padding-bottom: 30px;
   height: 100%;
@@ -112,13 +144,14 @@ watch(isLightTheme, (v) => {
 .website-info {
   border-top: 1px solid #eeeeee;
   padding-top: 15px;
-  margin-top: 100px;
+  // margin-top: 100px;
   text-align: center;
 
   a {
     font-weight: bold;
     color: var(--primary-color);
     text-decoration: none;
+    font-size: 14px;
   }
 }
 
@@ -131,6 +164,13 @@ watch(isLightTheme, (v) => {
 
   a {
     color: #333;
+  }
+}
+
+@media screen and (max-width:750px) {
+  .beian {
+    opacity: 0;
+    pointer-events: none;
   }
 }
 </style>

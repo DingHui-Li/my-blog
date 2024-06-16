@@ -54,10 +54,7 @@ export async function stByDate({ year, type } = {}) {
     ...aggregate,
     {
       $project: {
-        "createTime": {
-          $toDate: "$createTime"
-        },
-        "_id": 1
+        "createTime": { $toDate: "$createTime" },
       }
     },
     {

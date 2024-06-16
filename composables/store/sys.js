@@ -57,6 +57,7 @@ export const useSysStore = defineStore('sys', {
             }
         },
         theme: "light",//dark
+        themeColor: "#3f51b5",
         beian: "陕ICP备2024039659号-1"
     }),
     actions: {
@@ -64,6 +65,7 @@ export const useSysStore = defineStore('sys', {
             if (process.client) {
                 this.setToken(window.localStorage['token'] || "")
                 this.changeTheme(window.localStorage['theme'] || 'light')
+                this.changeThemeColor(window.localStorage['themeColor'] || '#3f51b5')
             }
         },
         login(params = {}) {
@@ -107,11 +109,25 @@ export const useSysStore = defineStore('sys', {
         },
         pushLog() {
             if (process.client) {
-                $http.post('/api/log/push', {
-                    ip: window.ip,
-                    url: window.location.href,
-                    ua: window.navigator.userAgent
-                })
+                if (!window.location.href.includes('localhost')) {
+                    $http.post('/api/log/push', {
+                        ip: window.ip,
+                        url: window.location.href,
+                        ua: window.navigator.userAgent
+                    })
+                }
+            }
+        },
+        changeThemeColor(color) {
+            if (color) {
+                this.themeColor = color
+                if (process.client) {
+                    window.localStorage['themeColor'] = this.themeColor
+                }
+            }
+            if (process.client) {
+                document.documentElement.style.setProperty('--primary-color', this.themeColor);
+                document.documentElement.style.setProperty('--el-color-primary', this.themeColor);
             }
         }
     }

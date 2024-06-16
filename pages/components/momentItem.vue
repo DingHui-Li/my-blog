@@ -23,7 +23,7 @@
             :aspect-ratio="data.imgs.length == 1 ? 'auto' : 1" />
         </div>
         <div class="movie" v-if="data.movie && data.movie.link" @click="openMovie">
-          <img :src="data.movie.cover" crossOrigin="Anonmyous" referrerpolicy="no-referrer" />
+          <img :src="data.movie.cover" referrerpolicy="no-referrer" />
           <div class="movie-info">
             <div class="name">{{ data.movie.title }}</div>
             <div class="rate">{{ data.movie.rate }}</div>
@@ -112,7 +112,7 @@ function openMap() {
       .name {
         font-size: 17px;
         font-weight: bold;
-        color: #3f51b5;
+        color: var(--primary-color);
       }
 
       .time {

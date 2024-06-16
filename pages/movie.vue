@@ -44,6 +44,7 @@ import { Article } from "~/types";
 import moment from "moment";
 
 let { pagination, list, getList } = useList<Article>("/api/article");
+pagination.value.size = 1000
 const selected = ref(0)
 const showInfo = ref(false)
 
@@ -73,8 +74,8 @@ function handleSelect(index: number) {
   overflow: auto;
 
   .mask {
-    position: absolute;
-    z-index: 9;
+    position: fixed;
+    z-index: 11;
     top: 0;
     left: 0;
     width: 100%;
@@ -84,11 +85,11 @@ function handleSelect(index: number) {
   }
 
   .info {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.6);
-    z-index: 9;
+    z-index: 12;
     width: 90%;
     min-height: 50vh;
     max-height: 70vh;
@@ -106,7 +107,7 @@ function handleSelect(index: number) {
       position: absolute;
       z-index: 1;
       width: 100%;
-      height: 100%;
+      height: 100vh;
       background-color: rgba(0, 0, 0, 0.5);
     }
 
@@ -134,8 +135,8 @@ function handleSelect(index: number) {
       transition: all .3s;
       filter: blur(20px);
       transform: scale(1.1);
-      opacity: 0;
-      animation: zoom-in .5s forwards;
+      // opacity: 0;
+      // animation: zoom-in .5s forwards;
     }
 
     .content {
@@ -205,7 +206,7 @@ function handleSelect(index: number) {
       aspect-ratio: 1/7;
       background-size: cover;
       overflow: hidden;
-      margin-right: 10px;
+      margin-right: 5px;
       cursor: pointer;
       user-select: none;
       border-radius: 10px;
@@ -216,12 +217,12 @@ function handleSelect(index: number) {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: all .3s;
+        transition: all .5s;
       }
 
       &:hover {
         .bg {
-          transform: scale(1.2);
+          transform: scale(1.05);
         }
       }
 

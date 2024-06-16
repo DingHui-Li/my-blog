@@ -1,5 +1,5 @@
 <template>
-  <div class="topic-page">
+  <div class="topic-page" v-loading="loading">
     <div class="chart" ref="chartEl"></div>
   </div>
 </template>
@@ -10,6 +10,7 @@ import * as echarts from 'echarts';
 
 const chartEl = ref()
 const chartIns = shallowRef<any>({})
+const loading = ref(true)
 
 
 onMounted(() => {
@@ -19,6 +20,8 @@ onMounted(() => {
   })
   $http.get('/api/topic/st').then(res => {
     updateChart(res.data)
+  }).finally(() => {
+    loading.value = false
   })
 })
 

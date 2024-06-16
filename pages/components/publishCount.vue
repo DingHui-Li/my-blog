@@ -15,7 +15,7 @@
         <div class="week" v-for="(week, index) in weekListOfYear" @click="handleClick"
           :style="`justify-content: ${index == 0 ? 'flex-end' : 'flex-start'};`">
           <div class="day indicate">
-            <span v-if="index % 10 == 1">{{ week[0].month }}</span>
+            <span v-if="index % 10 == 1">{{ week[0].month }}月</span>
           </div>
           <div :class="['day', data[day.date] && 'active']" v-for="day in week"
             :data-tip="`${new Date(day.date).format('yyyy年M月d日')}有 ${data[day.date]} 条内容`">
@@ -55,7 +55,7 @@ let yearList = computed(() => {
 
 let weekListOfYear = computed(() => {
   let t: Array<Array<{ date: string, week: number, month: number }>> = []
-  let firstDay = new Date(`${selectYear.value}-1-1`)
+  let firstDay = new Date(`${selectYear.value}/1/1`)
   let totalDayNum = 0
   for (let i = 1; i <= 12; i++) {
     totalDayNum += getDateLengthOfMonth(selectYear.value, i)
@@ -178,6 +178,7 @@ function handleClick(e: any) {
           font-size: 10px;
           margin-bottom: 5px;
           text-align: center;
+          white-space: nowrap;
         }
 
         &.active {
