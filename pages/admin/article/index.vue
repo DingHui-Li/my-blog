@@ -10,14 +10,14 @@
     el-button(type='primary' @click='pagination.page=1;_getList()') 搜索
   .actions
     el-button.btn(type='primary' @click="router.push('/admin/article/new')") 写文章
-  el-table(:data='list' stripe :loading='pagination.loading' @row-click='handleRowClick' :row-key='row=>row.id')  
+  el-table(:data='list' stripe :loading='pagination.loading' :row-key='row=>row.id')  
     //- el-table-column(type="selection" width="55")
     el-table-column(v-for="col in cols"  :prop='col.key' :label='col.label')
       template(#default="{row}")
         .time(v-if="col.key=='createTime'") {{ moment(row.createTime).format('YYYY-MM-DD HH:mm') }}
         .time(v-else-if="col.key=='updateTime'") {{ moment(row.updateTime).format('YYYY-MM-DD HH:mm') }}
         span(v-else-if="col.key=='type'")
-          el-tag(:type="row.type=='moment'?'success':''") {{ row.type }}
+          el-tag(:type="row.type=='moment'?'success':'primary'") {{ row.type }}
         span(v-else-if="col.key=='title'") 
           span(v-if='row.type=="moment"') {{ row.desc }}
           span(v-else) {{ row.title }}

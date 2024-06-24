@@ -1,32 +1,34 @@
 <template>
-  <div class="title">{{ selectYear }}年共有 {{ totalCountOfYear }} 条内容
-    <el-select class="years" v-model="selectYear">
-      <el-option v-for="year in yearList" :label="year" :value="year" :key="year"></el-option>
-    </el-select>
-  </div>
-  <div class="publish-count">
-    <div class="chart">
-      <div style="display: flex;overflow: auto;padding-bottom: 10px;">
-        <div class="week-indicate">
-          <div class="item">周一</div>
-          <div class="item">周四</div>
-          <div class="item">周日</div>
-        </div>
-        <div class="week" v-for="(week, index) in weekListOfYear" @click="handleClick"
-          :style="`justify-content: ${index == 0 ? 'flex-end' : 'flex-start'};`">
-          <div class="day indicate">
-            <span v-if="index % 10 == 1">{{ week[0].month }}月</span>
+  <div class="publish-count-container">
+    <div class="title">{{ selectYear }}年共有 {{ totalCountOfYear }} 条内容
+      <el-select class="years" v-model="selectYear">
+        <el-option v-for="year in yearList" :label="year" :value="year" :key="year"></el-option>
+      </el-select>
+    </div>
+    <div class="publish-count">
+      <div class="chart">
+        <div style="display: flex;overflow: auto;padding-bottom: 10px;">
+          <div class="week-indicate">
+            <div class="item">周一</div>
+            <div class="item">周四</div>
+            <div class="item">周日</div>
           </div>
-          <div :class="['day', data[day.date] && 'active']" v-for="day in week"
-            :data-tip="`${new Date(day.date).format('yyyy年M月d日')}有 ${data[day.date]} 条内容`">
-            <div class="box" :style="`opacity:${1 - (3 - data[day.date]) / 10}`" :data-date="day.date"></div>
+          <div class="week" v-for="(week, index) in weekListOfYear" @click="handleClick"
+            :style="`justify-content: ${index == 0 ? 'flex-end' : 'flex-start'};`">
+            <div class="day indicate">
+              <span v-if="index % 7 == 1">{{ week[0].month }}月</span>
+            </div>
+            <div :class="['day', data[day.date] && 'active']" v-for="day in week"
+              :data-tip="`${new Date(day.date).format('yyyy年M月d日')}有 ${data[day.date]} 条内容`">
+              <div class="box" :style="`opacity:${1 - (3 - data[day.date]) / 10}`" :data-date="day.date"></div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="years">
-      <div :class="['year', selectYear == year && 'active']" @click="selectYear = year" v-for="year in yearList">
-        {{ year }}
+      <div class="years">
+        <div :class="['year', selectYear == year && 'active']" @click="selectYear = year" v-for="year in yearList">
+          {{ year }}
+        </div>
       </div>
     </div>
   </div>
@@ -114,6 +116,12 @@ function handleClick(e: any) {
 }
 </script>
 <style lang="scss" scoped>
+.publish-count-container {
+  position: relative;
+  z-index: 1;
+  background-color: #fff
+}
+
 .title {
   font-size: 12px;
   padding: 15px;
@@ -133,6 +141,7 @@ function handleClick(e: any) {
   padding: 15px;
   padding-top: 5px;
   box-sizing: border-box;
+
 
   .week-indicate {
     display: flex;
@@ -191,12 +200,17 @@ function handleClick(e: any) {
             position: fixed;
             z-index: 2;
             transform: translate(-50%, -110%);
-            display: none;
             background-color: #fff;
             font-size: 12px;
             white-space: nowrap;
             padding: 5px 10px;
             border-radius: 5px;
+            box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.08);
+            pointer-events: none;
+            opacity: 0;
+            transition: all .5s;
+            color: var(--primary-color);
+            font-weight: bold;
           }
 
           &:hover {
@@ -206,6 +220,7 @@ function handleClick(e: any) {
 
             &::before {
               display: block;
+              opacity: 1;
             }
           }
         }

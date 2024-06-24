@@ -58,6 +58,7 @@ $max-width: 1080px;
   display: flex;
   flex-direction: column;
   background: #dee0ed;
+  overflow-x: hidden;
 
   &::before {
     content: '';

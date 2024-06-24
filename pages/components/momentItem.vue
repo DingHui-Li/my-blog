@@ -127,6 +127,11 @@ function openMap() {
       color: #333;
       word-break: break-all;
       white-space: pre-wrap;
+
+      // &::first-letter {
+      //   font-size: 20px;
+      //   font-weight: bold;
+      // }
     }
 
     .topics {
@@ -136,11 +141,11 @@ function openMap() {
 
     .imgs {
       margin-bottom: 5px;
-      border-radius: 15px;
+      // border-radius: 15px;
       overflow: hidden;
       max-width: 500px;
       font-size: 0;
-      border: 1px solid #eee;
+      // border: 1px solid #eee;
 
       .img {
         position: relative;
@@ -150,27 +155,9 @@ function openMap() {
         aspect-ratio: 1;
         overflow: hidden;
         box-sizing: border-box;
-
-        // &::before {
-        //   content: '';
-        //   position: absolute;
-        //   bottom: 0;
-        //   left: 0;
-        //   width: 100%;
-        //   height: 1px;
-        //   background-color: #fff;
-        // }
-
-        // &::after {
-        //   content: '';
-        //   position: absolute;
-        //   z-index: 2;
-        //   top: 0;
-        //   right: 0;
-        //   width: 1px;
-        //   height: 100%;
-        //   background-color: #fff;
-        // }
+        // border-radius: 15px;
+        padding-right: 2px;
+        padding-bottom: 2px;
 
         &:nth-child(3n) {
           &::after {
@@ -189,14 +176,8 @@ function openMap() {
           max-width: 100%;
           height: auto;
           aspect-ratio: auto;
-
-          &::before {
-            display: none;
-          }
-
-          &::after {
-            display: none;
-          }
+          // border-radius: 8px;
+          padding: 0;
         }
       }
     }

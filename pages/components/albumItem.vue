@@ -81,6 +81,7 @@ let createTime = computed(() => new Date(Number(props.data.createTime)))
       margin-top: 10px;
       padding-bottom: 30px;
       cursor: pointer;
+      font-size: 0;
 
       // &:hover {
       //   .img {
@@ -99,6 +100,7 @@ let createTime = computed(() => new Date(Number(props.data.createTime)))
         transform-origin: 0 0;
         display: inline-block;
         margin-right: 1px;
+        margin-bottom: 1px;
         border-radius: 10px;
 
         img {

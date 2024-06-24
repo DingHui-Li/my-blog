@@ -4,12 +4,12 @@
       <div class="img-box">
         <img :src="website.cover" />
       </div>
-      <div class="profile">
+      <!-- <div class="profile">
         <div class="name">{{ profile.name }}</div>
         <div class="avatar">
           <img :src="profile.avatar" alt="">
         </div>
-      </div>
+      </div> -->
     </div>
     <comPublishCount v-if="type != 'photo'" :type='type' @choosedDate="onChoosedDate" />
     <div class="date" v-if="date">
@@ -103,8 +103,9 @@ function onChoosedDate(e: string) {
 }
 
 .cover {
-  position: relative;
-  z-index: 9;
+  position: sticky;
+  top: 0;
+  z-index: 0;
   width: 100%;
   height: fit-content;
 

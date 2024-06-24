@@ -60,7 +60,7 @@ export async function stByDate({ year, type } = {}) {
     {
       $project: {
         "date": {
-          $dateToString: { format: '%Y-%m-%d', date: '$createTime' }
+          $dateToString: { format: '%Y-%m-%d', date: '$createTime', timezone: "Asia/Shanghai" }
         }
       }
     },

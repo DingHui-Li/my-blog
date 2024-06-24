@@ -39,10 +39,9 @@
       textarea.textarea(v-if='form.type=="moment"' v-model='form.htmlContent' placeholder="内容" maxlength='800')
     .imgs(v-if='form.type!="article"')
       .item(v-for='(item,index) in form.imgs')
-        .loading(v-if="!item")
-          el-icon.icon(size='25')
-            Loading
-        el-image(v-else :preview-teleported='true' :initial-index="index" style="width: 100%; height: 100%" fit='cover'  :src='item+"?x-oss-process=image/resize,m_mfit,w_400"' :preview-src-list='form.imgs')
+        .loading(v-if="item.loading" v-loading='item.loading')
+        el-image(v-if='item.url' :preview-teleported='true' :initial-index="index" style="width: 100%; height: 100%" fit='cover'  :src='(item.url)' :preview-src-list='form.imgs.map(item=>item.url||(item+"?x-oss-process=image/resize,m_mfit,w_400"))')
+        el-image(v-else :preview-teleported='true' :initial-index="index" style="width: 100%; height: 100%" fit='cover'  :src='item+"?x-oss-process=image/resize,m_mfit,w_400"' :preview-src-list='form.imgs.map(item=>item.url||(item+"?x-oss-process=image/resize,m_mfit,w_400"))')
         el-icon.clear(:size="30" v-if='item' @click.stop="form.imgs.splice(index,1)")
           CircleCloseFilled
       .item(v-if="form.imgs.length<maxImgs")
@@ -95,9 +94,11 @@ onMounted(() => {
       try {
         cache = JSON.parse(cache)
         form.value = cache || form.value
+        cacheTime.value = cache?.cacheTime
       } catch { }
     }
   }
+  console.log(form.value)
   timer = setInterval(() => {
     let payload = getPayload()
     if (payload.textContent) {
@@ -120,7 +121,7 @@ function clearCache() {
 let selectedTopicsMap = computed(() => {
   let _t = {};
   form.value.topics.forEach((item) => {
-    _t[item._id] = true;
+    _t[item?._id || item] = true;
   });
   return _t;
 });
@@ -152,19 +153,25 @@ function onInputChange(e) {
 }
 //上传图片
 async function onChooseImg(e) {
-  console.log(e)
   let folder = "photo"
   if (form.value.type == 'photo') {
     folder += `/${form.value.title}`
   }
   for (let index = 0; index < e.target.files.length; index++) {
-    if (form.value.imgs.length > maxImgs.value) {
-      break;
-    }
+    // if (form.value.imgs.length > maxImgs.value) {
+    //   break;
+    // }
     const file = e.target.files[index];
-    await uploadImage(file, folder).then(url => {
-      form.value.imgs.push(url)
+    form.value.imgs.push({
+      file,
+      url: window.URL.createObjectURL(file),
+      loading: false
     })
+    // const file = e.target.files[index];
+    // form.value.imgs.push(url)
+    // await uploadImage(file, folder).then(url => {
+    //   form.value.imgs.push(url)
+    // })
   }
   e.target.value = ''
 }
@@ -172,7 +179,7 @@ async function onChooseImg(e) {
 function getPayload() {
   let payload = {
     ...form.value,
-    topics: form.value.topics.map((item) => item._id),
+    topics: form.value.topics.map((item) => item?._id || item),
   };
   if (form.value.type == 'article') {
     payload.textContent = richEditorEl.value.getPureText()
@@ -183,9 +190,27 @@ function getPayload() {
   return payload
 }
 
-function save() {
+async function uploadImgs(imgs) {
+  let tasks = []
+  for (const i in imgs) {
+    const item = imgs[i]
+    if (item.url) {
+      form.value.imgs[i].loading = true
+      tasks.push(uploadImage(item.file, `photo/${new Date().format('yyyy-MM-dd')}`).then(url => {
+        window.URL.revokeObjectURL(item.url)
+        form.value.imgs[i] = url
+        imgs[i] = url
+      }))
+    }
+  }
+  await Promise.all(tasks)
+  return imgs
+}
+
+async function save() {
   loading.value = true;
   let payload = getPayload()
+  payload.imgs = await uploadImgs(payload.imgs)
   let req;
   if (form.value._id) {
     req = $http.put("/api/admin/article", payload);
@@ -388,6 +413,7 @@ function save() {
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      overflow: hidden;
 
       &:active {
         opacity: 0.8;
@@ -395,16 +421,11 @@ function save() {
 
       .loading {
         position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
         z-index: 9;
-        color: var(--primary-color);
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-
-        .icon {
-          animation: loading 1s linear infinite;
-          transform-origin: center center;
-        }
       }
 
       .clear {
@@ -428,12 +449,6 @@ function save() {
         object-fit: cover;
       }
     }
-  }
-}
-
-@keyframes loading {
-  100% {
-    transform: rotate(360deg);
   }
 }
 </style>

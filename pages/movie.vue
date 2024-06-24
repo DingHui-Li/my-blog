@@ -207,6 +207,7 @@ function handleSelect(index: number) {
       background-size: cover;
       overflow: hidden;
       margin-right: 5px;
+      // margin-bottom: 10px;
       cursor: pointer;
       user-select: none;
       border-radius: 10px;
@@ -243,8 +244,7 @@ function handleSelect(index: number) {
           flex: 1;
           overflow: hidden;
           text-overflow: ellipsis;
-          margin-bottom: 15px;
-          font-size: 15px;
+          font-size: 20px;
           font-weight: bold;
           padding: 0 20px;
           word-break: break-all;
@@ -259,7 +259,7 @@ function handleSelect(index: number) {
           color: #FF9800;
           font-weight: bold;
           margin-top: 15px;
-          text-align: right;
+          text-align: center;
         }
       }
 
@@ -284,8 +284,21 @@ function handleSelect(index: number) {
     }
   }
 
-  .item {
-    aspect-ratio: 10/30 !important;
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    .item {
+      margin-bottom: 10px;
+      aspect-ratio: 10/30 !important;
+
+      .content {
+        .title {
+          font-size: 15px !important;
+        }
+      }
+    }
   }
 }
 
