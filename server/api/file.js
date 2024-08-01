@@ -1,3 +1,4 @@
+import request from 'request'
 import BaseResponse from "../base/baseResponse";
 import * as FileService from '../services/file'
 
@@ -22,4 +23,31 @@ function getDir(body) {
   }
 }
 
+export let downloadFileBase64 = defineEventHandler(async (event) => {
+  let query = getQuery(event)
 
+  let base64 = await new Promise((resolve) => {
+    let req = request(query.url, {
+      method: "GET",
+      headers: {
+        "response-type": "blob"
+      }
+    })
+    let chunks = []
+    req.on('error', err => {
+      resolve('')
+    })
+    req.on('data', chunk => {
+      chunks.push(chunk)
+    })
+    req.on('end', async (res) => {
+      try {
+        let buffer = Buffer.concat(chunks);
+        resolve(buffer.toString('base64'))
+      } catch (err) {
+        resolve('')
+      }
+    })
+  })
+  return new BaseResponse({ data: base64 });
+});

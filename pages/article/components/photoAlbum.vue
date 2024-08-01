@@ -45,6 +45,8 @@ import moment from "moment";
 import TopicTag from "~/pages/components/topicTag.vue";
 import { LocationFilled } from '@element-plus/icons-vue'
 import EXIF from 'exifr'
+import $http from "@/utils/http.js";
+
 const props = defineProps({
   data: Object,
 });
@@ -55,11 +57,28 @@ watch(() => props.data, (v) => {
   console.log(v)
   nextTick(() => {
     // imgsEl.value[0].zoomImgEl
+
     props.data.imgs?.forEach((item, index) => {
       item = item.replace('http:', 'https:')
-      EXIF.parse(item, ['CreateDate', 'Make', 'LensModel', 'Model', 'FocalLengthIn35mmFormat', 'FNumber', 'ExposureTime', 'ISO']).then(res => {
-        exifList.value[index] = res
+      $http.get(item + '?x-oss-process=image/info').then(res => {
+        console.log(res)
+        let time = res.DateTime?.value.split(' ')[0].replace(/\:/g, '/') + ' ' + res.DateTime?.value.split(' ')[1]
+        exifList.value[index] = {
+          CreateDate: time,
+          Model: res.Model?.value,
+          Make: res.Make?.value,
+          FocalLengthIn35mmFormat: res.FocalLengthIn35mmFilm?.value,
+          FNumber: eval(res.FNumber?.value)?.toFixed(1),
+          ExposureTime: eval(res.ExposureTime?.value),
+          ISO: res.ISOSpeedRatings?.value
+        }
       })
+      // $http.get('/api/admin/file/downloadBase64', { url: item }).then(res => {
+      //   console.log(res)
+      //   EXIF.parse("data:image/jpg;base64," + res.data, ['CreateDate', 'Make', 'Model', 'FocalLengthIn35mmFormat', 'FNumber', 'ExposureTime', 'ISO']).then(res => {
+      //     exifList.value[index] = res
+      //   })
+      // })
     })
   })
 })
@@ -68,7 +87,7 @@ function getShotInfo(info) {
   if (!info.FocalLengthIn35mmFormat) {
     return ''
   }
-  return `${info.FocalLengthIn35mmFormat}mm  f/${info.FNumber}  ${info.ExposureTime?.toFixed(2)}s  ISO${info.ISO}`
+  return `${info.FocalLengthIn35mmFormat}mm  f/${info.FNumber}  ${(info.ExposureTime * 1000)?.toFixed(0)}ms  ISO${info.ISO}`
 }
 
 function openWeather() {
@@ -145,6 +164,8 @@ function openMap() {
     font-weight: bold;
     color: #333;
     text-align: center;
+    word-break: break-all;
+    white-space: pre-wrap;
   }
 
   .imgs {
@@ -157,15 +178,16 @@ function openMap() {
         width: 100%;
         max-width: 600px;
         margin: 0 auto;
-        border-radius: 10px;
+        // border-radius: 10px;
         overflow: hidden;
-        box-shadow: 0 0 8px 5px rgba(0, 0, 0, 0.05);
+        background-color: #f9f9f9;
+        // box-shadow: 0 0 8px 5px rgba(0, 0, 0, 0.05);
+        font-size: 0;
 
         .info {
           position: relative;
-          top: -5px;
           width: 100%;
-          background-color: #fff;
+          // background-color: #fff;
           display: flex;
           padding: 10px;
           box-sizing: border-box;

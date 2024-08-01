@@ -57,6 +57,9 @@ class Http {
           options = t.options;
         },
         onResponse: ({ request, response, options }) => {
+          if (isCompleteURL(url)) {
+            return resolve(response._data)
+          }
           return resolve(this.responseBefore(response));
         },
         onRequestError: ({ request, options, error }) => {

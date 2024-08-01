@@ -38,6 +38,7 @@
   </div>
 </template>
 <script setup lang="ts">
+
 import { StarFilled, CloseBold } from "@element-plus/icons-vue";
 import useList from "@/hooks/useList";
 import { Article } from "~/types";

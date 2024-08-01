@@ -7,7 +7,7 @@ import {
   getTopic,
   stTopic
 } from "../api/topic.js";
-import { uploadFile } from "../api/file.js";
+import { uploadFile, downloadFileBase64 } from "../api/file.js";
 import {
   addArticle,
   editArticle,
@@ -46,6 +46,7 @@ router.delete("/api/admin/article/:id", deleteArticle);
 router.get("/api/admin/searchmovie", searchMovie);
 
 router.post("/api/admin/file/upload", uploadFile);
+router.get("/api/admin/file/downloadBase64", downloadFileBase64);
 
 router.get("/api/getTOTPQR", getTOTPQR);
 router.post("/api/login", login);
