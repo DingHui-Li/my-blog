@@ -7,7 +7,7 @@
     <el-icon class="arrow">
       <ArrowRight />
     </el-icon>
-    <el-drawer v-model="popup" direction="btt" append-to-body size="fit-content" :with-header="false">
+    <el-drawer v-model="popup" direction="btt" append-to-body size="90vh" :with-header="false">
       <div class="drawer">
         <div class="header">
           <h4>选择位置</h4>
@@ -99,12 +99,8 @@ function handleChooseLocation() {
       }) || []
       poiList.value = [...result.regeocode.roads, ...result?.regeocode?.pois]
       //搜索城市位置
-      let city = result.regeocode.addressComponent?.city
-      if (currentCity.value?.name !== city) {
-        searchAddress(city, 1).then(res => {
-          currentCity.value = res[0]
-        })
-      }
+      let city = result.regeocode.addressComponent?.city || result.regeocode.addressComponent?.province
+      findCurrentCity(city.replace('市', ''))
     })
     positionPicker.on('fail', (err) => {
       console.log(err)
@@ -118,6 +114,14 @@ function handleChooseLocation() {
   });
 }
 
+//根据当前城市名查找当前城市经纬度信息
+function findCurrentCity(cityName) {
+  if (currentCity.value?.name !== cityName) {
+    searchAddress(cityName, 1).then(res => {
+      currentCity.value = res[0]
+    })
+  }
+}
 function handleSearch() {
   if (!input.value) {
     return
@@ -125,10 +129,12 @@ function handleSearch() {
   loading.value = true
   searchAddress(input.value, 20).then(res => {
     poiList.value = res
+    positionPicker.start(res[0]?.location)
   }).finally(() => {
     loading.value = false
   })
 }
+//根据关键字查找经纬度信息
 function searchAddress(keyword, size = 30) {
   return new Promise((resolve, reject) => {
     console.log('searchAddress')

@@ -44,7 +44,7 @@ const website = computed(() => globalSetting.value.website || {})
 let showSideMenu = ref(false)
 let type = ref('')
 onMounted(() => {
-  type.value = route.hash?.replace('#', '')
+  type.value = route.hash?.split('#').filter(item => Boolean(item))[0]
 
 })
 </script>

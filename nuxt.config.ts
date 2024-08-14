@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 // import nodeResolve from "@rollup/plugin-node-resolve";
+import config from "./.config.json";
 
 export default defineNuxtConfig({
   devtools: { enabled: false },
@@ -57,7 +58,7 @@ export default defineNuxtConfig({
           src: "/amapInit.js",
         },
         {
-          src: "//webapi.amap.com/maps?v=2.0&key=50a9416f87740841a14bac5ab28ee96a",
+          src: "//webapi.amap.com/maps?v=2.0&key=" + config.amap.key,
         },
         {
           src: "//webapi.amap.com/ui/1.1/main.js",

@@ -18,6 +18,11 @@
 		"service":"My Blog", 
 		"secret":"xxx" 
 	},
+	 "amap": {
+    "key": "",
+		"webkey":"",
+    "securityJsCode": ""
+  },
 	"deploy": {
     "host": "",
     "username": "",

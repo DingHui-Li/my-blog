@@ -1,3 +1,4 @@
+
 export function throttle(func, interval = 100) {
     let sign = true;
     return function () {
@@ -7,6 +8,15 @@ export function throttle(func, interval = 100) {
         setTimeout(() => {
             func.apply(this, arguments)
             sign = true;
+        }, interval)
+    }
+}
+export function debounce(func, interval = 100) {
+    let timer = '';
+    return function () {
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+            func.apply(this, arguments)
         }, interval)
     }
 }

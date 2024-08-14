@@ -2,7 +2,9 @@ import request from 'request'
 import Geocode from "../models/geocode";
 import config from "~/.config.json";
 import zlib from 'zlib';
+import $http from "@/utils/http.js";
 
+//根据ip获取地区
 export function getLocationByIp(ip) {
     return new Promise((resolve, reject) => {
         request({
@@ -22,6 +24,7 @@ export function getLocationByIp(ip) {
     })
 }
 
+//根据地理位置获取天气
 export function getWeather(location = {}) {
     return new Promise(async (resolve, reject) => {
         try {
@@ -55,6 +58,7 @@ export function getWeather(location = {}) {
     })
 }
 
+//获取地理编码
 export function getGeocode(address) {
     return new Promise(async (resolve) => {
         address = parseName(address)
@@ -105,4 +109,18 @@ function parseName(name) {
         return t.replace(word, '')
     }, name)
     return name
+}
+
+//获取逆地理编码
+export async function rgeocode(lng, lat) {
+    return new Promise(resolve => {
+        $http.get(`https://restapi.amap.com/v3/geocode/regeo?key=${config.amap.webkey}&location=${lng},${lat}`).then(res => {
+            let info = res.regeocode.addressComponent
+            delete info.streetNumber
+            delete info.businessAreas
+            delete info.building
+            delete info.neighborhood
+            resolve(info)
+        })
+    })
 }

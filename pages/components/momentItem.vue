@@ -30,7 +30,7 @@
           </div>
         </div>
         <div class="info">
-          <div class="location" v-if="data.location" @click="openMap">
+          <span class="location" v-if="data.location" @click="openMap">
             <el-icon class="icon">
               <LocationFilled></LocationFilled>
             </el-icon>
@@ -38,10 +38,10 @@
               {{ data.location.city }}·
             </span>
             <span>{{ data.location.name || data.location }}</span>
-          </div>
-          <div class="weather" v-if="data.weather" @click="openWeather"> {{ data.weather.text }} {{ data.weather.temp
+          </span>
+          <span class="weather" v-if="data.weather" @click="openWeather"> {{ data.weather.text }} {{ data.weather.temp
             }}°C
-          </div>
+          </span>
         </div>
       </template>
     </div>
@@ -228,19 +228,20 @@ function openMap() {
     }
 
     .info {
-      display: flex;
-      align-items: center;
+      // display: flex;
+      // align-items: center;
       margin-top: 5px;
 
       .location {
-        display: flex;
-        align-items: center;
+        // display: flex;
+        // align-items: center;
         font-size: 13px;
         color: #666;
         cursor: pointer;
 
         .icon {
-          margin-top: -1px;
+          position: relative;
+          transform: translateY(2px);
           font-size: 16px;
         }
       }

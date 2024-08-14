@@ -77,3 +77,12 @@ export async function stByDate({ year, type } = {}) {
   let res = await Article.aggregate(aggregate)
   return res
 }
+
+export async function getContentById(ids = []) {
+  let t = []
+  for (const id of ids) {
+    let content = await Article.find({ _id: id }).select({ htmlContent: 0 }).populate("topics")
+    t.push(content[0])
+  }
+  return t
+}

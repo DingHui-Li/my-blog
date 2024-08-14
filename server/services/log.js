@@ -1,5 +1,5 @@
 import Log from "../models/log";
-import Cache from "../models/cache";
+import * as cacheService from '../services/cache'
 import { getLocationByIp, getGeocode } from '../utils/location'
 
 export async function push({ ip = 'unknow', ua, url }) {
@@ -23,9 +23,9 @@ export function get({ page = 1, size = 100 }, filter = {}) {
 
 export function st() {
     return new Promise(async resolve => {
-        const result = await Cache.find({ label: "logSt" })
-        if (result?.length && new Date().getTime() - result[0].time < (1000 * 60 * 60 * 24)) {
-            return resolve(result[0].value)
+        const result = await cacheService.find("logSt", 1000 * 60 * 60 * 24)
+        if (result) {
+            return resolve(result)
         }
         let list = await Log.aggregate([
             {
@@ -44,7 +44,7 @@ export function st() {
         for (const item of list) {
             item.location = await getGeocode(item._id)
         }
-        await Cache.updateOne({ label: "logSt" }, { value: list, time: new Date().getTime() }, { upsert: true })
+        await cacheService.update("logSt", list)
         resolve(list)
     })
 }

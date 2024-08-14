@@ -18,10 +18,12 @@ import {
   deleteArticle,
   searchMovie,
   stArticleByDate,
+  getContentById
 } from "../api/article.js";
 import { getGlobalSetting, setGlobalSetting, login, getTOTPQR } from '../api/sys.js'
 import { test } from '../api/money.js'
 import * as LogApi from '../api/log.js'
+import * as StApi from '../api/st.js'
 
 const router = createRouter();
 
@@ -35,6 +37,7 @@ router.put("/api/admin/topic", editTopic);
 router.delete("/api/admin/topic/:id", deleteTopic);
 
 router.get("/api/article", getArticleList);
+router.post("/api/articleById", getContentById);
 router.get("/api/article/st/date", stArticleByDate);
 router.get("/api/admin/articleList", getArticleList);
 router.get("/api/article/:id", getArticle);
@@ -58,6 +61,10 @@ router.get("/api/money/test", test);
 router.get("/api/log", LogApi.get);
 router.get("/api/log/st", LogApi.st);
 router.post("/api/log/push", LogApi.push);
+
+router.get("/api/st/contentNumByProvince", StApi.stContentNumByProvince);
+router.get("/api/st/findRegionOfCity", StApi.findRegionOfCity);
+router.post("/api/st/findRegionOfDistrict", StApi.findRegionOfDistrict);
 
 export default defineNitroPlugin(async (nitroApp) => {
   nitroApp.h3App.stack.unshift({

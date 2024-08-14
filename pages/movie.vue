@@ -170,6 +170,8 @@ function handleSelect(index: number) {
       .text {
         margin: 5px 0;
         color: #fff;
+        word-break: break-all;
+        white-space: pre-wrap;
       }
 
       .time {
@@ -179,8 +181,8 @@ function handleSelect(index: number) {
       }
 
       .btn {
-        padding: 8px 20px;
-        border-radius: 30px;
+        position: relative;
+        padding: 2px 5px;
         // border: 1px solid #fff;
         background-color: #00B51D;
         width: fit-content;
@@ -189,6 +191,15 @@ function handleSelect(index: number) {
         cursor: pointer;
         color: #fff;
         user-select: none;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -20px;
+          border: 10px solid transparent;
+          border-right-color: #00B51D;
+        }
 
         &:active {
           opacity: 0.8;

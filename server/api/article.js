@@ -1,7 +1,7 @@
 import BaseResponse from "../base/baseResponse";
 import parseQuery from "../utils/parseQuery";
 import Article from "../models/article";
-import { getLocationByIp, getWeather } from "../utils/location";
+import { getLocationByIp, getWeather, rgeocode } from "../utils/location";
 import * as MovieService from '../services/movie'
 import * as ArticleService from '../services/article'
 
@@ -106,6 +106,8 @@ export let addArticle = defineEventHandler(async (event) => {
   // let location = await getLocationByIp(ip)
   let weather = {}
   if (body.location) {
+    let lnglat = body.location.location
+    body.location.detail = await rgeocode(lnglat.lng, lnglat.lat)
     weather = await getWeather(body.location?.location)
   }
   let validRes = validContent(body)
@@ -132,6 +134,11 @@ export let editArticle = defineEventHandler(async (event) => {
   }
   if (body.movie) {
     body.movie.cover = await ArticleService.saveNetworkImg(body.movie?.cover)
+  }
+  if (body.location) {
+    let lnglat = body.location.location
+    body.location.detail = await rgeocode(lnglat.lng, lnglat.lat)
+    weather = await getWeather(body.location?.location)
   }
   let res = await Article.updateOne(
     { _id: body._id },
@@ -175,5 +182,13 @@ export let searchMovie = defineEventHandler(async (event) => {
 export let stArticleByDate = defineEventHandler(async (event) => {
   let query = getQuery(event);
   let res = await ArticleService.stByDate(parseQuery(query)?.filter)
+  return new BaseResponse({ data: res });
+});
+
+
+//根据id列表查询内容
+export let getContentById = defineEventHandler(async (event) => {
+  const body = await readBody(event);
+  let res = await ArticleService.getContentById(body.ids)
   return new BaseResponse({ data: res });
 });

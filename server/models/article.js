@@ -18,7 +18,7 @@ const articleSchema = new Schema({
   type: {
     type: String,
     default: "article"
-  },//article/moment/photo
+  },//article,moment,photo
   cover: String,
   htmlContent: String,
   textContent: String,

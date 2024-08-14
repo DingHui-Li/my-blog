@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-    label: String,
+    key: String,
     value: Object,
     time: {
         type: Number,
@@ -10,4 +10,4 @@ const schema = new Schema({
     }
 });
 
-export default mongoose.model("LogStResult", schema);
+export default mongoose.model("cache", schema);

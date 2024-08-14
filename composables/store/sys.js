@@ -17,11 +17,11 @@ export const useSysStore = defineStore('sys', {
                 label: "相册",
                 key: "photo"
             },
-            // {
-            //     label: "足迹",
-            //     key: "map",
-            //     path: "map"
-            // },
+            {
+                label: "足迹",
+                key: "footprint",
+                path: "footprint"
+            },
             {
                 label: "电影",
                 key: "movie",
@@ -109,6 +109,7 @@ export const useSysStore = defineStore('sys', {
         },
         pushLog() {
             if (process.client) {
+                // return
                 if (!window.location.href.includes('localhost')) {
                     $http.post('/api/log/push', {
                         ip: window.ip,
