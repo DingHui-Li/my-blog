@@ -61,6 +61,19 @@ export const useSysStore = defineStore('sys', {
         beian: "陕ICP备2024039659号-1"
     }),
     actions: {
+        isMobile() {
+            if (process.client) {
+                const userAgent = navigator.userAgent;
+                const mobileKeywords = ['Mobile', 'Android', 'iPhone', 'iPad', 'Windows Phone'];
+
+                for (let i = 0; i < mobileKeywords.length; i++) {
+                    if (userAgent.indexOf(mobileKeywords[i]) !== -1) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        },
         init() {
             if (process.client) {
                 this.setToken(window.localStorage['token'] || "")

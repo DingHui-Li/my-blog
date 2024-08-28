@@ -138,7 +138,6 @@ export let editArticle = defineEventHandler(async (event) => {
   if (body.location) {
     let lnglat = body.location.location
     body.location.detail = await rgeocode(lnglat.lng, lnglat.lat)
-    weather = await getWeather(body.location?.location)
   }
   let res = await Article.updateOne(
     { _id: body._id },

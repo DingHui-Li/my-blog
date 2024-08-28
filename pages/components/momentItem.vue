@@ -1,12 +1,17 @@
 <template>
   <div class="moment-item">
-    <div class="avatar">
+    <!-- <div class="avatar">
       <img :src='profile?.avatar + "?x-oss-process=image/resize,m_mfit,w_100"' />
-    </div>
+    </div> -->
     <div class="right">
       <div class="user-info">
-        <div class="name">{{ profile?.name }}</div>
-        <div class="time">{{ moment(data.createTime).format('LLLL') }}</div>
+        <!-- <div class="name">{{ profile?.name }}</div> -->
+        <!-- <div class="time">
+          <el-icon class="icon">
+            <Clock></Clock>
+          </el-icon>
+          {{ moment(data.createTime).format('LLLL') }}
+        </div> -->
       </div>
       <div class="article" v-if="data.type == 'article'">
         <comArticleItem :data="data" />
@@ -32,7 +37,7 @@
         <div class="info">
           <span class="location" v-if="data.location" @click="openMap">
             <el-icon class="icon">
-              <LocationFilled></LocationFilled>
+              <Location></Location>
             </el-icon>
             <span v-if="data.location.city">
               {{ data.location.city }}·
@@ -43,6 +48,14 @@
             }}°C
           </span>
         </div>
+        <div class="user-info">
+          <div class="time" style="color:#666;padding-left: 1px;">
+            <el-icon class="icon" style="color:#666">
+              <Clock></Clock>
+            </el-icon>
+            {{ moment(data.createTime).format('LLLL') }}
+          </div>
+        </div>
       </template>
     </div>
   </div>
@@ -51,7 +64,7 @@
 import { storeToRefs } from 'pinia'
 import moment from "moment";
 import TopicTag from "./topicTag.vue";
-import { LocationFilled } from '@element-plus/icons-vue'
+import { Location, Clock } from '@element-plus/icons-vue'
 import { Article } from '~/types';
 import comArticleItem from './articleItem.vue'
 
@@ -116,9 +129,17 @@ function openMap() {
       }
 
       .time {
+        display: flex;
+        align-items: center;
         font-size: 12px;
         color: #999;
         margin-top: 2px;
+
+        .icon {
+          font-size: 14px;
+          margin-right: 4px;
+          color: #888;
+        }
       }
     }
 
@@ -128,10 +149,10 @@ function openMap() {
       word-break: break-all;
       white-space: pre-wrap;
 
-      // &::first-letter {
-      //   font-size: 20px;
-      //   font-weight: bold;
-      // }
+      &::first-letter {
+        font-size: 30px;
+        font-weight: bold;
+      }
     }
 
     .topics {
@@ -243,6 +264,7 @@ function openMap() {
           position: relative;
           transform: translateY(2px);
           font-size: 16px;
+          margin-right: 2px;
         }
       }
 

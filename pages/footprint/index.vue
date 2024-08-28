@@ -38,7 +38,7 @@ const dataOfProvince = ref({})
 const dataOfCity = ref({})
 const dataOfDistrict = ref({})
 const dataOfPoint = ref({})
-const markerLevel = ref('province')//marker纬度，province-city-district-point
+const markerLevel = ref('')//marker纬度，province-city-district-point
 const popup = ref(false)
 const mapContainer = ref()
 const openMarkerData = ref({
@@ -72,7 +72,6 @@ watch(popup, v => {
   }
 })
 watch(() => route.hash, v => {
-  console.log(v)
   if (!v.includes('open')) {
     popup.value = false
   }
@@ -81,13 +80,23 @@ watch(markerLevel, async v => {
   loading.value = true
   mapInstance.clearMap()
   if (v == 'province') {
+    mapPosOfRegion.value.province = findMapPosOfProvince(Object.keys(dataOfProvince.value))
+    console.log(mapPosOfRegion.value.province)
     renderProvinceMarker()
   } else if (v == 'city') {
-    await getDataOfCity(dataOfProvince.value).then(() => {
+    await getDataOfCity(dataOfProvince.value).then(async (t) => {
+      mapPosOfRegion.value.city = await findMapPosOfCity(Object.keys(t))
       renderCityMarker()
     })
   } else if (v == 'district') {
-    await getDataOfDistrict(dataOfProvince.value).then(() => {
+    await getDataOfDistrict(dataOfProvince.value).then(async () => {
+      if (!Object.keys(dataOfCity.value).length) {
+        await getDataOfCity(dataOfProvince.value)
+      }
+      mapPosOfRegion.value.district = await findMapPosOfDistrict(Object.keys(dataOfCity.value).reduce((obj, citycode) => {
+        obj[citycode] = dataOfCity.value[citycode].map(item => item.location.detail.adcode)
+        return obj
+      }, {}))
       renderDistrictMarker()
     })
   } else {
@@ -102,7 +111,7 @@ onMounted(() => {
   initMap()
   getData().then(() => {
     loading.value = false
-    renderProvinceMarker()
+    markerLevel.value = 'province'
   })
 })
 
@@ -134,14 +143,13 @@ function onZoomChange(e) {
 function getData() {
   return $http.get('/api/st/contentNumByProvince').then(res => {
     dataOfProvince.value = res.data
-    mapPosOfRegion.value.province = findMapPosOfProvince(Object.keys(res.data))
   })
 }
 
 //获取城市纬度数据
 async function getDataOfCity(data) {
   if (Object.keys(dataOfCity.value).length > 0) {
-    return
+    return dataOfCity.value
   }
   let t = {}
   for (const province in data) {
@@ -154,7 +162,7 @@ async function getDataOfCity(data) {
     }
   }
   dataOfCity.value = t
-  mapPosOfRegion.value.city = await findMapPosOfCity(Object.keys(t))
+  return t
 }
 
 //获取区纬度数据
@@ -173,10 +181,7 @@ async function getDataOfDistrict(data) {
     }
   }
   dataOfDistrict.value = t
-  mapPosOfRegion.value.district = await findMapPosOfDistrict(Object.keys(dataOfCity.value).reduce((obj, citycode) => {
-    obj[citycode] = dataOfCity.value[citycode].map(item => item.location.detail.adcode)
-    return obj
-  }, {}))
+  return t
 }
 //获取点纬度数据
 async function getDataOfPoint(data) {
@@ -224,6 +229,7 @@ function renderProvinceMarker() {
   for (const province in dataOfProvince.value) {
     let marker = makeMarker({
       pos: mapPosOfRegion.value.province[province],
+      key: province,
       title: province,
       list: dataOfProvince.value[province]
     })
@@ -236,6 +242,7 @@ function renderCityMarker() {
     let location = dataOfCity.value[citycode][0]?.location
     let marker = makeMarker({
       pos: mapPosOfRegion.value.city[citycode],
+      key: citycode,
       title: location?.detail?.province + location?.detail?.city,
       list: dataOfCity.value[citycode],
       size: 30
@@ -249,6 +256,7 @@ function renderDistrictMarker() {
     let location = dataOfDistrict.value[code][0]?.location
     let marker = makeMarker({
       pos: mapPosOfRegion.value.district[code],
+      key: code,
       title: location?.detail?.province + location?.detail?.city + location?.detail?.district,
       list: dataOfDistrict.value[code],
       size: 30
@@ -262,6 +270,7 @@ function renderPointMarker() {
     let point = dataOfPoint.value[id][0]
     let marker = makeMarker({
       pos: [point.location.location.lng, point.location.location.lat],
+      key: id,
       title: point.location?.name,
       list: dataOfPoint.value[id],
       size: 10,
@@ -272,7 +281,7 @@ function renderPointMarker() {
 }
 
 //创建地图点
-function makeMarker({ pos = [], title = '', list = [], size = 40, showNum = true, opacity = 1 }) {
+function makeMarker({ pos = [], key = '', title = '', list = [], size = 40, showNum = true, opacity = 1 }) {
   const style = `
   background:${themeColor.value};
   color:#fff;
@@ -295,10 +304,13 @@ function makeMarker({ pos = [], title = '', list = [], size = 40, showNum = true
     offset: new AMap.Pixel(-size / 4, -size / 1.2),
     topWhenClick: true,
     title,
-    extData: { title, list },
+    extData: { title, list, key },
   });
-  marker.on('click', debounce(markerClick))
-  marker.on('touchstart', debounce(markerClick))
+  if (sysStore.isMobile()) {
+    marker.on('touchstart', debounce(markerClick))
+  } else {
+    marker.on('click', debounce(markerClick))
+  }
   return marker
 }
 
@@ -311,22 +323,43 @@ function markerClick(e) {
     loading: false,
     contentList: []
   }
+  let firstPoint
+  if (markerLevel.value == 'province') {
+    firstPoint = dataOfProvince.value[extData.key][0]
+  } else if (markerLevel.value == 'city') {
+    firstPoint = dataOfCity.value[extData.key][0]
+  }
+  else if (markerLevel.value == 'district') {
+    firstPoint = dataOfDistrict.value[extData.key][0]
+  }
+  else if (markerLevel.value == 'point') {
+    firstPoint = dataOfPoint.value[extData.key][0]
+  }
+  if (firstPoint) {
+    mapInstance.setCenter(new AMap.LngLat(firstPoint.location.location.lng, firstPoint.location.location.lat))
+  }
   getContentList()
+  mapInstance.setZoom(12)
 }
 
 function loadMore() {
+  if (openMarkerData.value.loading) return
   getContentList(openMarkerData.value.page + 1)
 }
 function getContentList(page = 1) {
+  if (openMarkerData.value.loading) return
+  openMarkerData.value.loading = true
+
   let ids = []
   for (let i = (page - 1) * 10; i < 10 * page; i++) {
     if (openMarkerData.value.list[i]) {
       ids.push(openMarkerData.value.list[i]?._id)
     }
   }
-  openMarkerData.value.loading = true
   $http.post('/api/articleById', { ids }).then(res => {
-    openMarkerData.value.contentList = [...openMarkerData.value.contentList, ...res.data]
+    res.data.forEach(element => {
+      openMarkerData.value.contentList.push(element)
+    });
     openMarkerData.value.page = page
   }).finally(() => {
     openMarkerData.value.loading = false
