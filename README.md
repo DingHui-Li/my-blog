@@ -4,7 +4,11 @@ Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introdu
 
 ## Setup
 
-Make sure to install the dependencies:
+1.Recommend nodejs version 18.16.0
+
+2.add .config.json file,like .config.json.example
+
+3.Make sure to install the dependencies:
 
 ```bash
 # yarn
@@ -40,6 +44,3 @@ npm run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
-
-# config
-~/.config.json
