@@ -47,6 +47,10 @@ export default defineNuxtConfig({
   // experimental: {
   //   renderJsonPayloads: false
   // },
+  sourcemap: {
+    server: false,
+    client: true,
+  },
   app: {
     pageTransition: { name: "page", mode: "default" },
     head: {
