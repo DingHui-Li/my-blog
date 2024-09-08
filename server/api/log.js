@@ -7,7 +7,8 @@ export let push = defineEventHandler(async (event) => {
     let res = await LogService.push({
         ip: body.ip,
         ua: body.ua,
-        url: body.url
+        url: body.url,
+        login: body.login || false
     });
     return new BaseResponse({ data: res });
 });

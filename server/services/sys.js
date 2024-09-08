@@ -27,13 +27,13 @@ export async function getTOTPQR(input = "") {
   })
 }
 
-export async function login(code = '',fromApp=false) {
+export async function login(code = '', fromApp = false, longtime = false) {
   return new Promise((resolve, reject) => {
     const isValid = authenticator.verify({ token: code, secret });
     if (!isValid) {
       reject('动态验证码无效')
     }
-    const token = jwt.sign({ user: TOTPCONF.user }, TOTPCONF.secret, { expiresIn:fromApp?'365d':'6h' })
+    const token = jwt.sign({ user: TOTPCONF.user }, TOTPCONF.secret, { expiresIn: fromApp || longtime ? '365d' : '6h' })
     resolve(token)
   })
 }

@@ -11,6 +11,10 @@
           <input class="input" placeholder="请输入动态验证码" v-model="input" />
         </div>
         <div :class="['btn', input.length != 6 && 'disabled']" @click="login">验证</div>
+        <div class="longtime">
+          <el-checkbox v-model="longtime"></el-checkbox>
+          <span @click="longtime = !longtime">长期有效</span>
+        </div>
       </div>
     </div>
   </div>
@@ -22,6 +26,7 @@ import $http from "@/utils/http.js";
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const input = ref('')
+const longtime = ref(false)
 const router = useRouter()
 const { globalSetting } = storeToRefs(useSysStore())
 const website = computed(() => globalSetting.value.website || {})
@@ -48,7 +53,7 @@ function getTotpQr() {
 
 function login() {
   if (input.value) {
-    useSysStore().login({ code: input.value }).then(() => {
+    useSysStore().login({ code: input.value, longtime: longtime.value }).then(() => {
       console.log("登录成功")
       navigateTo({ path: "/admin" }, { replace: true })
     })
@@ -121,6 +126,15 @@ function login() {
       }
     }
 
+    .longtime {
+      font-size: 15px;
+      text-align: center;
+      color: #999;
+      margin-top: 10px;
+      user-select: none;
+      cursor: pointer;
+    }
+
     .btn {
       padding: 15px;
       border-radius: 8px;
@@ -128,7 +142,7 @@ function login() {
       text-align: center;
       font-size: 15px;
       color: #fff;
-      margin-top: 60px;
+      margin-top: 50px;
       margin-bottom: 20px;
 
       &:active {

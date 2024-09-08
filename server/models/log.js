@@ -9,7 +9,8 @@ const sysSchema = new Schema({
     time: {
         type: Number,
         default: Date.now,
-    }
+    },
+    login: Boolean
 });
 
 export default mongoose.model("Log", sysSchema);

@@ -127,7 +127,8 @@ export const useSysStore = defineStore('sys', {
                     $http.post('/api/log/push', {
                         ip: window.ip,
                         url: window.location.href,
-                        ua: window.navigator.userAgent
+                        ua: window.navigator.userAgent,
+                        login: this.isLogin()
                     })
                 }
             }

@@ -11,7 +11,7 @@ export let getTOTPQR = defineEventHandler(async (event) => {
 export let login = defineEventHandler(async (event) => {
     const body = await readBody(event);
     try {
-        const token = await SysService.login(body.code,Boolean(body.fromApp))
+        const token = await SysService.login(body.code, Boolean(body.fromApp), body.longtime)
         return new BaseResponse({ data: { token } });
     } catch (err) {
         return new BaseResponse({ code: 2001, msg: err });
