@@ -3,6 +3,7 @@
   .actions
     .time(v-if="cacheTime") {{ moment(cacheTime).format('YYYY MMMM Do, hh:mm:ss') }}已缓存
       el-button(text @click='clearCache') 清除缓存
+    el-switch(v-model='form.onlySelf' active-text='仅自己可见' style='margin-right:30px')
     el-button.btn.confirm(type='primary' @click="save" :loading='loading') {{form._id?'保存':'发布'}}
   .container
     .form-item

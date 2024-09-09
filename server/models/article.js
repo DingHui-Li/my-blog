@@ -30,6 +30,7 @@ const articleSchema = new Schema({
   },
   weather: Object,
   movie: Object,
+  onlySelf: Boolean
 });
 articleSchema.index({ "$**": "text" });
 export default mongoose.model("Article", articleSchema);

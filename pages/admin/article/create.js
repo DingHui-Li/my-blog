@@ -37,4 +37,5 @@ export class Form {
   imgs = []
   movie = {}
   location = {}
+  onlySelf = false
 }

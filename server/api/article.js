@@ -48,6 +48,16 @@ export let getArticleList = defineEventHandler(async (event) => {
     .sort({ createTime: -1 })
     .populate("topics");
   let total = await Article.find(filter).count();
+  if (!event.context.user) {
+    res = res.map(item => {
+      if (item.onlySelf) {
+        item.imgs = []
+        item.textContent = item.textContent.replace(/./g, '*')
+        item.desc = item.desc.replace(/./g, '*')
+      }
+      return item
+    })
+  }
   return new BaseResponse({
     data: {
       list: res,
@@ -61,6 +71,12 @@ export let getArticleList = defineEventHandler(async (event) => {
 export let getArticle = defineEventHandler(async (event) => {
   let params = getRouterParams(event);
   let res = await Article.findOne({ _id: params.id }).populate("topics");
+  if (!event.context.user && res.onlySelf) {
+    res.imgs = []
+    res.textContent = res.textContent.replace(/./g, '*')
+    res.desc = res.desc.replace(/./g, '*')
+    res.htmlContent = '***'
+  }
   return new BaseResponse({ data: res });
 });
 
@@ -105,7 +121,7 @@ export let addArticle = defineEventHandler(async (event) => {
   //   || headers['x-real-ip']
   // let location = await getLocationByIp(ip)
   let weather = {}
-  if (body.location) {
+  if (body?.location?.location) {
     let lnglat = body.location.location
     body.location.detail = await rgeocode(lnglat.lng, lnglat.lat)
     weather = await getWeather(body.location?.location)

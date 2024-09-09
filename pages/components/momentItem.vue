@@ -3,6 +3,11 @@
     <!-- <div class="avatar">
       <img :src='profile?.avatar + "?x-oss-process=image/resize,m_mfit,w_100"' />
     </div> -->
+    <el-tooltip v-if="data.onlySelf" content="仅自己可见" placement="left">
+      <el-icon class="only-self">
+        <View />
+      </el-icon>
+    </el-tooltip>
     <div class="right">
       <div class="user-info">
         <!-- <div class="name">{{ profile?.name }}</div> -->
@@ -64,7 +69,7 @@
 import { storeToRefs } from 'pinia'
 import moment from "moment";
 import TopicTag from "./topicTag.vue";
-import { Location, Clock } from '@element-plus/icons-vue'
+import { Location, Clock, View } from '@element-plus/icons-vue'
 import { Article } from '~/types';
 import comArticleItem from './articleItem.vue'
 
@@ -99,6 +104,13 @@ function openMap() {
 <style lang='scss' scoped>
 .moment-item {
   display: flex;
+  position: relative;
+
+  .only-self {
+    position: absolute;
+    right: 5px;
+    top: -15px;
+  }
 
   .avatar {
     width: 45px;

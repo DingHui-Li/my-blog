@@ -4,13 +4,14 @@ import { verifyToken } from '../services/sys.js'
 export default defineNitroPlugin((nitroApp) => {
     nitroApp.hooks.hook("request", async (event) => {
         try {
+            const token = event.node.req.headers?.authorization
+            let jwt = await verifyToken(token)
+            event.context.user = jwt?.user
             if (event.node.req.url.includes('api/admin')) {
-                const token = event.node.req.headers?.authorization
                 let res = null
                 if (!token) {
                     res = new BaseResponse({ msg: "Token不能为空", code: 2000 })
                 } else {
-                    let jwt = await verifyToken(token)
                     if (!jwt?.user) {
                         res = new BaseResponse({ msg: "Token无效", code: 2002 })
                     }

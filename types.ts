@@ -22,6 +22,7 @@ export type Article = {
   imgs: Array<string>;
   weather: any;
   movie: Movie;
+  onlySelf: boolean;
 };
 
 export type Movie = {

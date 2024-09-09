@@ -19,7 +19,7 @@
       </el-icon>
     </div>
     <div class="home">
-      <div class="item" :class="type" v-for="(item, index) in _list" :key="item._id.toString()"
+      <div :class="['item type']" v-for="(item, index) in _list" :key="item._id.toString()"
         :style="`animation-delay:${index % 10 * 100}ms`">
         <comAlbumItem v-if="type == 'photo'" :data="item"
           :showYear="index == 0 || item.createTimeObj?.getFullYear() != _list[index - 1]?.createTimeObj?.getFullYear()"
@@ -197,6 +197,7 @@ function onChoosedDate(e: string) {
   padding-bottom: 60px;
 
   .item {
+    position: relative;
     padding: 15px;
     padding-left: 30px;
     opacity: 0;

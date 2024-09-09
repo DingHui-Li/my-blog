@@ -133,6 +133,13 @@ function login() {
       margin-top: 10px;
       user-select: none;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      span {
+        margin-left: 5px;
+      }
     }
 
     .btn {

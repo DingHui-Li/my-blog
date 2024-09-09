@@ -2,13 +2,13 @@ import Log from "../models/log";
 import * as cacheService from '../services/cache'
 import { getLocationByIp, getGeocode } from '../utils/location'
 
-export async function push({ ip = 'unknow', ua, url }) {
+export async function push({ ip = 'unknow', ua, url, login }) {
     return new Promise(async resolve => {
         if (!ip || ip == 'unknow') {
-            return resolve(await Log.create({ ip, ua, url }))
+            return resolve(await Log.create({ ip, ua, url, login }))
         }
         let location = await getLocationByIp(ip)
-        resolve(await Log.create({ ip, ua, url, location }))
+        resolve(await Log.create({ ip, ua, url, location, login }))
     })
 }
 
