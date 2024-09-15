@@ -24,8 +24,8 @@
     <div class="imgs">
       <div class="item" v-for="(item, index) in data.imgs">
         <div class="img">
-          <Vimg ref="imgsEl" :preview-teleported="true" :src="item"
-            :thumb="item + '?x-oss-process=image/resize,m_mfit,w_1000'"></Vimg>
+          <VImg ref="imgsEl" :preview-teleported="true" :src="item"
+            :thumb="item + '?x-oss-process=image/resize,m_mfit,w_1000'"></VImg>
           <div class="info" v-if="exifList[index]">
             <div class="text left">{{ exifList[index].Make || "" }} {{ exifList[index].Model || "" }}
               <div class="date">{{ moment(exifList[index].CreateDate || "").format('YYYY/MM/DD HH:mm') }}</div>
@@ -46,6 +46,7 @@ import TopicTag from "~/pages/components/topicTag.vue";
 import { LocationFilled } from '@element-plus/icons-vue'
 import EXIF from 'exifr'
 import $http from "@/utils/http.js";
+import VImg from '@/components/vimg/index.vue'
 
 const props = defineProps({
   data: Object,

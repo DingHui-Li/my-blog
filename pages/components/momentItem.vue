@@ -27,10 +27,11 @@
           <TopicTag v-for="item in data.topics" :data="item"></TopicTag>
         </div>
         <div class="imgs" v-if="data.imgs.length">
-          <Vimg :class="['img', data.imgs.length == 1 && 'single']" v-for="(item, index) in data.imgs"
+          <VImg :class="['img', data.imgs.length == 1 && 'single']" v-for="(item, index) in data.imgs"
             :style="`width:${data.imgs.length == 1 ? 100 : data.imgs.length == 2 ? 50 : 33.33}%;`" :src="item"
             :thumb='item + "?x-oss-process=image/resize,m_mfit,w_355"'
-            :aspect-ratio="data.imgs.length == 1 ? 'auto' : 1" />
+            :aspect-ratio="data.imgs.length == 1 ? 'auto' : 1">
+          </VImg>
         </div>
         <div class="movie" v-if="data.movie && data.movie.link" @click="openMovie">
           <img :src="data.movie.cover" referrerpolicy="no-referrer" />
@@ -72,6 +73,7 @@ import TopicTag from "./topicTag.vue";
 import { Location, Clock, View } from '@element-plus/icons-vue'
 import { Article } from '~/types';
 import comArticleItem from './articleItem.vue'
+import VImg from '@/components/vimg/index.vue'
 
 const router = useRouter();
 const props = defineProps<{ data: Article }>();

@@ -3,6 +3,7 @@
   "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
+    "allowImportingTsExtensions": true,
     "typeRoots": ["node_modules/@types", "./types"]
   }
 }

@@ -6,7 +6,7 @@
     .list
         .item(v-for='item in list')
             .col.ip {{ item.ip }}
-                el-tag(size='small' v-if='item.login') 我
+                el-tag(size='small' v-if='item.login') 已登录
                 div {{ item.location }}
             .col.url {{ item.url }}
             .col.time {{ moment(item.time).calendar() }}

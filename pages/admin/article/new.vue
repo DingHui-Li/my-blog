@@ -166,7 +166,7 @@ async function onChooseImg(e) {
     form.value.imgs.push({
       file,
       url: window.URL.createObjectURL(file),
-      loading: false
+      loading: false,
     })
     // const file = e.target.files[index];
     // form.value.imgs.push(url)
@@ -193,18 +193,22 @@ function getPayload() {
 
 async function uploadImgs(imgs) {
   let tasks = []
+  imgs.forEach((item, index) => {
+    form.value.imgs[index].loading = true
+  })
   for (const i in imgs) {
     const item = imgs[i]
     if (item.url) {
-      form.value.imgs[i].loading = true
-      tasks.push(uploadImage(item.file, `photo/${new Date().format('yyyy-MM-dd')}`).then(url => {
+      // form.value.imgs[i].loading = true
+      // tasks.push()
+      await uploadImage(item.file, `photo/${new Date().format('yyyy-MM-dd')}`).then(url => {
         window.URL.revokeObjectURL(item.url)
         form.value.imgs[i] = url
         imgs[i] = url
-      }))
+      })
     }
   }
-  await Promise.all(tasks)
+  // await Promise.all(tasks)
   return imgs
 }
 

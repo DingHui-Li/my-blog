@@ -18,10 +18,10 @@
       <div class="mask" v-if="showSideMenu" @click="showSideMenu = false"></div>
       <div class="side" :class="`${showSideMenu && 'show'}`" @click="showSideMenu = false">
         <comSideMenu v-model="type"></comSideMenu>
-        <div :class="['bg']">
+        <!-- <div :class="['bg']">
           <img :src="`/icon/${theme == 'dark' ? 'wave_dark' : 'wave'}.png`" v-for="item in 30"
             onerror="this.style.display='none';">
-        </div>
+        </div> -->
       </div>
       <div class="content">
         <slot></slot>
