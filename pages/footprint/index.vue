@@ -392,7 +392,7 @@ function getContentList(page = 1) {
     position: absolute;
     bottom: 30px;
     right: 30px;
-    z-index: 99;
+    z-index: 999;
     width: 350px;
     height: calc(100% - 60px);
     background-color: #fff;
@@ -456,6 +456,7 @@ function getContentList(page = 1) {
       width: 100%;
       height: 70vh;
       transform: translateY(100%);
+      border-radius: 20px 20px 0 0;
 
       &.show {
         transform: translateY(0);

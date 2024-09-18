@@ -6,9 +6,11 @@
     .list
         .item(v-for='item in list')
             .col.ip {{ item.ip }}
-                el-tag(size='small' v-if='item.login') 已登录
+                el-tag(size='small' type="success" v-if='item.login') 已登录
                 div {{ item.location }}
             .col.url {{ item.url }}
+            .col 
+                el-tag(size='small') {{ item.ua?.system }}-{{ item.ua?.browser }}
             .col.time {{ moment(item.time).calendar() }}
                 div {{ moment(item.time).format('YYYY-MM-DD HH:mm:ss') }}
 </template>
@@ -16,6 +18,7 @@
 import comEarth from './components/earth.vue'
 import $http from "@/utils/http.js";
 import moment from "moment";
+import UA from 'browser-tool'
 
 let list = ref([])
 let updateTime = ref(new Date())
@@ -30,7 +33,12 @@ onUnmounted(() => {
 function getList() {
     updateTime.value = new Date()
     $http.get('/api/log?type=client', { size: 100 }).then(res => {
-        list.value = res?.data?.list
+        res.data.list.forEach(item => {
+            if (item.ua) {
+                item.ua = UA.parse(item.ua)
+            }
+        })
+        list.value = res.data.list
     })
 }
 </script>
@@ -74,6 +82,8 @@ function getList() {
 
             .col {
                 flex: 1;
+                overflow: hidden;
+                word-break: break-all;
             }
 
             .ip {
@@ -86,7 +96,6 @@ function getList() {
             }
 
             .time {
-                white-space: nowrap;
                 width: 140px;
             }
 
