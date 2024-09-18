@@ -194,7 +194,9 @@ function getPayload() {
 async function uploadImgs(imgs) {
   let tasks = []
   imgs.forEach((item, index) => {
-    form.value.imgs[index].loading = true
+    if (form.value.imgs[index]?.url) {
+      form.value.imgs[index].loading = true
+    }
   })
   for (const i in imgs) {
     const item = imgs[i]

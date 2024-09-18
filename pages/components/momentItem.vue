@@ -3,7 +3,7 @@
     <!-- <div class="avatar">
       <img :src='profile?.avatar + "?x-oss-process=image/resize,m_mfit,w_100"' />
     </div> -->
-    <el-tooltip v-if="data.onlySelf" content="仅自己可见" placement="left">
+    <el-tooltip v-if="data.onlySelf" content="仅博主可见" placement="left">
       <el-icon class="only-self">
         <View />
       </el-icon>

@@ -150,6 +150,7 @@ $max-width: 1080px;
       height: 100%;
       top: 0;
       left: 0;
+      backdrop-filter: blur(5px);
     }
 
     .side {
