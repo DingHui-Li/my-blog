@@ -65,14 +65,13 @@ $max-width: 1080px;
     position: fixed;
     width: 100vw;
     height: 100vh;
-    background-image: url(/bg.webp);
+    background-image: url(/bg.png);
   }
 
   .topbar-container {
     position: sticky;
     top: 0;
     z-index: 9+1;
-    // background: rgba(255, 255, 255, 0.8);
     background-color: #fff;
     backdrop-filter: blur(5px);
     width: 100%;

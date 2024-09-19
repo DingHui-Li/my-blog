@@ -27,7 +27,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useSlots } from 'vue'
+import { useSlots, getCurrentInstance } from 'vue'
 import useCarousel from './useCarousel.ts'
 import comImgItem from './components/imgItem.vue'
 import anime from '@/utils/anime.es.js'
@@ -48,8 +48,19 @@ carouselController.afterOpen = afterCarouselOpen
 carouselController.beforeClose = beforeCarouselClose
 
 const vimgEl = ref()
-const imgList = ref<Array<{ src: string, thumb: string, rect: DOMRect, el: Element }>>([])
+const imgList = ref<Array<{ src: string, thumb?: string, rect: DOMRect, el?: Element }>>([])
 const showUI = ref(true)
+
+defineExpose({ open })
+
+function open({ imgs = [], index = 0 }, target?: Element) {
+  imgList.value = imgs.map(img => ({
+    src: img,
+    rect: target?.getBoundingClientRect() || new DOMRect(),
+    el: target
+  }))
+  carouselController.open()
+}
 
 function openCarousel() {
   findImgList()

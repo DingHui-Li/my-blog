@@ -32,7 +32,7 @@ onUnmounted(() => {
 
 function getList() {
     updateTime.value = new Date()
-    $http.get('/api/log?type=client', { size: 100 }).then(res => {
+    $http.get('/api/log?type=client', { size: 100, login: false }).then(res => {
         res.data.list.forEach(item => {
             if (item.ua) {
                 item.ua = UA.parse(item.ua)
@@ -70,10 +70,13 @@ function getList() {
         margin-top: 15px;
 
         .item {
+            width: 100%;
             display: flex;
             color: #fff;
             font-size: 12px;
             margin-bottom: 30px;
+            overflow: auto;
+            white-space: nowrap;
 
             div {
                 min-width: 40px;
@@ -83,7 +86,7 @@ function getList() {
             .col {
                 flex: 1;
                 overflow: hidden;
-                word-break: break-all;
+                min-width: 100px;
             }
 
             .ip {
@@ -103,6 +106,17 @@ function getList() {
                 flex: 1;
                 overflow: hidden;
             }
+        }
+    }
+}
+
+@media screen and (max-width:750px) {
+    .visitor-page {
+        padding: 5px;
+        overflow-x: hidden;
+
+        .title {
+            padding: 15px;
         }
     }
 }

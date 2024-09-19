@@ -13,7 +13,7 @@ import { DEG2RAD, getImageData, visibilityForCoordinate, polarToCartesian } from
 import $http from "@/utils/http.js";
 
 let earthBoxEl = ref(null)
-let width = 500; //宽度
+let width = 600; //宽度
 let radius = width / 2
 let timer = null
 const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });

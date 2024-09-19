@@ -14,7 +14,11 @@ export async function push({ ip = 'unknow', ua, url, login }) {
 
 export function get({ page = 1, size = 100 }, filter = {}) {
     if (filter.type == 'client') {
-        filter = { url: { '$not': /admin/i } }
+        filter = { ...filter, url: { '$not': /admin/i } }
+        delete filter.type
+    }
+    if (filter.login == 'false') {
+        filter.login = { '$ne': true }
     }
     return Log.find(filter).skip((page - 1) * size)
         .limit(size)

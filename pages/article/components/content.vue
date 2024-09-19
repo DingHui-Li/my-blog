@@ -14,11 +14,15 @@
       RichEditor(:value="data.htmlContent" readonly)
 .img-preview(v-if='previewImg.show' @click="previewImg.show=false")
   img(:src='previewImg.url')
+VImg(ref="VImgEl" style="display:none")
 </template>
 <script setup>
 import moment from "moment";
 import TopicTag from "~/pages/components/topicTag.vue";
+import VImg from '@/components/vimg/index.vue'
 
+
+const VImgEl = ref()
 let previewImg = ref({
   show: false,
   url: "",
@@ -39,10 +43,11 @@ function addContentImgEvent() {
   for (let index = 0; index < imgs.length; index++) {
     let img = imgs[index];
     img.addEventListener("click", (e) => {
-      previewImg.value = {
-        show: true,
-        url: e.target.currentSrc,
-      };
+      // previewImg.value = {
+      //   show: true,
+      //   url: e.target.currentSrc,
+      // };
+      VImgEl.value.open({ imgs: [e.target.currentSrc] }, e.target)
     });
   }
 }

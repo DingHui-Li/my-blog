@@ -3,7 +3,7 @@
     <div class="img-box" @click.stop="imgClick" ref="imgBoxEl" @mousedown="mouseStart" @touchstart="mouseStart"
       @mousemove="mouseMove" @touchmove="mouseMove" @mouseup="mouseEnd" @touchend="mouseEnd" @mouseover="mousecancel"
       @touchcancel="mousecancel">
-      <img class="img thumb" :src="thumb" draggable="false">
+      <img class="img thumb" :src="thumb || src" draggable="false">
       <img v-if="showOriginalImg || !thumb" class="img origin" :src="src" draggable="false">
       <div class="original-btn" v-show="showUI && scale == 1" v-if="thumb && !showOriginalImg"
         @click.stop="showOriginalImg = true">
@@ -13,7 +13,7 @@
   </div>
 </template>
 <script setup lang="ts">
-const props = defineProps<{ src: string, thumb: string, index: number, total: number, carouselController: any, showUI: boolean }>()
+const props = defineProps<{ src: string, thumb?: string, index: number, total: number, carouselController: any, showUI: boolean }>()
 
 const imgItemEl = ref()
 const imgBoxEl = ref()
