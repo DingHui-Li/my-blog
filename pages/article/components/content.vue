@@ -79,6 +79,7 @@ $topbar-height: 50px;
     padding-bottom: 5px;
     border-radius: 20px 20px 0 0;
     background-color: #fff;
+    font-size: 35px;
 
     .subtitle {
       display: flex;

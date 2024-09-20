@@ -1,5 +1,6 @@
 <template>
   <div class="layout">
+    <div class="smoke-bg" id="smoke-bg"></div>
     <div class="topbar-container">
       <div class="topbar">
         <el-icon class="menu" :size="20" @click="showSideMenu = !showSideMenu">
@@ -36,6 +37,8 @@
 import { storeToRefs } from 'pinia'
 import { Search, Menu } from "@element-plus/icons-vue";
 import comSideMenu from '@/pages/components/sideMenu.vue'
+import SmokeBg from './smokeBg'
+
 const router = useRouter();
 const route = useRoute();
 const { globalSetting, beian, theme } = storeToRefs(useSysStore())
@@ -45,7 +48,7 @@ let showSideMenu = ref(false)
 let type = ref('')
 onMounted(() => {
   type.value = route.hash?.split('#').filter(item => Boolean(item))[0]
-
+  new SmokeBg('smoke-bg')
 })
 </script>
 <style lang="scss" scoped>
@@ -58,14 +61,23 @@ $max-width: 1080px;
   display: flex;
   flex-direction: column;
   background: #dee0ed;
-  overflow-x: hidden;
+  overflow: hidden;
 
-  &::before {
-    content: '';
+  // &::before {
+  //   content: '';
+  //   position: fixed;
+  //   width: 100vw;
+  //   height: 100vh;
+  //   background-image: url(/bg.png);
+  // }
+
+  .smoke-bg {
     position: fixed;
+    top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
-    background-image: url(/bg.png);
+    background-color: #0E0F24;
   }
 
   .topbar-container {
@@ -87,6 +99,7 @@ $max-width: 1080px;
       align-items: center;
       padding: 0 10px;
       box-sizing: border-box;
+      background-color: #fff;
 
       .menu {
         display: none;
