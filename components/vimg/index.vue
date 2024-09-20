@@ -90,7 +90,7 @@ function afterCarouselOpen() {
         height: [from.height, to.height],
         translateX: [0, '-50%'],
         translateY: [0, '-50%'],
-        easing: "easeInOutSine",
+        easing: "easeInOutQuad",
         duration: props.duration,
       })
       animation.finished.then(() => {

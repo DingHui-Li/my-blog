@@ -54,6 +54,12 @@ export default defineNuxtConfig({
   app: {
     pageTransition: { name: "page", mode: "default" },
     head: {
+      meta: [
+        {
+          name: "referrer",
+          content: "no-referrer",
+        },
+      ],
       script: [
         {
           src: "https://unpkg.com/darkreader@4.9.84",
@@ -72,7 +78,7 @@ export default defineNuxtConfig({
         },
         {
           type: "application/javascript",
-          src: "https://api.ipify.org?format=jsonp&callback=getIP",
+          src: "//whois.pconline.com.cn/ipJson.jsp?callback=getIP",
         },
       ],
     },
