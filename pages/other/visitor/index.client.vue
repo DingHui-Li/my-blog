@@ -76,7 +76,6 @@ function getList() {
             font-size: 12px;
             margin-bottom: 30px;
             overflow: auto;
-            white-space: nowrap;
 
             div {
                 min-width: 40px;
