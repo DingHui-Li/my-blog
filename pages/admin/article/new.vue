@@ -183,7 +183,7 @@ function getPayload() {
     topics: form.value.topics.map((item) => item?._id || item),
   };
   if (form.value.type == 'article') {
-    payload.textContent = richEditorEl.value.getPureText()
+    payload.textContent = richEditorEl.value.getPureText()?.slice(0, 1000)
     payload.htmlContent = richEditorEl.value.getHtmlContent()
   } else {
     payload.textContent = form.value.htmlContent

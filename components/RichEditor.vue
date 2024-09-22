@@ -209,7 +209,7 @@ function setLink() {
 
         .content-img {
             width: 100%;
-            max-width: 500px;
+            max-width: 1000px;
             display: block;
             margin: 5px auto;
             border-radius: 10px;

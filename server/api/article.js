@@ -40,7 +40,6 @@ export let getArticleList = defineEventHandler(async (event) => {
   if (filter.type == 'article') {
     select['textContent'] = 0
   }
-  console.log(select)
   let res = await Article.find(filter)
     .select(select)
     .skip((pagination.page - 1) * pagination.size)
@@ -49,14 +48,7 @@ export let getArticleList = defineEventHandler(async (event) => {
     .populate("topics");
   let total = await Article.find(filter).count();
   if (!event.context.user) {
-    res = res.map(item => {
-      if (item.onlySelf) {
-        item.imgs = []
-        item.textContent = item.textContent.replace(/./g, '*')
-        item.desc = item.desc.replace(/./g, '*')
-      }
-      return item
-    })
+    res = ArticleService.handleOnleSelf(res)
   }
   return new BaseResponse({
     data: {
@@ -72,10 +64,7 @@ export let getArticle = defineEventHandler(async (event) => {
   let params = getRouterParams(event);
   let res = await Article.findOne({ _id: params.id }).populate("topics");
   if (!event.context.user && res.onlySelf) {
-    res.imgs = []
-    res.textContent = res.textContent.replace(/./g, '*')
-    res.desc = res.desc.replace(/./g, '*')
-    res.htmlContent = '***'
+    res = ArticleService.handleOnleSelf([res])[0]
   }
   return new BaseResponse({ data: res });
 });
@@ -205,5 +194,15 @@ export let stArticleByDate = defineEventHandler(async (event) => {
 export let getContentById = defineEventHandler(async (event) => {
   const body = await readBody(event);
   let res = await ArticleService.getContentById(body.ids)
+  return new BaseResponse({ data: res });
+});
+
+//那年今日
+export let searchForSameDay = defineEventHandler(async (event) => {
+  let query = getQuery(event);
+  let res = await ArticleService.searchForSameDay(query.day)
+  if (!event.context.user) {
+    res = ArticleService.handleOnleSelf(res)
+  }
   return new BaseResponse({ data: res });
 });

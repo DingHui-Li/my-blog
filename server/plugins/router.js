@@ -18,12 +18,14 @@ import {
   deleteArticle,
   searchMovie,
   stArticleByDate,
-  getContentById
+  getContentById,
+  searchForSameDay
 } from "../api/article.js";
 import { getGlobalSetting, setGlobalSetting, login, getTOTPQR } from '../api/sys.js'
 import { test } from '../api/money.js'
 import * as LogApi from '../api/log.js'
 import * as StApi from '../api/st.js'
+import * as History4dayApi from '../api/history4day.js'
 
 const router = createRouter();
 
@@ -47,6 +49,7 @@ router.post("/api/admin/article", addArticle);
 router.put("/api/admin/article", editArticle);
 router.delete("/api/admin/article/:id", deleteArticle);
 router.get("/api/admin/searchmovie", searchMovie);
+router.get("/api/article/sameday", searchForSameDay);
 
 router.post("/api/admin/file/upload", uploadFile);
 router.get("/api/admin/file/downloadBase64", downloadFileBase64);
@@ -65,6 +68,9 @@ router.post("/api/log/push", LogApi.push);
 router.get("/api/st/contentNumByProvince", StApi.stContentNumByProvince);
 router.get("/api/st/findRegionOfCity", StApi.findRegionOfCity);
 router.post("/api/st/findRegionOfDistrict", StApi.findRegionOfDistrict);
+
+router.get("/api/history4day", History4dayApi.searchByDate);
+router.get("/api/history4day/:id", History4dayApi.searchById);
 
 export default defineNitroPlugin(async (nitroApp) => {
   nitroApp.h3App.stack.unshift({

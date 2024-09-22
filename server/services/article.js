@@ -86,3 +86,31 @@ export async function getContentById(ids = []) {
   }
   return t
 }
+
+export function searchForSameDay(day = `${new Date().getMonth() + 1}-${new Date().getDate()}`) {
+  let arr = []
+  for (let year = new Date().getFullYear() - 1; year >= 2023; year--) {
+    arr.push([
+      new Date(`${year}-${day} 0:0:0`).getTime(),
+      new Date(`${year}-${day} 23:59:59`).getTime(),
+    ])
+  }
+  return Article.find({
+    $or: arr.map(item => {
+      return {
+        createTime: { $gte: item[0], $lte: item[1] }
+      }
+    })
+  }).select({ htmlContent: 0 })
+}
+
+export function handleOnleSelf(list = []) {
+  return list.map(item => {
+    if (item.onlySelf) {
+      item.imgs = []
+      item.textContent = item.textContent.replace(/./g, '*')
+      item.desc = item.desc.replace(/./g, '*')
+    }
+    return item
+  })
+}

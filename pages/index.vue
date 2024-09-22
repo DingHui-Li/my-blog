@@ -19,6 +19,14 @@
       </el-icon>
     </div>
     <div class="home">
+      <div v-if="!date">
+        <div class="item same-day" v-for="item in listOfSameDay" :key="item._id.toString()">
+          <div class="year">{{ new Date(item.createTime).getFullYear() }}</div>
+          <div class="tag">那年今日</div>
+          <comArticleItem v-if="item.type == 'article'" :data="item"></comArticleItem>
+          <comMomentItem v-else :data="item"></comMomentItem>
+        </div>
+      </div>
       <div :class="['item type']" v-for="(item, index) in _list" :key="item._id.toString()"
         :style="`animation-delay:${index % 10 * 100}ms`">
         <comAlbumItem v-if="type == 'photo'" :data="item"
@@ -35,6 +43,7 @@
 </template>
 <script setup lang="ts">
 defineOptions({ name: 'index' })
+import $http from "@/utils/http.js";
 import { storeToRefs } from 'pinia'
 import comArticleItem from './components/articleItem.vue'
 import comMomentItem from './components/momentItem.vue'
@@ -52,6 +61,7 @@ const route = useRoute()
 let type = ref('')
 let date = ref<string>('')
 let { pagination, list, getList, loadMore } = useList<Article>("/api/article");
+const listOfSameDay = ref<Array<Article>>()
 
 
 const searchFilter = computed(() => {
@@ -84,6 +94,11 @@ function initList() {
     pageEl.value?.scrollTo(0, 0)
   }
   getList(searchFilter.value);
+  if (!type.value || type.value == 'moment') {
+    getListOfSameDay()
+  } else {
+    listOfSameDay.value = []
+  }
 }
 
 function onScroll(e: any) {
@@ -93,6 +108,12 @@ function onScroll(e: any) {
 function onChoosedDate(e: string) {
   date.value = e;
   initList()
+}
+
+function getListOfSameDay() {
+  $http.get('/api/article/sameday').then(res => {
+    listOfSameDay.value = res.data
+  })
 }
 </script>
 <style lang="scss" scoped>
@@ -210,6 +231,33 @@ function onChoosedDate(e: string) {
       padding-bottom: 0;
       margin-bottom: 0;
       border: none;
+    }
+
+    &.same-day {
+      .year {
+        position: absolute;
+        top: -20px;
+        left: 0;
+        font-size: 100px;
+        line-height: 100px;
+        color: #000;
+        opacity: 0.04;
+        font-weight: bold;
+        pointer-events: none;
+      }
+
+      .tag {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: var(--primary-color);
+        color: #fff;
+        padding: 5px 10px;
+        padding-left: 15px;
+        border-radius: 30px 0 0 30px;
+        pointer-events: none;
+        font-size: 15px;
+      }
     }
   }
 }
