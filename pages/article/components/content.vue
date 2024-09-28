@@ -110,6 +110,7 @@ $topbar-height: 50px;
     background: #fff;
     min-height: 500px;
     overflow: hidden;
+    padding-bottom: 100px;
 
     .content {
       padding: 0 15px;

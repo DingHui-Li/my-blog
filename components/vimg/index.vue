@@ -4,6 +4,9 @@
     <teleport to="body" v-if="showCarousel">
       <div class="mask" ref="vimgCarouselBgEl"></div>
       <div v-show="showUI">
+        <el-icon class="close" @click.stop="carouselController.close()">
+          <CircleClose />
+        </el-icon>
         <div class="pagination">
           <span>{{ currentIndex + 1 }}</span>/{{ imgList.length }}
         </div>
@@ -20,7 +23,7 @@
         @mousemove="mouseMove" @touchmove="mouseMove" @mouseup="mouseEnd" @touchend="mouseEnd" @mouseover="mousecancel"
         @touchcancel="mousecancel">
         <comImgItem v-for="(item, index) in imgList" :index="index" :total="imgList.length"
-          :carouselController="carouselController" :src="item.src" :thumb="item.thumb" :showUI="showUI">
+          :carouselController="carouselController" :src="item.src" :thumb="item.thumb" v-model:showUI="showUI">
         </comImgItem>
       </div>
     </teleport>
@@ -31,6 +34,7 @@ import { useSlots, getCurrentInstance } from 'vue'
 import useCarousel from './useCarousel.ts'
 import comImgItem from './components/imgItem.vue'
 import anime from '@/utils/anime.es.js'
+import { CircleClose } from '@element-plus/icons-vue'
 
 const slots = useSlots()
 const {
@@ -190,6 +194,16 @@ function findImgList() {
   background: black;
 }
 
+.close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 9999+2;
+  font-size: 40px;
+  color: #fff;
+  cursor: pointer;
+}
+
 .pagination {
   position: absolute;
   top: 15px;
@@ -239,6 +253,12 @@ function findImgList() {
   .prev-btn-default,
   .next-btn-default {
     margin: 10px;
+  }
+}
+
+@media screen and (max-width:750px) {
+  .close {
+    font-size: 30px;
   }
 }
 </style>

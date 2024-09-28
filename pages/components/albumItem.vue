@@ -101,7 +101,7 @@ let createTime = computed(() => new Date(Number(props.data.createTime)))
         display: inline-block;
         margin-right: 1px;
         margin-bottom: 1px;
-        border-radius: 10px;
+        // border-radius: 10px;
 
         img {
           width: 100%;

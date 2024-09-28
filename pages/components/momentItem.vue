@@ -190,7 +190,7 @@ function openMap() {
         aspect-ratio: 1;
         overflow: hidden;
         box-sizing: border-box;
-        // border-radius: 15px;
+        // border-radius: 10px;
         padding-right: 2px;
         padding-bottom: 2px;
 

@@ -8,7 +8,7 @@ export let push = defineEventHandler(async (event) => {
         ip: body.ip,
         ua: body.ua,
         url: body.url,
-        login: body.login || false
+        login: !!event.context.user
     });
     return new BaseResponse({ data: res });
 });

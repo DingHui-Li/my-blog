@@ -219,11 +219,11 @@ function getListOfSameDay() {
 
   .item {
     position: relative;
-    padding: 15px;
+    padding: 30px 15px;
     padding-left: 30px;
+    padding-bottom: 50px;
     opacity: 0;
     animation: fadeIn .3s forwards;
-    padding-bottom: 30px;
     margin-bottom: 20px;
     border-bottom: 1px solid #eee;
 
@@ -252,7 +252,7 @@ function getListOfSameDay() {
         right: 0;
         background-color: var(--primary-color);
         color: #fff;
-        padding: 5px 10px;
+        padding: 8px 10px;
         padding-left: 15px;
         border-radius: 30px 0 0 30px;
         pointer-events: none;

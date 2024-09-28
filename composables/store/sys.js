@@ -28,6 +28,11 @@ export const useSysStore = defineStore("sys", {
         path: "movie",
       },
       // {
+      //   label: "友链",
+      //   key: "friend",
+      //   path: "other/friendLink",
+      // },
+      // {
       //     label: "话题",
       //     key: "topic",
       //     path: "topic",
@@ -133,8 +138,7 @@ export const useSysStore = defineStore("sys", {
           $http.post("/api/log/push", {
             ip: window.ip,
             url: window.location.href,
-            ua: window.navigator.userAgent,
-            login: this.isLogin()
+            ua: window.navigator.userAgent
           });
         }
       }

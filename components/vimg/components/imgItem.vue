@@ -14,6 +14,7 @@
 </template>
 <script setup lang="ts">
 const props = defineProps<{ src: string, thumb?: string, index: number, total: number, carouselController: any, showUI: boolean }>()
+const emits = defineEmits(['update:showUI'])
 
 const imgItemEl = ref()
 const imgBoxEl = ref()
@@ -115,6 +116,7 @@ function dblclick(e: any) {
   setTimeout(() => {
     imgBoxEl.value.style.transition = "none";
   }, 300);
+  emits('update:showUI', scale.value == 1)
   if (scale.value == 1) {
     //复原图片容器位置
     imgItemEl.value.style.top = 0
