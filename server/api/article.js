@@ -194,6 +194,9 @@ export let stArticleByDate = defineEventHandler(async (event) => {
 export let getContentById = defineEventHandler(async (event) => {
   const body = await readBody(event);
   let res = await ArticleService.getContentById(body.ids)
+  if (!event.context.user) {
+    res = ArticleService.handleOnleSelf(res)
+  }
   return new BaseResponse({ data: res });
 });
 
