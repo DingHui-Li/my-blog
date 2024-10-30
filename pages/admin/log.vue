@@ -3,16 +3,19 @@
     .title 访问日志
     .list
         .item(v-for='item in list')
-            .ip {{ item.ip }}
+            .col.ip {{ item.ip }}
+                el-tag(size='small' type="success" v-if='item.login') 已登录
                 div {{ item.location }}
-            .url {{ item.url }}
-            .time {{ moment(item.time).calendar() }}
+            .col.url {{ item.url }}
+            .col 
+                el-tag(size='small') {{ item.ua?.system }}-{{ item.ua?.browser }}
+            .col.time {{ moment(item.time).calendar() }}
                 div {{ moment(item.time).format('YYYY-MM-DD HH:mm:ss') }}
-            .ua {{ item.ua }}
 </template>
 <script setup>
 import $http from "@/utils/http.js";
 import moment from "moment";
+import UA from 'browser-tool'
 
 let list = ref([])
 
@@ -22,7 +25,12 @@ let timer = setInterval(() => {
 }, 5000);
 
 function getList() {
-    $http.get('/api/log', { size: 100 }).then(res => {
+    $http.get('/api/log', { size: 100, login: false }).then(res => {
+        res.data.list.forEach(item => {
+            if (item.ua) {
+                item.ua = UA.parse(item.ua)
+            }
+        })
         list.value = res?.data?.list
     })
 }
@@ -46,14 +54,22 @@ onBeforeUnmount(() => {
         margin-top: 15px;
 
         .item {
+            width: 100%;
             display: flex;
             color: #fff;
             font-size: 12px;
             margin-bottom: 30px;
+            overflow: auto;
 
             div {
                 min-width: 40px;
                 margin-right: 10px;
+            }
+
+            .col {
+                flex: 1;
+                overflow: hidden;
+                min-width: 100px;
             }
 
             .ip {
@@ -66,7 +82,6 @@ onBeforeUnmount(() => {
             }
 
             .time {
-                white-space: nowrap;
                 width: 140px;
             }
 

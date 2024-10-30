@@ -2,10 +2,7 @@
   <div class="other-page">
     <div class="list">
       <div class="item" v-for="item in list" @click="jump(item.path)">
-        <span
-          :style="`color:${item.color}`"
-          :class="`icon iconfont icon-${item.icon}`"
-        ></span>
+        <span :style="`color:${item.color}`" :class="`icon iconfont icon-${item.icon}`"></span>
         <div class="name">{{ item.name }}</div>
       </div>
     </div>
@@ -21,12 +18,12 @@ const list = [
     color: "#4CAF50",
     path: "/other/life",
   },
-  {
-    name: "访客",
-    icon: "fangkeshu",
-    color: "#2196F3",
-    path: "/other/visitor",
-  },
+  // {
+  //   name: "访客",
+  //   icon: "fangkeshu",
+  //   color: "#2196F3",
+  //   path: "/other/visitor",
+  // },
   {
     name: "后台管理",
     icon: "manage",

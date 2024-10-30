@@ -22,7 +22,7 @@
       <div class="v-img-carousel" ref="vimgCarouselEl" @mousedown="mouseStart" @touchstart="mouseStart"
         @mousemove="mouseMove" @touchmove="mouseMove" @mouseup="mouseEnd" @touchend="mouseEnd" @mouseover="mousecancel"
         @touchcancel="mousecancel">
-        <comImgItem v-for="(item, index) in imgList" :index="index" :total="imgList.length"
+        <comImgItem v-for="(item, index) in imgList" :index="index" :active="currentIndex" :total="imgList.length"
           :carouselController="carouselController" :src="item.src" :thumb="item.thumb" v-model:showUI="showUI">
         </comImgItem>
       </div>

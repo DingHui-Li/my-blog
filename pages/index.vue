@@ -236,7 +236,7 @@ function getListOfSameDay() {
     &.same-day {
       .year {
         position: absolute;
-        top: -20px;
+        top: 0;
         left: 0;
         font-size: 100px;
         line-height: 100px;

@@ -13,7 +13,7 @@
   </div>
 </template>
 <script setup lang="ts">
-const props = defineProps<{ src: string, thumb?: string, index: number, total: number, carouselController: any, showUI: boolean }>()
+const props = defineProps<{ src: string, thumb?: string, index: number, active: number, total: number, carouselController: any, showUI: boolean }>()
 const emits = defineEmits(['update:showUI'])
 
 const imgItemEl = ref()
@@ -40,6 +40,9 @@ watch(scale, (v) => {
     props.carouselController.stopSlide = true
   }
 })
+watch(() => props.active, v => {
+  showOriginalImg.value = showOriginalImg.value || v == props.index
+}, { immediate: true })
 
 function mouseStart(e: any) {
   let pos = getPointPos(e)
