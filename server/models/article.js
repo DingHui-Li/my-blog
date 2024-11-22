@@ -28,6 +28,10 @@ const articleSchema = new Schema({
     type: Array,
     default: []
   },
+  sounds: {
+    type: Array,
+    default: []
+  },
   weather: Object,
   movie: Object,
   onlySelf: Boolean

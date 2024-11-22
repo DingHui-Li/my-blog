@@ -2,8 +2,8 @@
 .new-article()
   .actions
     .time(v-if="cacheTime") {{ moment(cacheTime).format('YYYY MMMM Do, hh:mm:ss') }}已缓存
-      el-button(text @click='clearCache') 清除缓存
-    el-switch(v-model='form.onlySelf' active-text='仅自己可见' style='margin-right:30px')
+      el-button(size="small" type='danger' @click='clearCache' style='margin-bottom:5px;margin-left:5px') 清除缓存
+    el-switch(v-model='form.onlySelf' active-text='仅自己可见' style='margin:0 30px')
     el-button.btn.confirm(type='primary' @click="save" :loading='loading') {{form._id?'保存':'发布'}}
   .container
     .form-item
@@ -32,6 +32,13 @@
           el-option(v-for="item in movieList" :label="item.title" :value="item")
         el-button(:disabled="!movieName" style="margin-left:15px" type="primary" :icon="Search" circle @click="searchMovie")
     comLocation(v-model="form.location")
+    comSound(v-model="form.sounds")
+    .sounds(v-if="form.sounds")
+      el-tag(v-for='(item,index) in form.sounds' size="large" effect="dark"
+        :style='`display:block;margin-bottom:5px;`' :key="item.src" color="#fff"
+        closable @close="form.sounds.splice(index,1)")
+        .sound(:style='`min-width:250px;height:30px;width:${(item.duration / 30) * 100}%`')
+          Sound(:src='item.src' :duration='item.duration')
     .title(v-if='form.type=="article"')
       el-input.input(placeholder="请输入文章标题" v-model="form.title" :maxlength='100' show-word-limit)
     .content
@@ -54,10 +61,11 @@
 import moment from "moment";
 import $http from "@/utils/http.js";
 import { PictureFilled, Plus, Loading, CircleCloseFilled, Search } from "@element-plus/icons-vue";
-import { uploadImage } from "@/utils/upload.js";
+import { uploadImage, uploadSound } from "@/utils/upload.js";
 import { ElMessage, ElMessageBox } from "element-plus";
 import comAddTopic from '../__com__/addTopic'
 import comLocation from './components/location.vue'
+import comSound from './components/addSound.vue'
 import { movieName, movieList, searchMovie, searching, onMovieInput, Form } from './create.js'
 
 const route = useRoute();
@@ -103,6 +111,7 @@ onMounted(() => {
   timer = setInterval(() => {
     let payload = getPayload()
     if (payload.textContent) {
+      payload.sounds = []
       cacheTime.value = new Date()
       payload.cacheTime = cacheTime.value
       window.localStorage['cache-article'] = JSON.stringify(payload)
@@ -214,10 +223,26 @@ async function uploadImgs(imgs) {
   return imgs
 }
 
+async function uploadSounds(sounds) {
+  for (const i in sounds) {
+    const item = sounds[i]
+    if (item.src.includes("blob:http")) {
+      let file = new File([await fetch(item.src).then(res => res.blob())], 'sound.mp3', { type: "audio/mp3" })
+      await uploadImage(file, `sound/${new Date().format('yyyy-MM-dd')}`).then(url => {
+        window.URL.revokeObjectURL(item.src)
+        form.value.sounds[i].src = url
+        sounds[i].src = url
+      })
+    }
+  }
+  return sounds
+}
+
 async function save() {
   loading.value = true;
   let payload = getPayload()
   payload.imgs = await uploadImgs(payload.imgs)
+  payload.sounds = await uploadSounds(payload.sounds)
   let req;
   if (form.value._id) {
     req = $http.put("/api/admin/article", payload);
@@ -257,6 +282,7 @@ async function save() {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    flex-wrap: wrap;
     z-index: 99;
     top: 0;
     background: rgba(255, 255, 255);
@@ -266,7 +292,6 @@ async function save() {
 
     .time {
       color: #999;
-      margin-right: 20px;
       font-size: 12px;
     }
 
@@ -399,6 +424,28 @@ async function save() {
       padding: 15px;
       font-size: 15px;
       height: 200px;
+    }
+  }
+
+  .sounds {
+    overflow: hidden;
+    margin-bottom: 5px;
+
+    &:deep(.el-tag) {
+      display: flex !important;
+      // background-color: var(--primary-color) !important;
+      // border-radius: 30px;
+      border: none;
+
+      .el-tag__content {
+        flex: 1;
+      }
+    }
+
+    .sound {
+      background-color: var(--primary-color);
+      border-radius: 30px;
+      padding: 0 8px;
     }
   }
 

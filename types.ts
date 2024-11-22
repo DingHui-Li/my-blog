@@ -23,6 +23,7 @@ export type Article = {
   weather: any;
   movie: Movie;
   onlySelf: boolean;
+  sounds: Array<Sound>;
 };
 
 export type Movie = {
@@ -39,6 +40,10 @@ export type Location = {
   location: LngLat;
   type: string;
   city: String;
+};
+export type Sound = {
+  src: string;
+  duration: number;
 };
 
 type LngLat = {

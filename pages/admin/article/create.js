@@ -38,4 +38,5 @@ export class Form {
   movie = {}
   location = {}
   onlySelf = false
+  sounds = []
 }

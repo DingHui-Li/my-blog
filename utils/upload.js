@@ -8,3 +8,11 @@ export function uploadImage(file, dir) {
     return res?.data;
   });
 }
+export function uploadSound(file, dir) {
+  let formData = new FormData();
+  formData.append("sound", file);
+  formData.append("dir", dir);
+  return $http.post("/api/admin/file/upload", formData).then((res) => {
+    return res?.data;
+  });
+}

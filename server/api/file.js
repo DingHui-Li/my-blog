@@ -5,7 +5,7 @@ import * as FileService from '../services/file'
 
 export let uploadFile = defineEventHandler(async (event) => {
   const rawBody = await readMultipartFormData(event);
-  let file = rawBody?.find((item) => item.name == "image");
+  let file = rawBody?.find((item) => item.name == "image" || item.name == "sound");
   let imgType = file.type.substring(file.type.indexOf("/") + 1);
   // let filename = new Date().getTime() + "." + imgType;
   let dir = getDir(rawBody);

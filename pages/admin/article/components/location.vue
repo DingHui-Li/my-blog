@@ -181,7 +181,6 @@ function confirm() {
   align-items: center;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
-  margin-bottom: 15px;
   margin-top: 15px;
 
   &:active {

@@ -26,6 +26,11 @@
         <div class="topics">
           <TopicTag v-for="item in data.topics" :data="item"></TopicTag>
         </div>
+        <div class="sounds" v-if="data.sounds">
+          <div class="sound" v-for="item in data.sounds" :style="`width:${(item.duration / 30) * 100}%`">
+            <Sound :src="item.src" :duration="item.duration" />
+          </div>
+        </div>
         <div class="imgs" v-if="data.imgs.length">
           <VImg :class="['img', data.imgs.length == 1 && 'single']" v-for="(item, index) in data.imgs"
             :style="`width:${data.imgs.length == 1 ? 100 : [2, 4].includes(data.imgs.length) ? 50 : 33.33}%;`"
@@ -172,6 +177,20 @@ function openMap() {
     .topics {
       margin-top: 10px;
       margin-bottom: 5px;
+    }
+
+    .sounds {
+
+      .sound {
+        box-sizing: border-box;
+        height: 35px;
+        padding-left: 6px;
+        min-width: 100px;
+        background: var(--primary-color);
+        border-radius: 30px;
+        overflow: hidden;
+        margin-bottom: 5px;
+      }
     }
 
     .imgs {

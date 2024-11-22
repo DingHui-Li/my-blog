@@ -61,7 +61,8 @@
     "request": "^2.88.2",
     "swiper": "^9.3.2",
     "three": "^0.156.1",
-    "vconsole": "^3.15.1"
+    "vconsole": "^3.15.1",
+    "vue-audio-visual": "^3.0.8"
   },
   "overrides": {
     "vue": "latest"
