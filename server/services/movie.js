@@ -10,10 +10,12 @@ export async function searchMovie(text) {
   const listEl = await page.$$('div > .item-root');
   const list = []
   for (const i in listEl) {
+    let title = await listEl[i].$eval('.title', el => el?.textContent)
+    title = title.replace('[可播放]', '')
     list.push({
       cover: await listEl[i].$eval('img', el => el?.src),
       link: await listEl[i].$eval('.cover-link', el => el?.href),
-      title: await listEl[i].$eval('.title', el => el?.textContent),
+      title: title,
       rate: await listEl[i].$eval('.rating', el => el?.textContent),
       meta: await listEl[i].$eval('.meta,.abstract', el => el?.textContent),
     })

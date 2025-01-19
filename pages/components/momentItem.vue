@@ -163,15 +163,15 @@ function openMap() {
     }
 
     .content {
-      font-size: 16px;
+      font-size: 17px;
       color: #333;
       word-break: break-all;
       white-space: pre-wrap;
 
-      &::first-letter {
-        font-size: 30px;
-        font-weight: bold;
-      }
+      // &::first-letter {
+      //   font-size: 30px;
+      //   font-weight: bold;
+      // }
     }
 
     .topics {
