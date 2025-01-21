@@ -163,7 +163,7 @@ function openMap() {
     }
 
     .content {
-      font-size: 17px;
+      font-size: 16px;
       color: #333;
       word-break: break-all;
       white-space: pre-wrap;

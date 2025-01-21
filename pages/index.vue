@@ -225,7 +225,7 @@ function getListOfSameDay() {
     opacity: 0;
     animation: fadeIn .3s forwards;
     margin-bottom: 20px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 10px solid #f0f0f0;
 
     &.photo {
       padding-bottom: 0;
