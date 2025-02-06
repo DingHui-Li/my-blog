@@ -4,7 +4,6 @@
       <div class="title">{{ data.title }}</div>
       <div class="num">共{{ data.imgs?.length }}张照片</div>
       <TopicTag v-for="topic in data.topics" :data="topic"></TopicTag>
-      <div class="date">发布于 {{ moment(data.createTime).calendar() }}</div>
       <div class="info">
         <div class="location" v-if="data.location" @click="openMap">
           <el-icon class="icon">
@@ -21,6 +20,7 @@
       </div>
     </div>
     <div class="content">{{ data.textContent }}</div>
+    <div class="date">发布于 {{ moment(data.createTime).calendar() }}</div>
     <div class="imgs">
       <div class="item" v-for="(item, index) in data.imgs">
         <div class="img">
@@ -113,7 +113,6 @@ function openMap() {
 
   .header {
     margin-bottom: 15px;
-    text-align: center;
 
     .title {
       font-size: 30px;
@@ -123,19 +122,16 @@ function openMap() {
     }
 
     .num {
+      width: 100%;
+      text-align: right;
       font-size: 14px;
       color: #333;
     }
 
-    .date {
-      font-size: 12px;
-      color: #999;
-    }
-
     .info {
       display: flex;
-      align-items: center;
-      justify-content: center;
+      // align-items: center;
+      // justify-content: center;
       margin-top: 5px;
 
       .location {
@@ -161,12 +157,19 @@ function openMap() {
   }
 
   .content {
-    font-size: 20px;
-    font-weight: bold;
+    background-color: #f5f5f5;
+    padding: 30px 15px;
+    font-size: 15px;
     color: #333;
-    text-align: center;
     word-break: break-all;
     white-space: pre-wrap;
+  }
+
+  .date {
+    text-align: right;
+    font-size: 13px;
+    color: #999;
+    margin-top: 10px;
   }
 
   .imgs {

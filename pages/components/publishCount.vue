@@ -16,10 +16,13 @@
           <div class="week" v-for="(week, index) in weekListOfYear" @click="handleClick"
             :style="`justify-content: ${index == 0 ? 'flex-end' : 'flex-start'};`">
             <div class="day indicate">
-              <span v-if="index % 7 == 1">{{ week[0].month }}月</span>
+              <span v-if="index == 1 || (index > 0 && weekListOfYear[index - 1][0].month != week[0].month)">{{
+      week[0].month
+    }}月</span>
+              <!-- <span v-if="index % 7 == 1">{{ week[0].month }}月</span> -->
             </div>
-            <div :class="['day', data[day.date] && 'active']" v-for="day in week"
-              :data-tip="`${new Date(day.date).format('yyyy年M月d日')}有 ${data[day.date]} 条内容`">
+            <div :class="['day', data[day.date] && 'active', new Date(day.date).getMonth() % 2 == 0 && 'stripe']"
+              v-for="day in week" :data-tip="`${new Date(day.date).format('yyyy年M月d日')}有 ${data[day.date]} 条内容`">
               <div class="box" :style="`opacity:${1 - (3 - data[day.date]) / 10}`" :data-date="day.date"></div>
             </div>
           </div>
@@ -173,9 +176,17 @@ function handleClick(e: any) {
         position: relative;
         width: 10px;
         height: 10px;
-        margin: 1px;
+        padding: 1px;
+
+        &.stripe {
+          .box {
+            border-radius: 50%;
+          }
+        }
 
         .box {
+          position: relative;
+          z-index: 1;
           width: 100%;
           height: 100%;
           background-color: #e0e0e0;
