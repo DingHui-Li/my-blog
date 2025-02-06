@@ -42,6 +42,13 @@
       </div>
     </el-drawer>
   </div>
+  <div v-if="recentLocationList.length">
+    <div class="recent-title">最近使用的地址:</div>
+    <div class="recent-list">
+      <div :class="['item', modelValue.id == item.id && 'active']" v-for="item in recentLocationList" :key="item.id"
+        @click="handleChooseRecent(item)">{{ item.city }}·{{ item.name }}</div>
+    </div>
+  </div>
 </template>
 <script setup>
 import { Location, ArrowRight, Close, Search } from '@element-plus/icons-vue'
@@ -61,7 +68,19 @@ let mapInstance = {}
 let positionPicker = {}
 const selectedLocation = ref({})
 let clickItem = false
+const recentLocationList = ref([])//最近使用的地址列表
+try {
+  if (process.client) {
+    recentLocationList.value = JSON.parse(window.localStorage['recent-location-list']) || []
+  }
+} catch { }
 
+watch(() => recentLocationList.value, v => {
+  console.log(v)
+  if (process.client) {
+    window.localStorage['recent-location-list'] = JSON.stringify(v)
+  }
+})
 watch(popup, v => {
   if (v) {
     useRouter().push(route.fullPath + '#chooselocation')
@@ -105,9 +124,10 @@ function handleChooseLocation() {
     positionPicker.on('fail', (err) => {
       console.log(err)
     })
-    if (props.modelValue.location?.lat) {
+    if (props.modelValue?.location?.lat) {
       let location = props.modelValue.location
       positionPicker.start(new AMap.LngLat(location.lng, location.lat))
+
     } else {
       positionPicker.start()
     }
@@ -162,16 +182,31 @@ function handleChoose(data) {
   positionPicker.start(new AMap.LngLat(data.location.lng, data.location.lat))
 }
 
+function handleChooseRecent(location) {
+  emits('update:modelValue', location)
+}
 function confirm() {
   if (selectedLocation.value?.id) {
     popup.value = false
     let latlng = selectedLocation.value.location
-    emits('update:modelValue', {
+    let locationObj = {
       ...selectedLocation.value,
       city: selectedLocation.value.name == currentCity.value.name ? '' : currentCity.value.name,
       location: { lat: latlng.lat, lng: latlng.lng }
-    })
+    }
+    emits('update:modelValue', locationObj)
+    addRecentLocation(locationObj)
   }
+}
+
+//添加最近使用的地址
+function addRecentLocation(location) {
+  let index = recentLocationList.value.findIndex(item => item.id == location.id)
+  if (index >= 0) {
+    recentLocationList.value.splice(index, 1)
+  }
+  recentLocationList.value = [location, ...recentLocationList.value]
+  recentLocationList.value = recentLocationList.value.slice(0, 5)
 }
 </script>
 <style lang="scss" scoped>
@@ -331,6 +366,32 @@ function confirm() {
       &:active {
         opacity: 1;
       }
+    }
+  }
+}
+
+.recent-title {
+  font-size: 12px;
+  padding: 10px 0;
+}
+
+.recent-list {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+
+  .item {
+    border: 1px solid #eee;
+    border-radius: 30px;
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 14px;
+    margin-right: 5px;
+    cursor: pointer;
+    margin-bottom: 5px;
+
+    &.active {
+      background-color: var(--primary-color);
+      color: #fff;
     }
   }
 }
