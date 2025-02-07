@@ -19,7 +19,8 @@ import {
   searchMovie,
   stArticleByDate,
   getContentById,
-  searchForSameDay
+  searchForSameDay,
+  getAiReply,
 } from "../api/article.js";
 import { getGlobalSetting, setGlobalSetting, login, getTOTPQR } from '../api/sys.js'
 import { test } from '../api/money.js'
@@ -50,6 +51,7 @@ router.put("/api/admin/article", editArticle);
 router.delete("/api/admin/article/:id", deleteArticle);
 router.get("/api/admin/searchmovie", searchMovie);
 router.get("/api/article/sameday", searchForSameDay);
+router.post("/api/admin/article/aireply", getAiReply);
 
 router.post("/api/admin/file/upload", uploadFile);
 router.get("/api/admin/file/downloadBase64", downloadFileBase64);

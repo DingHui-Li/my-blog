@@ -24,6 +24,7 @@ export type Article = {
   movie: Movie;
   onlySelf: boolean;
   sounds: Array<Sound>;
+  ai: AI;
 };
 
 export type Movie = {
@@ -44,6 +45,10 @@ export type Location = {
 export type Sound = {
   src: string;
   duration: number;
+};
+export type AI = {
+  model: string;
+  content: string;
 };
 
 type LngLat = {

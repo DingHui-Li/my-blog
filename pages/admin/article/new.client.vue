@@ -1,5 +1,5 @@
 <template lang="pug">
-.new-article()
+.new-article(v-loading='loading')
   .actions
     .time(v-if="cacheTime") {{ moment(cacheTime).format('YYYY MMMM Do, hh:mm:ss') }}已缓存
       el-button(size="small" type='danger' @click='clearCache' style='margin-bottom:5px;margin-left:5px') 清除缓存
@@ -56,11 +56,17 @@
         input.input(type='file' multiple accept="image/*" @change="onChooseImg")
         el-icon(size='20')
           PictureFilled
+    .ai-reply(v-if="form.ai&&form.ai.content" v-loading='aiReplying')
+      .model {{ form.ai.model }}: 
+      .msg {{ form.ai.content }}
+      .actions
+        el-icon.refresh(@click="getAiReply")
+          Refresh
 </template>
 <script setup>
 import moment from "moment";
 import $http from "@/utils/http.js";
-import { PictureFilled, Plus, Loading, CircleCloseFilled, Search } from "@element-plus/icons-vue";
+import { PictureFilled, Plus, Loading, CircleCloseFilled, Search, Refresh } from "@element-plus/icons-vue";
 import { uploadImage, uploadSound } from "@/utils/upload.js";
 import { ElMessage, ElMessageBox } from "element-plus";
 import comAddTopic from '../__com__/addTopic'
@@ -86,6 +92,7 @@ let typeList = [
     key: "article"
   },
 ]
+const aiReplying = ref(false)
 
 getTopicList();
 let timer
@@ -266,6 +273,16 @@ async function save() {
       window.localStorage['cache-article'] = ""
       loading.value = false;
     });
+}
+
+function getAiReply() {
+  let payload = getPayload()
+  aiReplying.value = true
+  $http.post("/api/admin/article/aireply", payload).then(res => {
+    form.value.ai = res?.data
+  }).finally(() => {
+    aiReplying.value = false
+  })
 }
 
 </script>
@@ -501,6 +518,39 @@ async function save() {
         width: 100%;
         height: 100%;
         object-fit: cover;
+      }
+    }
+  }
+
+  .ai-reply {
+    background-color: #f5f5f5;
+    padding: 5px;
+    border-radius: 5px;
+    margin-top: 5px;
+
+    .model {
+      display: inline;
+      font-size: 13px;
+      color: var(--primary-color);
+    }
+
+    .msg {
+      display: inline;
+      font-size: 13px;
+      color: #333;
+      font-weight: normal;
+    }
+
+    .actions {
+      width: 100%;
+      text-align: right;
+      overflow: hidden;
+      background-color: transparent;
+
+      .refresh {
+        color: var(--primary-color);
+        font-size: 18px;
+        cursor: pointer;
       }
     }
   }

@@ -39,4 +39,5 @@ export class Form {
   location = {}
   onlySelf = false
   sounds = []
+  ai = {}
 }

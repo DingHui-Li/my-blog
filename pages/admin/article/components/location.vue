@@ -45,7 +45,7 @@
   <div v-if="recentLocationList.length">
     <div class="recent-title">最近使用的地址:</div>
     <div class="recent-list">
-      <div :class="['item', modelValue.id == item.id && 'active']" v-for="item in recentLocationList" :key="item.id"
+      <div :class="['item', modelValue?.id == item.id && 'active']" v-for="item in recentLocationList" :key="item.id"
         @click="handleChooseRecent(item)">{{ item.city }}·{{ item.name }}</div>
     </div>
   </div>

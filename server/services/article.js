@@ -1,6 +1,7 @@
 import request from 'request'
 import * as FileService from './file'
 import Article from "../models/article";
+import * as AiService from '../services/AIAssistant'
 
 export function saveNetworkImg(url = "") {
   return new Promise((resolve) => {
@@ -113,4 +114,24 @@ export function handleOnleSelf(list = []) {
     }
     return item
   })
+}
+
+//根据内容获取ai回复
+export async function getAiResponse(article) {
+  let aiResponse = {}
+  try {
+    if (article.type == 'moment') {
+      if (article.movie?.title) {
+        aiResponse = await AiService.getMovieEvaluate(article.movie?.title)
+      } else {
+        aiResponse = await AiService.getReply(article.textContent)
+      }
+    }
+  } catch (err) {
+    console.log(err)
+  }
+  return {
+    model: aiResponse?.model,
+    content: aiResponse.content
+  }
 }

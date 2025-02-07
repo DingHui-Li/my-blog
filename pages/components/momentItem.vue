@@ -22,9 +22,11 @@
         <comArticleItem :data="data" />
       </div>
       <template v-else>
-        <div class="content">{{ data.textContent }}</div>
         <div class="topics">
           <TopicTag v-for="item in data.topics" :data="item"></TopicTag>
+        </div>
+        <div class="content" @click="router.push('/article/' + data._id)">
+          {{ data.textContent }}
         </div>
         <div class="sounds" v-if="data.sounds">
           <div class="sound" v-for="item in data.sounds" :style="`width:${(item.duration / 30) * 100}%`">
@@ -46,10 +48,11 @@
           </div>
         </div>
         <div class="info">
+          <span class="time">{{ moment(data.createTime).fromNow() }}</span>
           <span class="location" v-if="data.location" @click="openMap">
-            <el-icon class="icon">
+            <!-- <el-icon class="icon">
               <Location></Location>
-            </el-icon>
+            </el-icon> -->
             <span v-if="data.location.city">
               {{ data.location.city }}·
             </span>
@@ -59,15 +62,11 @@
             }}°C
           </span>
         </div>
-        <div class="user-info">
-          <div class="time" style="color:#666;padding-left: 1px;">
-            <el-icon class="icon" style="color:#666">
-              <Clock></Clock>
-            </el-icon>
-            {{ moment(data.createTime).format('LLLL') }}
-          </div>
-        </div>
       </template>
+      <div class="ai-reply" v-if="data?.ai?.content">
+        <div class="model">{{ data.ai.model }}: </div>
+        <div class="msg">{{ data.ai.content }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -138,35 +137,13 @@ function openMap() {
     flex: 1;
     overflow: hidden;
 
-    .user-info {
-      margin-bottom: 5px;
-
-      .name {
-        font-size: 17px;
-        font-weight: bold;
-        color: var(--primary-color);
-      }
-
-      .time {
-        display: flex;
-        align-items: center;
-        font-size: 12px;
-        color: #999;
-        margin-top: 2px;
-
-        .icon {
-          font-size: 14px;
-          margin-right: 4px;
-          color: #888;
-        }
-      }
-    }
-
     .content {
       font-size: 16px;
-      color: #222;
+      color: #000;
       word-break: break-all;
       white-space: pre-wrap;
+      margin-bottom: 10px;
+      cursor: pointer;
 
       // &::first-letter {
       //   font-size: 30px;
@@ -175,7 +152,6 @@ function openMap() {
     }
 
     .topics {
-      margin-top: 10px;
       margin-bottom: 5px;
     }
 
@@ -285,11 +261,18 @@ function openMap() {
       // align-items: center;
       margin-top: 5px;
 
+      .time {
+        margin-right: 10px;
+        color: #999;
+        font-size: 12px;
+      }
+
       .location {
         // display: flex;
         // align-items: center;
         font-size: 13px;
-        color: #666;
+        opacity: 0.6;
+        color: #303F9F;
         cursor: pointer;
 
         .icon {
@@ -302,11 +285,31 @@ function openMap() {
 
       .weather {
         font-size: 13px;
-        color: #666;
+        color: #999;
         margin-left: 10px;
         cursor: pointer;
       }
     }
+  }
+}
+
+.ai-reply {
+  background-color: #f5f5f5;
+  padding: 5px;
+  border-radius: 5px;
+  margin-top: 5px;
+
+  .model {
+    display: inline;
+    font-size: 13px;
+    color: var(--primary-color);
+  }
+
+  .msg {
+    display: inline;
+    font-size: 13px;
+    color: #333;
+    font-weight: normal;
   }
 }
 </style>

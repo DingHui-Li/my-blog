@@ -20,12 +20,19 @@
       </div>
     </div>
     <div class="content">{{ data.textContent }}</div>
+    <div class="movie" v-if="data.movie && data.movie.link" @click="openMovie">
+      <img :src="data.movie.cover" referrerpolicy="no-referrer" />
+      <div class="movie-info">
+        <div class="name">{{ data.movie.title }}</div>
+        <div class="rate">{{ data.movie.rate }}</div>
+      </div>
+    </div>
     <div class="date">发布于 {{ moment(data.createTime).calendar() }}</div>
     <div class="imgs">
       <div class="item" v-for="(item, index) in data.imgs">
         <div class="img">
           <VImg ref="imgsEl" :preview-teleported="true" :src="item"
-            :thumb="item + '?x-oss-process=image/resize,m_mfit,w_1000'"></VImg>
+            :thumb="item + '?x-oss-process=image/resize,m_mfit,w_800'"></VImg>
           <div class="info" v-if="exifList[index]">
             <div class="text left">{{ exifList[index].Make || "" }} {{ exifList[index].Model || "" }}
               <div class="date">{{ moment(exifList[index].CreateDate || "").format('YYYY/MM/DD HH:mm') }}</div>
@@ -36,6 +43,10 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="ai-reply" v-if="data?.ai?.content">
+      <div class="model">{{ data.ai.model }}: </div>
+      <div class="msg">{{ data.ai.content }}</div>
     </div>
   </div>
 </template>
@@ -94,6 +105,11 @@ function getShotInfo(info) {
 function openWeather() {
   if (props.data.weather?.fxLink) {
     window.open(props.data.weather?.fxLink, '_blank')
+  }
+}
+function openMovie() {
+  if (props.data.movie?.link) {
+    window.open(props.data.movie.link, '_blank')
   }
 }
 function openMap() {
@@ -165,6 +181,45 @@ function openMap() {
     white-space: pre-wrap;
   }
 
+  .movie {
+    display: flex;
+    align-items: center;
+    background-color: #f5f5f5;
+    // border-radius: 5px;
+    overflow: hidden;
+    cursor: pointer;
+    margin-top: 15px;
+
+    img {
+      width: 80px;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      margin-right: 10px;
+      // border-radius: 5px;
+    }
+
+    .movie-info {
+      flex: 1;
+      overflow: hidden;
+      padding: 10px 0;
+
+      .name {
+        font-size: 14px;
+      }
+
+      .rate {
+        font-size: 12px;
+        color: #FF9800;
+        font-weight: bold;
+        margin: 5px 0;
+      }
+
+      .meta {
+        font-size: 12px;
+      }
+    }
+  }
+
   .date {
     text-align: right;
     font-size: 13px;
@@ -223,6 +278,26 @@ function openMap() {
         }
       }
     }
+  }
+}
+
+.ai-reply {
+  background-color: #f5f5f5;
+  padding: 5px;
+  border-radius: 5px;
+  margin-top: 10px;
+
+  .model {
+    display: inline;
+    font-size: 13px;
+    color: var(--primary-color);
+  }
+
+  .msg {
+    display: inline;
+    font-size: 13px;
+    color: #333;
+    font-weight: normal;
   }
 }
 </style>

@@ -60,9 +60,10 @@
   async function uploadNodeModules() {
     await runServerCommand(`cd ${config.deploy.path}\n rm node_modules.zip\n exit\n`)
     let exist = await fs.existsSync('node_modules.zip')
-    if (!exist) {
-      await compressing.zip.compressDir('node_modules', './node_modules.zip')
+    if (exist) {
+      fs.unlinkSync("./node_modules.zip")
     }
+    await compressing.zip.compressDir('node_modules', './node_modules.zip')
     return new Promise(async resolve => {
       await uploadFile('./node_modules.zip')
       await runServerCommand(`unzip -o -q ${config.deploy.path}/node_modules.zip -d ${config.deploy.path}/server\n exit\n`)

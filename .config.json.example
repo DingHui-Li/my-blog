@@ -23,6 +23,11 @@
 		"webkey":"",
     "securityJsCode": ""
   },
+	"ai":{
+		"DeepSeek":{
+			"key":""
+		}
+	},
 	"deploy": {
     "host": "",
     "username": "",

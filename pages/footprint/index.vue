@@ -3,11 +3,11 @@
     <div class="map-container" ref="mapContainer"></div>
     <div class="drawer-mask" v-if="popup" @click="popup = false"></div>
     <div :class="['drawer', popup && 'show']">
-      <el-icon class="close" @click="popup = false">
-        <CloseBold />
-      </el-icon>
       <div class="header">
         在 <span>{{ openMarkerData.title }}</span> 共发布了 <span>{{ openMarkerData.list.length }}</span> 条内容
+        <el-icon class="close" @click="popup = false">
+          <CloseBold />
+        </el-icon>
       </div>
       <div class="list">
         <div class="item" v-for="(item, index) in openMarkerData.contentList" :key="item._id.toString()">
@@ -427,11 +427,13 @@ function getContentList(page = 1) {
     .header {
       font-size: 15rpx;
       padding: 15px 0;
+      padding-top: 20px;
       margin-bottom: 10px;
       position: sticky;
       top: 0;
       background-color: #fff;
       z-index: 2;
+      border-bottom: 1px solid #eee;
 
       span {
         font-weight: bold;
@@ -442,7 +444,7 @@ function getContentList(page = 1) {
       .item {
         padding-bottom: 30px;
         margin-bottom: 20px;
-        border-bottom: 1px solid #eee;
+        border-bottom: 10px solid #f0f0f0;
       }
     }
   }

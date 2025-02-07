@@ -66,10 +66,10 @@ const cols = [
     label: "创建时间",
     key: "createTime",
   },
-  {
-    label: "更新时间",
-    key: "updateTime",
-  },
+  // {
+  //   label: "更新时间",
+  //   key: "updateTime",
+  // },
 ];
 let filter = ref(new Filter());
 _getList();

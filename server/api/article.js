@@ -7,6 +7,7 @@ import * as ArticleService from '../services/article'
 
 //查询列表
 export let getArticleList = defineEventHandler(async (event) => {
+
   let { pagination, filter } = parseQuery(getQuery(event));
   if (filter.topic) {
     filter.topics = { $in: filter.topic };
@@ -50,6 +51,7 @@ export let getArticleList = defineEventHandler(async (event) => {
   if (!event.context.user) {
     res = ArticleService.handleOnleSelf(res)
   }
+
   return new BaseResponse({
     data: {
       list: res,
@@ -122,11 +124,13 @@ export let addArticle = defineEventHandler(async (event) => {
   if (body.movie) {
     body.movie.cover = await ArticleService.saveNetworkImg(body.movie?.cover)
   }
-  let res = await Article.create({
+  let d = {
     ...body,
     weather,
     desc: body.textContent?.slice(0, 50),
-  });
+  }
+  d['ai'] = await ArticleService.getAiResponse(d)
+  let res = await Article.create(d);
   return new BaseResponse({ data: res });
 });
 
@@ -144,13 +148,20 @@ export let editArticle = defineEventHandler(async (event) => {
     let lnglat = body.location.location
     body.location.detail = await rgeocode(lnglat.lng, lnglat.lat)
   }
+  let d = {
+    ...body,
+    desc: body.textContent?.slice(0, 50),
+    updateTime: new Date().getTime(),
+  }
+  if (!d.ai?.content) {
+    const aiResponse = await ArticleService.getAiResponse(d)
+    if (aiResponse?.content) {
+      d['ai'] = aiResponse
+    }
+  }
   let res = await Article.updateOne(
     { _id: body._id },
-    {
-      ...body,
-      desc: body.textContent?.slice(0, 50),
-      updateTime: new Date().getTime(),
-    }
+    d
   );
   return new BaseResponse({ data: res });
 });
@@ -208,4 +219,11 @@ export let searchForSameDay = defineEventHandler(async (event) => {
     res = ArticleService.handleOnleSelf(res)
   }
   return new BaseResponse({ data: res });
+});
+
+//获取ai回复
+export let getAiReply = defineEventHandler(async (event) => {
+  let body = await readBody(event);
+  const aiResponse = await ArticleService.getAiResponse(body)
+  return new BaseResponse({ data: aiResponse });
 });
