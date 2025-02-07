@@ -3,7 +3,7 @@
     <div class="mask" v-if="showInfo" @click="showInfo = false"></div>
     <div :class="['info', showInfo && 'show']">
       <div class="close" @click="showInfo = false">
-        <el-icon color="#fff" :size="30">
+        <el-icon color="red" :size="30">
           <CloseBold />
         </el-icon>
       </div>
@@ -28,7 +28,8 @@
         <img class="bg" :src="item.movie.cover" referrerpolicy="no-referrer">
         <div class="content">
           <div class="title">
-            <div v-for="word in item.movie.title.split(' ')[0]">{{ word }}</div>
+            {{ item.movie.title.split(' ')[0] }}
+            <!-- <div v-for="word in item.movie.title.split(' ')[0]">{{ word }}</div> -->
           </div>
           <div class="rate">{{ item.movie.rate.split('(')[0] }}
           </div>
@@ -196,7 +197,7 @@ function handleSelect(index: number) {
           content: '';
           position: absolute;
           top: 0;
-          left: -20px;
+          left: -19px;
           border: 10px solid transparent;
           border-right-color: #00B51D;
         }

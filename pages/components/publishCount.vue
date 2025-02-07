@@ -15,10 +15,10 @@
           </div>
           <div class="week" v-for="(week, index) in weekListOfYear" @click="handleClick"
             :style="`justify-content: ${index == 0 ? 'flex-end' : 'flex-start'};`">
-            <div class="day indicate">
-              <span v-if="index == 1 || (index > 0 && weekListOfYear[index - 1][0].month != week[0].month)">{{
-      week[0].month
-    }}月</span>
+            <div class="day indicate" v-if="week[0]">
+              <span v-if="index == 1 || (index > 0 && weekListOfYear[index - 1][0]?.month != week[0]?.month)">
+                {{ week[0].month }}月
+              </span>
               <!-- <span v-if="index % 7 == 1">{{ week[0].month }}月</span> -->
             </div>
             <div :class="['day', data[day.date] && 'active', new Date(day.date).getMonth() % 2 == 0 && 'stripe']"

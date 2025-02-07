@@ -36,6 +36,12 @@
       <LoadMore :loading="pagination.loading" :has-more="pagination.hasMore" @load-more="loadMore(searchFilter)">
       </LoadMore>
     </div>
+    <div class="toTop" @click="handleToTop" v-if="scrollTop > 500">
+      <el-icon class="icon">
+        <CaretTop />
+      </el-icon>
+      {{ scrollTop > 1000 ? ((scrollTop / 1000).toFixed(1) + 'k') : scrollTop.toFixed(0) }}
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -48,7 +54,7 @@ import comAlbumItem from './components/albumItem.vue'
 import comPublishCount from './components/publishCount.vue'
 import { type Article } from "~/types";
 import useList from '~/hooks/useList';
-import { CircleCloseFilled } from '@element-plus/icons-vue'
+import { CircleCloseFilled, CaretTop } from '@element-plus/icons-vue'
 
 const pageEl = ref<any>(null)
 const { globalSetting } = storeToRefs(useSysStore())
@@ -59,6 +65,7 @@ let type = ref('')
 let date = ref<string>('')
 let { pagination, list, getList, loadMore } = useList<Article>("/api/article");
 const listOfSameDay = ref<Array<Article>>()
+const scrollTop = ref(0)
 
 
 const searchFilter = computed(() => {
@@ -100,6 +107,11 @@ function initList() {
 
 function onScroll(e: any) {
   sessionStorage['home-page-scroll-top'] = e.target.scrollTop
+  scrollTop.value = e.target.scrollTop
+}
+
+function handleToTop() {
+  pageEl.value?.scrollTo(0, 0)
 }
 
 function onChoosedDate(e: string) {
@@ -256,6 +268,42 @@ function getListOfSameDay() {
         font-size: 15px;
       }
     }
+  }
+}
+
+.toTop {
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  bottom: 30px;
+  right: 30px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  font-size: 12px;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+
+  &::before {
+    content: '';
+    position: absolute;
+    transform: scale(1.4);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    opacity: 0.5;
+  }
+
+  .icon {
+    font-size: 20px;
+    color: #fff;
+    line-height: 15px;
   }
 }
 

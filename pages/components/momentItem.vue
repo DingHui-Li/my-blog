@@ -164,7 +164,7 @@ function openMap() {
 
     .content {
       font-size: 16px;
-      color: #333;
+      color: #222;
       word-break: break-all;
       white-space: pre-wrap;
 
@@ -230,7 +230,7 @@ function openMap() {
           max-width: 100%;
           height: auto;
           aspect-ratio: auto;
-          // border-radius: 8px;
+          border-radius: 10px;
           padding: 0;
         }
       }
@@ -246,7 +246,7 @@ function openMap() {
       display: flex;
       align-items: center;
       background-color: #f5f5f5;
-      border-radius: 5px;
+      // border-radius: 5px;
       overflow: hidden;
       cursor: pointer;
 
@@ -255,7 +255,7 @@ function openMap() {
         aspect-ratio: 3/4;
         object-fit: cover;
         margin-right: 10px;
-        border-radius: 5px;
+        // border-radius: 5px;
       }
 
       .movie-info {
@@ -265,7 +265,6 @@ function openMap() {
 
         .name {
           font-size: 14px;
-          font-weight: bold;
         }
 
         .rate {

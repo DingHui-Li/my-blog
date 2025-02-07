@@ -3,9 +3,9 @@
     <div class="map-container" ref="mapContainer"></div>
     <div class="drawer-mask" v-if="popup" @click="popup = false"></div>
     <div :class="['drawer', popup && 'show']">
-      <!-- <el-icon class="close" @click="popup = false">
-        <Close />
-      </el-icon> -->
+      <el-icon class="close" @click="popup = false">
+        <CloseBold />
+      </el-icon>
       <div class="header">
         在 <span>{{ openMarkerData.title }}</span> 共发布了 <span>{{ openMarkerData.list.length }}</span> 条内容
       </div>
@@ -22,7 +22,7 @@
   </div>
 </template>
 <script setup>
-import { Close } from '@element-plus/icons-vue'
+import { CloseBold } from '@element-plus/icons-vue'
 import comMomentItem from '../components/momentItem.vue'
 import $http from "@/utils/http.js";
 import { debounce } from "@/utils/util.js";
@@ -415,11 +415,13 @@ function getContentList(page = 1) {
 
     .close {
       position: absolute;
+      z-index: 9;
       right: 15px;
       top: 15px;
-      font-size: 25px;
+      font-size: 30px;
       font-weight: bold;
       cursor: pointer;
+      color: red;
     }
 
     .header {
