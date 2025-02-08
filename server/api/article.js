@@ -4,13 +4,15 @@ import Article from "../models/article";
 import { getLocationByIp, getWeather, rgeocode } from "../utils/location";
 import * as MovieService from '../services/movie'
 import * as ArticleService from '../services/article'
+import { ObjectId } from "mongodb";
 
 //查询列表
 export let getArticleList = defineEventHandler(async (event) => {
 
   let { pagination, filter } = parseQuery(getQuery(event));
   if (filter.topic) {
-    filter.topics = { $in: filter.topic };
+    let topics = filter.topic?.split(",")
+    filter.topics = { $in: topics.concat(topics.map(i => new ObjectId(i))) };
     delete filter.topic;
   }
   if (filter.type == 'moment') {
@@ -76,9 +78,10 @@ export let getSameArticleList = defineEventHandler(async (event) => {
   let query = getQuery(event);
   let params = getRouterParams(event);
 
+  let topics = query.topics?.split(",")
   let res = await Article.find({
     _id: { $ne: params.id },
-    topics: { $in: query.topics?.split(",") },
+    topics: { $in: topics.concat(topics.map(i => new ObjectId(i))) },
   })
     .limit(3)
     .populate("topics");
@@ -93,7 +96,8 @@ export let searchArticleList = defineEventHandler(async (event) => {
     delete filter.keyword
   }
   if (filter.topics) {
-    filter["topics"] = { $in: filter.topics?.split(",") };
+    let topics = filter.topics?.split(",")
+    filter["topics"] = { $in: topics.concat(topics.map(i => new ObjectId(i))) };
   }
   let res = await Article.find(filter)
     .select({ htmlContent: 0, textContent: 0 })

@@ -1,21 +1,41 @@
 <template lang="pug">
 .topic
   .cover
-    img(:src='topicDetail.cover')
+    img(v-if='topicDetail.cover' :src='topicDetail.cover')
+    .imgs(v-else)
+      img.img(v-for="item in coverImgs" :src="item" :style='coverImgStyle')
     .mask
-    .name {{ topicDetail.name }}
+    .name {{ topicDetail.name }}·{{ totalCount }}
   .container
     .content
-      Content
+      Content(@dataChange="onDataChange")
 </template>
 <script setup>
 import Content from "./components/content.vue";
 import $http from "@/utils/http.js";
 
 const route = useRoute();
-if (!route.hash.includes('topic')) {
-  useRouter().replace(route.fullPath + '#topic')
-}
+const totalCount = ref(0)
+const coverImgs = ref([])
+const coverImgStyle = computed(() => {
+  let width = '100%'
+  let height = '100%'
+  if (coverImgs.value.length <= 5) {
+    width = (1 / coverImgs.value.length) * 100 + '%'
+    height = '100%'
+  }
+  else if (coverImgs.value.length <= 10) {
+    width = (2 / coverImgs.value.length) * 100 + '%'
+    height = '50%'
+  } else {
+    width = '10%'
+    height = '25%'
+  }
+  return `width:${width};height:${height}`
+})
+// if (!route.hash.includes('topic')) {
+//   useRouter().replace(route.fullPath + '#topic')
+// }
 let topicDetail = ref({});
 getTopic();
 
@@ -23,6 +43,11 @@ function getTopic() {
   $http.get(`/api/topic/${route.params.id}`).then((res) => {
     topicDetail.value = res.data;
   });
+}
+
+function onDataChange({ total, imgs }) {
+  totalCount.value = total
+  coverImgs.value = imgs.slice(0, 40)
 }
 </script>
 <style lang="scss" scoped>
@@ -41,6 +66,19 @@ function getTopic() {
       height: auto;
     }
 
+    .imgs {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      font-size: 0;
+
+      .img {
+        width: 50px;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
     .mask {
       position: absolute;
       z-index: 1;
@@ -48,7 +86,7 @@ function getTopic() {
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.5));
     }
 
     .name {

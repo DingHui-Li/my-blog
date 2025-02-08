@@ -63,10 +63,7 @@
           </span>
         </div>
       </template>
-      <div class="ai-reply" v-if="data?.ai?.content">
-        <div class="model">{{ data.ai.model }}: </div>
-        <div class="msg">{{ data.ai.content }}</div>
-      </div>
+      <comReply :data="data.ai"></comReply>
     </div>
   </div>
 </template>
@@ -74,6 +71,7 @@
 import { storeToRefs } from 'pinia'
 import moment from "moment";
 import TopicTag from "./topicTag.vue";
+import comReply from "./reply.vue";
 import { Location, Clock, View } from '@element-plus/icons-vue'
 import { Article } from '~/types';
 import comArticleItem from './articleItem.vue'
@@ -227,7 +225,7 @@ function openMap() {
       cursor: pointer;
 
       img {
-        width: 80px;
+        width: 60px;
         aspect-ratio: 3/4;
         object-fit: cover;
         margin-right: 10px;
@@ -264,15 +262,15 @@ function openMap() {
       .time {
         margin-right: 10px;
         color: #999;
-        font-size: 12px;
+        font-size: 13px;
       }
 
       .location {
         // display: flex;
         // align-items: center;
         font-size: 13px;
-        opacity: 0.6;
-        color: #303F9F;
+        opacity: 0.8;
+        color: var(--primary-color);
         cursor: pointer;
 
         .icon {
@@ -290,26 +288,6 @@ function openMap() {
         cursor: pointer;
       }
     }
-  }
-}
-
-.ai-reply {
-  background-color: #f5f5f5;
-  padding: 5px;
-  border-radius: 5px;
-  margin-top: 5px;
-
-  .model {
-    display: inline;
-    font-size: 13px;
-    color: var(--primary-color);
-  }
-
-  .msg {
-    display: inline;
-    font-size: 13px;
-    color: #333;
-    font-weight: normal;
   }
 }
 </style>

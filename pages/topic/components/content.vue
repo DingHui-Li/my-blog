@@ -16,6 +16,7 @@ import comMomentItem from '../../components/momentItem'
 import comAlbumItem from '../../components/albumItem'
 
 const route = useRoute();
+const $emits = defineEmits(["dataChange"])
 
 let pagination = ref({
   page: 1,
@@ -49,6 +50,23 @@ function getList(page = 1) {
         list.value = [...list.value, ...res.data.list];
         pagination.value.page = page;
         pagination.value.isMore = page * pagination.value.size < res.data.total;
+        if (page == 1) {
+          //找出第一页的所有电影封面或者图片,合成头部封面图
+          let imgs = res.data.list?.map(item => {
+            if (item?.movie?.cover) {
+              return [item?.movie?.cover + '?x-oss-process=image/resize,m_mfit,w_200']
+            } else if (item.cover) {
+              return [item.cover + '?x-oss-process=image/resize,m_mfit,w_200']
+            } else {
+              return item.imgs.map(img => img + '?x-oss-process=image/resize,m_mfit,w_200')
+            }
+          })
+          $emits('dataChange', {
+            total: res.data.total, imgs: imgs.reduce((imgs, arr) => {
+              return imgs.concat(arr)
+            }, [])
+          })
+        }
       }
     })
     .finally(() => {
@@ -58,7 +76,6 @@ function getList(page = 1) {
 </script>
 <style lang="scss" scoped>
 .content-container {
-  padding: 15px;
   background: #fff;
 
   .list {
@@ -66,11 +83,10 @@ function getList(page = 1) {
 
     .item {
       padding: 15px;
-      padding-left: 30px;
       animation: fadeIn .3s forwards;
-      padding-bottom: 30px;
+      padding-bottom: 40px;
       margin-bottom: 30px;
-      border-bottom: 1px solid #eee;
+      border-bottom: 10px solid #eee;
 
       &.photo {
         padding-bottom: 0;
@@ -88,12 +104,5 @@ function getList(page = 1) {
   }
 }
 
-@media screen and (max-width:750px) {
-  .list {
-    .item {
-      padding: 0 !important;
-      padding-bottom: 30px !important;
-    }
-  }
-}
+@media screen and (max-width:750px) {}
 </style>

@@ -6,9 +6,9 @@
       <TopicTag v-for="topic in data.topics" :data="topic"></TopicTag>
       <div class="info">
         <div class="location" v-if="data.location" @click="openMap">
-          <el-icon class="icon">
+          <!-- <el-icon class="icon">
             <LocationFilled></LocationFilled>
-          </el-icon>
+          </el-icon> -->
           <span v-if="data.location.city">
             {{ data.location.city }} ·
           </span>
@@ -44,16 +44,14 @@
         </div>
       </div>
     </div>
-    <div class="ai-reply" v-if="data?.ai?.content">
-      <div class="model">{{ data.ai.model }}: </div>
-      <div class="msg">{{ data.ai.content }}</div>
-    </div>
+    <comReply :data="data.ai"></comReply>
   </div>
 </template>
 <script setup>
 import { onMounted, nextTick } from 'vue'
 import moment from "moment";
 import TopicTag from "~/pages/components/topicTag.vue";
+import comReply from "~/pages/components/reply.vue";
 import { LocationFilled } from '@element-plus/icons-vue'
 import EXIF from 'exifr'
 import $http from "@/utils/http.js";

@@ -190,7 +190,7 @@ function getListOfSameDay() {
     .avatar {
       width: 60px;
       height: 60px;
-      border-radius: 8px;
+      border-radius: 6px;
       overflow: hidden;
 
       img {

@@ -19,8 +19,10 @@
         </div>
         <div class="title">{{ list[selected].movie.title }}</div>
         <div class="desc">{{ list[selected].movie.meta }}</div>
-        <div class="text">{{ list[selected].textContent }}</div>
-        <div class="time">——{{ moment(list[selected].createTime).format('LLLL') }}</div>
+        <div class="time">{{ moment(list[selected].createTime).format('LLLL') }}</div>
+        <div class="text">{{ list[selected].textContent }}
+          <comReply :data="list[selected].ai" style="background-color: #999; margin-top: 15px;"></comReply>
+        </div>
       </div>
     </div>
     <div class="list">
@@ -44,6 +46,7 @@ import { StarFilled, CloseBold } from "@element-plus/icons-vue";
 import useList from "@/hooks/useList";
 import { Article } from "~/types";
 import moment from "moment";
+import comReply from "~/pages/components/reply.vue";
 
 let { pagination, list, getList } = useList<Article>("/api/article");
 pagination.value.size = 1000
@@ -148,7 +151,10 @@ function handleSelect(index: number) {
       z-index: 2;
       color: #fff;
       padding: 30px;
+      padding-bottom: 0 !important;
       box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
 
       .rate {
         display: flex;
@@ -164,21 +170,26 @@ function handleSelect(index: number) {
 
       .desc {
         font-size: 12px;
-        margin-bottom: 20px;
+        margin-bottom: 5px;
         opacity: 0.8;
       }
 
       .text {
+        flex: 1;
+        overflow: auto;
         margin: 5px 0;
         color: #fff;
         word-break: break-all;
         white-space: pre-wrap;
+        border-top: 1px solid #333;
+        padding-top: 15px;
+        padding-bottom: 15px;
       }
 
       .time {
-        text-align: right;
         font-size: 12px;
-        margin-top: 10px;
+        margin-bottom: 10px;
+        text-align: right;
       }
 
       .btn {
