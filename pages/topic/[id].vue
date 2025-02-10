@@ -27,6 +27,9 @@ const coverImgStyle = computed(() => {
   else if (coverImgs.value.length <= 10) {
     width = (2 / coverImgs.value.length) * 100 + '%'
     height = '50%'
+  } else if (coverImgs.value.length <= 20) {
+    width = '20%'
+    height = '50%'
   } else {
     width = '10%'
     height = '25%'

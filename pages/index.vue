@@ -4,8 +4,11 @@
       <div class="img-box">
         <img :src="website.cover" />
       </div>
-      <div class="profile">
-        <div class="name">{{ profile.name }}</div>
+      <div class="profile" @click="router.push('/other/userPortrait')">
+        <div class="name">
+          {{ profile.name }}
+          <div class="bubble" v-if="analyMyBlog.hasUpdate">AI</div>
+        </div>
         <div class="avatar">
           <img :src="profile.avatar" alt="">
         </div>
@@ -57,10 +60,11 @@ import useList from '~/hooks/useList';
 import { CircleCloseFilled, CaretTop } from '@element-plus/icons-vue'
 
 const pageEl = ref<any>(null)
-const { globalSetting } = storeToRefs(useSysStore())
+const { globalSetting, analyMyBlog } = storeToRefs(useSysStore())
 const website = computed(() => globalSetting.value.website || {})
 const profile = computed(() => globalSetting.value.profile || {})
 const route = useRoute()
+const router = useRouter();
 let type = ref('')
 let date = ref<string>('')
 let { pagination, list, getList, loadMore } = useList<Article>("/api/article");
@@ -177,27 +181,47 @@ function getListOfSameDay() {
     padding: 15px;
     padding-bottom: 0;
     box-sizing: border-box;
+    cursor: pointer;
 
     .name {
+      position: relative;
       padding-top: 4px;
       width: fit-content;
       font-size: 22px;
       font-weight: bold;
       color: #fff;
       margin-right: 15px;
+      text-decoration: underline;
     }
 
     .avatar {
+      position: relative;
       width: 60px;
       height: 60px;
-      border-radius: 6px;
-      overflow: hidden;
 
       img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        border-radius: 6px;
       }
+    }
+
+    .bubble {
+      position: absolute;
+      top: -5px;
+      right: -10px;
+      z-index: 2;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: red;
+      color: #fff;
+      border-radius: 50%;
+      font-size: 12px;
+      box-shadow: 0 0 5px 5px rgba(255, 0, 0, .2);
     }
   }
 }

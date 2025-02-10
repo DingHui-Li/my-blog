@@ -62,7 +62,7 @@ export let stTopic = defineEventHandler(async (event) => {
   let list = await Topic.find();
   for (const index in list) {
     let topic = list[index]
-    let count = await Article.find({ topics: { $in: topic._id.toString() } }).count()
+    let count = await Article.find({ topics: { $in: [topic._id, topic._id.toString()] } }).count()
     list[index]._doc['count'] = count
   }
   return new BaseResponse({ data: list });

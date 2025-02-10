@@ -7,11 +7,14 @@
           <Menu></Menu>
         </el-icon>
         <div class="host" @click="router.replace('/')">{{ website?.name }}</div>
-        <div class="search" @click="router.push('/search')" v-if="route.name != 'search'">
+        <!-- <div class="search" @click="router.push('/search')" v-if="route.name != 'search'">
           <div class="placeholder">搜索</div>
           <el-icon class="icon">
             <Search></Search>
           </el-icon>
+        </div> -->
+        <div>
+          <comMood style="position: relative;top: 0;" :size='30' />
         </div>
       </div>
     </div>
@@ -37,6 +40,7 @@
 import { storeToRefs } from 'pinia'
 import { Search, Menu } from "@element-plus/icons-vue";
 import comSideMenu from '@/pages/components/sideMenu.vue'
+import comMood from '@/pages/components/mood.vue'
 import SmokeBg from './smokeBg'
 
 const router = useRouter();
@@ -122,6 +126,8 @@ $max-width: 1080px;
         display: flex;
         align-items: center;
         cursor: pointer;
+        opacity: 0;
+        pointer-events: none;
 
         .placeholder {
           flex: 1;

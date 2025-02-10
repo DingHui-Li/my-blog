@@ -102,7 +102,7 @@ export function searchForSameDay(day = `${new Date().getMonth() + 1}-${new Date(
         createTime: { $gte: item[0], $lte: item[1] }
       }
     })
-  }).select({ htmlContent: 0 })
+  }).select({ htmlContent: 0 }).populate("topics")
 }
 
 export function handleOnleSelf(list = []) {
@@ -124,7 +124,7 @@ export async function getAiResponse(article) {
       if (article.movie?.title) {
         aiResponse = await AiService.getMovieEvaluate(article.movie?.title)
       } else {
-        aiResponse = await AiService.getReply(article.textContent)
+        aiResponse = await AiService.getReply(article)
       }
     }
   } catch (err) {

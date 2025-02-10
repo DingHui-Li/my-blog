@@ -24,6 +24,9 @@
     "securityJsCode": ""
   },
 	"ai":{
+		"SiliconFlow": {
+      "key": ""
+    },
 		"DeepSeek":{
 			"key":""
 		}

@@ -1,6 +1,6 @@
 import Cache from "../models/cache";
 
-export async function find(key = '', expried = 1000 * 60 * 10) {
+export async function find(key = '', expried = 1000 * 60 * 10) {//ms
   if (!key) return Promise.resolve(null)
   let result = await Cache.find({ key })
   if (result?.length) {

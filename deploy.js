@@ -67,6 +67,8 @@
     return new Promise(async resolve => {
       await uploadFile('./node_modules.zip')
       await runServerCommand(`unzip -o -q ${config.deploy.path}/node_modules.zip -d ${config.deploy.path}/server\n exit\n`)
+      //安装puppeteer
+      runServerCommand(`node ${config.deploy.path}/server/node_modules/puppeterr/install.mjs`)
       resolve()
     })
 

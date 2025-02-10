@@ -22,7 +22,14 @@ import {
   searchForSameDay,
   getAiReply,
 } from "../api/article.js";
-import { getGlobalSetting, setGlobalSetting, login, getTOTPQR } from '../api/sys.js'
+import {
+  getGlobalSetting,
+  setGlobalSetting,
+  login,
+  getTOTPQR,
+  analyMyBlog,
+  analyMoodByNearWeek,
+} from '../api/sys.js'
 import { test } from '../api/money.js'
 import * as LogApi from '../api/log.js'
 import * as StApi from '../api/st.js'
@@ -59,6 +66,8 @@ router.get("/api/admin/file/downloadBase64", downloadFileBase64);
 router.get("/api/getTOTPQR", getTOTPQR);
 router.post("/api/login", login);
 router.get("/api/sys/setting", getGlobalSetting);
+router.get("/api/sys/analyMyBlog", analyMyBlog);
+router.get("/api/sys/analyMoodByNearWeek", analyMoodByNearWeek);
 router.post("/api/admin/sys/setting", setGlobalSetting);
 
 router.get("/api/money/test", test);

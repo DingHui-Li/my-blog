@@ -4,7 +4,7 @@ import config from "./.config.json";
 
 export default defineNuxtConfig({
   devtools: { enabled: false },
-  modules: ["@element-plus/nuxt", "@pinia/nuxt"],
+  modules: ["@element-plus/nuxt", "@pinia/nuxt", "nuxt-scheduler"],
   routeRules: {
     "/admin/*": { ssr: false },
     "/visitor": { ssr: false },

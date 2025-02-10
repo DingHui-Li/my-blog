@@ -33,6 +33,7 @@ watch(() => website, () => {
         })
     }
 }, { deep: true, immediate: true })
+
 </script>
 <style lang='scss' scoped>
 .about-page {

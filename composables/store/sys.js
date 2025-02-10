@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import $http from "@/utils/http.js";
+import { marked } from 'marked'
 
 export const useSysStore = defineStore("sys", {
   state: () => ({
@@ -64,6 +65,18 @@ export const useSysStore = defineStore("sys", {
     theme: "light", //dark
     themeColor: "#3f51b5",
     beian: "陕ICP备2024039659号-1",
+    analyMyBlog: {
+      loading: false,
+      model: "",
+      content: "",
+      time: "",
+      hasUpdate: false
+    },
+    nearWeekMood: {
+      data: {},
+      model: "",
+      time: ""
+    }
   }),
   actions: {
     isMobile() {
@@ -90,6 +103,8 @@ export const useSysStore = defineStore("sys", {
         this.setToken(window.localStorage["token"] || "");
         this.changeTheme(window.localStorage["theme"] || "light");
         this.changeThemeColor(window.localStorage["themeColor"] || "#3f51b5");
+        this.getAnalyMyBlog()
+        this.analyMoodByNearWeek()
       }
     },
     login(params = {}) {
@@ -161,5 +176,41 @@ export const useSysStore = defineStore("sys", {
         );
       }
     },
+    getAnalyMyBlog() {
+      try {
+        this.analyMyBlog.time = Number(window.localStorage["analyMyBlogTime"])
+      } catch { }
+      try {
+        this.analyMyBlog.loading = true
+        $http.get("/api/sys/analyMyBlog").then(res => {
+          res.data.content = marked(res.data.content)
+          if (this.analyMyBlog.time != res.data.time) {
+            window.localStorage['checkedAnalyMyBlog'] = 'false'
+          }
+          this.analyMyBlog = {
+            ...this.analyMyBlog,
+            ...res.data,
+            hasUpdate: this.analyMyBlog.time != res.data.time || window.localStorage['checkedAnalyMyBlog'] == 'false'
+          }
+        }).finally(() => {
+          this.analyMyBlog.loading = false
+          window.localStorage["analyMyBlogTime"] = this.analyMyBlog.time
+        })
+      } catch { }
+    },
+    checkedAnalyMyBlog() {
+      if (process.client) {
+        window.localStorage['checkedAnalyMyBlog'] = 'true'
+        this.analyMyBlog.hasUpdate = false
+        window.localStorage["analyMyBlogTime"] = this.analyMyBlog.time
+      }
+    },
+    analyMoodByNearWeek() {
+      $http.get("/api/sys/analyMoodByNearWeek").then(res => {
+        res.data.content = res.data.content.replace("```json", '').replace("```", '')
+        res.data.data = JSON.parse(res.data.content)
+        this.nearWeekMood = res.data
+      })
+    }
   },
 });
