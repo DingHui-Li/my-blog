@@ -121,11 +121,7 @@ export async function getAiResponse(article) {
   let aiResponse = {}
   try {
     if (article.type == 'moment') {
-      if (article.movie?.title) {
-        aiResponse = await AiService.getMovieEvaluate(article.movie?.title)
-      } else {
-        aiResponse = await AiService.getReply(article)
-      }
+      aiResponse = await AiService.getReply(article)
     }
   } catch (err) {
     console.log(err)

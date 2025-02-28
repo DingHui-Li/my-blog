@@ -46,7 +46,15 @@ export async function getReply(article) {
   }
   let content = article.textContent
   let time = new Date(article.createTime).toLocaleString()
-  let prompt = `以朋友身份简短的回复以下内容但不要忘记你依然是AI,不要在回答中添加图片:\n${content};包含:${article.imgs?.length}张图片,${article.sounds?.length}端音频;\n当前时间:${time};`
+  let prompt = `以朋友身份简短的回复以下内容，
+  要求：不要忘记你依然是AI(不要强调这一点),
+  不要评价数据库中没有的电影，
+  不要在回答中添加图片；
+  以下是内容：\n
+  ${content};\n
+  包含:${article.imgs?.length}张图片,
+  ${article.movie?.title ? ('评价电影《' + article.movie?.title + '》') : ""}
+  \n当前时间:${time};`
   const model = getAiConfig()?.model
   console.log(prompt)
   const completion = await aiInstance.chat.completions.create({
@@ -96,7 +104,7 @@ export async function getMood(article) {
     "desc":"一周内情绪如落叶起伏",
     "sentiment": "消极",
     "implicit":""
-  },其中emoji为对应评分的描述;
+  },其中emoji为对应评分的描述;某些天数数据可能为空；
   待分析内容：\n${str}`
   const model = getAiConfig()?.model
   console.log(prompt)
