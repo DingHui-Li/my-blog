@@ -26,10 +26,7 @@
 	"ai":{
 		"SiliconFlow": {
       "key": ""
-    },
-		"DeepSeek":{
-			"key":""
-		}
+    }
 	},
 	"deploy": {
     "host": "",

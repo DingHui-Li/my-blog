@@ -9,16 +9,11 @@ function getAiConfig() {
   let aiConfig = config["ai"]
   aiProvider = Object.keys(config['ai'])[0]
   return {
-    "DeepSeek": {
-      baseURL: 'https://api.deepseek.com',
-      apiKey: aiConfig["DeepSeek"]?.key,
-      // model: "deepseek-chat"
-      model: "deepseek-reasoner"
-    },
     "SiliconFlow": {
       baseURL: "https://api.siliconflow.cn/v1",
       apiKey: aiConfig["SiliconFlow"]?.key,
-      model: "Pro/deepseek-ai/DeepSeek-R1"
+      model: "Pro/deepseek-ai/DeepSeek-R1",
+      visionModel: "Qwen/Qwen2-VL-72B-Instruct"
     }
   }[aiProvider]
 }
@@ -45,15 +40,16 @@ export async function getReply(article) {
     throw "ai助手未初始化"
   }
   let content = article.textContent
-  let time = new Date(article.createTime).toLocaleString()
-  let prompt = `以朋友身份简短的回复以下内容，
+  let time = new Date(article.createTime || '').toLocaleString()
+  let imgDesc = (await describeImg(article.imgs))?.content
+  let prompt = `以朋友身份评价以下内容，
   要求：不要忘记你依然是AI(不要强调这一点),
   不要评价数据库中没有的电影，
   不要在回答中添加图片；
   以下是内容：\n
+  ${article.movie?.title ? ('看完电影《' + article.movie?.title + '》后说：\n') : ""}
   ${content};\n
-  包含:${article.imgs?.length}张图片,
-  ${article.movie?.title ? ('评价电影《' + article.movie?.title + '》') : ""}
+  包含:${article.imgs?.length}张图片：${JSON.stringify(imgDesc)},
   \n当前时间:${time};`
   const model = getAiConfig()?.model
   console.log(prompt)
@@ -68,22 +64,42 @@ export async function getReply(article) {
     content: res
   }
 }
-export async function getMovieEvaluate(movieName, comment) {
+
+async function describeImg(imgList = []) {
   if (!aiInstance) {
     throw "ai助手未初始化"
   }
-  let prompt = `以普通观众身份简短评价电影,100字以内:\n电影名:${movieName};`
-  const model = getAiConfig()?.model
-  console.log(prompt)
-  const completion = await aiInstance.chat.completions.create({
-    messages: [{ role: "user", content: prompt }],
-    model,
-  });
-  let res = completion.choices[0].message.content
-  console.log(res)
+  const model = getAiConfig()?.visionModel
+  let result = []
+  for (let index in imgList) {
+    index = Number(index)
+    let img = imgList[index]
+    const completion = await aiInstance.chat.completions.create({
+      messages: [
+        {
+          role: "user", content: [
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": img + '?x-oss-process=image/resize,m_mfit,w_600'
+              }
+            },
+            {
+              "type": "text",
+              "text": "描述图片"
+            }
+          ]
+        }
+      ],
+      model,
+    });
+    let t = {}
+    t[`第${index + 1}张`] = completion.choices[0].message.content
+    result.push(t)
+  }
   return {
     model,
-    content: res
+    content: result
   }
 }
 
