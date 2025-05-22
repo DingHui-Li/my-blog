@@ -12,7 +12,7 @@ function getAiConfig() {
     "SiliconFlow": {
       baseURL: "https://api.siliconflow.cn/v1",
       apiKey: aiConfig["SiliconFlow"]?.key,
-      model: "Pro/deepseek-ai/DeepSeek-R1",
+      model: "deepseek-ai/DeepSeek-V3",
       visionModel: "Qwen/Qwen2-VL-72B-Instruct"
     }
   }[aiProvider]

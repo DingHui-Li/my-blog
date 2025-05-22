@@ -14,12 +14,12 @@
 ##### 配置文件说明：
 
 复制一份 .config.json.example 文件，并去掉 .example 后缀。配置项说明：
-{
+`{
 "oss": 阿里云 OSS-存储图片等静态资源,
-"mongodb":,mongodb 数据库相关配置，
+"mongodb":mongodb 数据库相关配置，
 "qweather":查询天气 api，
 "TOTP":后台登录密钥,
 "amap": 高德地图 api,
 "ai":硅基流动平台 api,
 "deploy":部署到的服务器配置
-}
+}`

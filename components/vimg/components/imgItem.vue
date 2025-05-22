@@ -41,7 +41,7 @@ watch(scale, (v) => {
   }
 })
 watch(() => props.active, v => {
-  showOriginalImg.value = showOriginalImg.value || v == props.index
+  showOriginalImg.value = v == props.index
 }, { immediate: true })
 
 function mouseStart(e: any) {

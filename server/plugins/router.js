@@ -61,6 +61,7 @@ router.get("/api/article/sameday", searchForSameDay);
 router.post("/api/admin/article/aireply", getAiReply);
 
 router.post("/api/admin/file/upload", uploadFile);
+router.post("/api/wx/file/upload", uploadFile);
 router.get("/api/admin/file/downloadBase64", downloadFileBase64);
 
 router.get("/api/getTOTPQR", getTOTPQR);
