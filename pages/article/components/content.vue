@@ -58,6 +58,7 @@ $topbar-height: 50px;
 .content-container {
   background: #fff;
   height: 100%;
+  min-height: 100vh;
 
   .cover {
     width: 100%;

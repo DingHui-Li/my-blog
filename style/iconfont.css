@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4431001 */
-  src: url('iconfont.woff2?t=1724851140377') format('woff2'),
-       url('iconfont.woff?t=1724851140377') format('woff'),
-       url('iconfont.ttf?t=1724851140377') format('truetype');
+  src: url('iconfont.woff2?t=1749021931861') format('woff2'),
+       url('iconfont.woff?t=1749021931861') format('woff'),
+       url('iconfont.ttf?t=1749021931861') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-bxs-bot:before {
+  content: "\e69a";
 }
 
 .icon-manage:before {

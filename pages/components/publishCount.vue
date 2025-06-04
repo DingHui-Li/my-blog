@@ -122,7 +122,10 @@ function handleClick(e: any) {
 .publish-count-container {
   position: relative;
   z-index: 1;
-  background-color: #fff
+  background-color: #fff;
+  margin: 15px;
+  margin-bottom: 0;
+  border-radius: 10px;
 }
 
 .title {
@@ -259,7 +262,12 @@ function handleClick(e: any) {
   }
 }
 
-@media screen and (max-width:750px) {
+@media screen and (max-width:1080px) {
+  .publish-count-container {
+    margin: 10px;
+    margin-bottom: 0;
+  }
+
   .title {
     margin-top: 15px;
 
@@ -269,6 +277,7 @@ function handleClick(e: any) {
   }
 
   .publish-count {
+
     .chart {
       margin-right: 0;
     }

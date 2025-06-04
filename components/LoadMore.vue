@@ -1,5 +1,5 @@
 <template lang="pug">
-.load-more(@click="loadMore") {{ loading?'加载中':hasMore?"加载更多":"没有更多了" }}
+.load-more(@click="loadMore") {{ loading?'加载中':hasMore?"点击加载更多":"没有更多了" }}
 </template>
 <script setup>
 const props = defineProps({
@@ -26,7 +26,7 @@ function loadMore() {
     font-size: 20px;
     font-weight: bold;
     // color: var(--primary-color);
-    color: #333;
+    color: #444;
     font-style: oblique;
     margin-top: 10px;
     cursor: pointer;

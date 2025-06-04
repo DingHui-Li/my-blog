@@ -76,17 +76,20 @@ function getList(page = 1) {
 </script>
 <style lang="scss" scoped>
 .content-container {
-  background: #fff;
+  // background: #fff;
+  padding: 15px;
+  padding-top: 0;
 
   .list {
-    padding-top: 15px;
+    // padding-top: 15px;
 
     .item {
       padding: 15px;
       animation: fadeIn .3s forwards;
-      padding-bottom: 40px;
-      margin-bottom: 30px;
-      border-bottom: 10px solid #eee;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 10px;
+      background-color: #fff;
 
       &.photo {
         padding-bottom: 0;
@@ -104,5 +107,11 @@ function getList(page = 1) {
   }
 }
 
-@media screen and (max-width:750px) {}
+@media screen and (max-width:1080px) {
+  .content-container {
+    // background: #fff;
+    padding: 10px;
+    padding-top: 0;
+  }
+}
 </style>

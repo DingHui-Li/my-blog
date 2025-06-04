@@ -57,6 +57,7 @@ function onDataChange({ total, imgs }) {
 .topic {
   position: relative;
   overflow: auto;
+  // background-color: #fff;
 
   .cover {
     position: relative;

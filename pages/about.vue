@@ -1,14 +1,16 @@
 <template>
     <div class="about-page">
-        <h2>关于我</h2>
-        <div class="content" v-if="aboutmeArticle?._id">
+        <!-- <h2>关于我</h2> -->
+        <!-- <div class="content" v-if="aboutmeArticle?._id">
             <RichEditor :value="(aboutmeArticle?.htmlContent)?.toString()" readonly />
-        </div>
-        <div class="divider"></div>
+        </div> -->
+        <div class="content" v-html="analyMyBlog.content" style="margin-left: 20px;"></div>
+        <div class="time">更新于 <span>{{ new Date(analyMyBlog.time).toLocaleString() }}</span>(每月1号更新) </div>
+        <!-- <div class="divider"></div>
         <h2>关于本站</h2>
         <div class="content" v-if="aboutArticle?._id">
             <RichEditor :value="(aboutArticle?.htmlContent)?.toString()" readonly />
-        </div>
+        </div> -->
     </div>
 </template>
 <script setup lang="ts">
@@ -16,8 +18,10 @@ import { storeToRefs } from 'pinia'
 import $http from "@/utils/http.js";
 import { type Article } from "~/types";
 
-const { globalSetting } = storeToRefs(useSysStore())
+const { globalSetting, analyMyBlog } = storeToRefs(useSysStore())
 const website = computed(() => globalSetting.value.website || {})
+
+useSysStore().checkedAnalyMyBlog()
 const aboutmeArticle = ref<Article>()
 const aboutArticle = ref<Article>()
 
@@ -43,6 +47,7 @@ watch(() => website, () => {
     padding: 15px;
     box-sizing: border-box;
     overflow: auto;
+    padding-bottom: 150px;
 
     h2 {
         margin-top: 30px;
@@ -59,6 +64,37 @@ watch(() => website, () => {
         height: 1px;
         background-color: #eee;
         margin-top: 30px;
+    }
+
+    .time {
+        font-size: 12px;
+        text-align: right;
+        margin-top: 30px;
+        color: #999;
+    }
+
+    &:deep(.content) {
+        h3 {
+            margin-bottom: 10px;
+        }
+
+        ol,
+        ul {
+            margin-top: 15px;
+            margin-bottom: 15px;
+
+            li {
+                margin-bottom: 10px;
+            }
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+        hr {
+            margin-bottom: 15px;
+        }
     }
 }
 </style>

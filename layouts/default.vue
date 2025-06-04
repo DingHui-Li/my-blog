@@ -157,7 +157,7 @@ $max-width: 1080px;
     max-width: $max-width;
     margin: 0 auto;
     display: flex;
-    background: #fff;
+    // background: #fff;
     transform: scale(1);
     box-sizing: border-box;
 

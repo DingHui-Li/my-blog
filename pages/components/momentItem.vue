@@ -140,7 +140,8 @@ function openMap() {
       color: #000;
       word-break: break-all;
       white-space: pre-wrap;
-      margin-bottom: 10px;
+      margin-top: 10px;
+      margin-bottom: 15px;
       cursor: pointer;
 
       // &::first-letter {

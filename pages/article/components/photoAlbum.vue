@@ -2,7 +2,7 @@
   <div class="photo-album">
     <div class="header">
       <div class="title">{{ data.title }}</div>
-      <div class="num">共{{ data.imgs?.length }}张照片</div>
+      <!-- <div class="num">共{{ data.imgs?.length }}张照片</div> -->
       <TopicTag v-for="topic in data.topics" :data="topic"></TopicTag>
       <div class="info">
         <div class="location" v-if="data.location" @click="openMap">
@@ -19,7 +19,10 @@
         </div>
       </div>
     </div>
-    <div class="content">{{ data.textContent }}</div>
+    <div class="content">
+      {{ data.textContent }}
+      <comReply :data="data.ai"></comReply>
+    </div>
     <div class="movie" v-if="data.movie && data.movie.link" @click="openMovie">
       <img :src="data.movie.cover" referrerpolicy="no-referrer" />
       <div class="movie-info">
@@ -44,7 +47,6 @@
         </div>
       </div>
     </div>
-    <comReply :data="data.ai"></comReply>
   </div>
 </template>
 <script setup>
@@ -123,7 +125,7 @@ function openMap() {
   overflow: hidden;
   padding: 15px;
   // background: #f5f5f5;
-  border-left: 1px solid #99999950;
+  // border-left: 1px solid #99999950;
 
   .header {
     margin-bottom: 15px;
@@ -172,7 +174,7 @@ function openMap() {
 
   .content {
     background-color: #f5f5f5;
-    padding: 30px 15px;
+    padding: 15px;
     font-size: 15px;
     color: #333;
     word-break: break-all;

@@ -1,6 +1,6 @@
 <template>
   <div class="home-page" @scroll="onScroll" ref="pageEl">
-    <div class="cover" v-if="type == '' && website.cover">
+    <!-- <div class="cover" v-if="type == '' && website.cover">
       <div class="img-box">
         <img :src="website.cover" />
       </div>
@@ -13,7 +13,7 @@
           <img :src="profile.avatar" alt="">
         </div>
       </div>
-    </div>
+    </div> -->
     <comPublishCount v-if="type != 'photo'" :type='type' @choosedDate="onChoosedDate" />
     <div class="date" v-if="date">
       已筛选 {{ new Date(date).format('yyyy年M月d日') }} 的内容
@@ -24,8 +24,8 @@
     <div class="home">
       <div v-if="!date">
         <div class="item same-day" v-for="item in listOfSameDay" :key="item._id.toString()">
-          <div class="year">{{ new Date(item.createTime).getFullYear() }}</div>
-          <div class="tag">那年今日</div>
+          <!-- <div class="year">{{ new Date(item.createTime).getFullYear() }}</div> -->
+          <div class="tag">{{ new Date(item.createTime).getFullYear() }}年的今天</div>
           <comArticleItem v-if="item.type == 'article'" :data="item"></comArticleItem>
           <comMomentItem v-else :data="item"></comMomentItem>
         </div>
@@ -245,20 +245,23 @@ function getListOfSameDay() {
 .home {
   position: relative;
   // top: -5px;
-  background: #fff;
+  // background: #fff;
   min-height: 100vh;
+  padding: 15px;
   padding-top: 10px;
   padding-bottom: 60px;
 
   .item {
     position: relative;
-    padding: 30px 15px;
-    padding-left: 30px;
-    padding-bottom: 50px;
+    padding: 15px;
     opacity: 0;
     animation: fadeIn .3s forwards;
-    margin-bottom: 20px;
-    border-bottom: 10px solid #f0f0f0;
+    // border-bottom: 10px solid #f0f0f0;
+    background-color: rgba(255, 255, 255, 1);
+    // backdrop-filter: blur(10px);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 10px;
 
     &.photo {
       padding-bottom: 0;
@@ -339,8 +342,11 @@ function getListOfSameDay() {
 
 @media screen and (max-width:1080px) {
   .home {
+    padding: 10px;
+
     .item {
       padding-left: 15px;
+      margin-bottom: 10px;
     }
   }
 }

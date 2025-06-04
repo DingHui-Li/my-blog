@@ -371,7 +371,7 @@ function getContentList(page = 1) {
   height: 100%;
   overflow: hidden;
   padding: 15px;
-  padding-left: 0;
+  // padding-left: 0;
   box-sizing: border-box;
 
   .map-container {
