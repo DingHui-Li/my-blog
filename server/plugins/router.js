@@ -21,6 +21,7 @@ import {
   getContentById,
   searchForSameDay,
   getAiReply,
+  getMood,
 } from "../api/article.js";
 import {
   getGlobalSetting,
@@ -59,6 +60,7 @@ router.delete("/api/admin/article/:id", deleteArticle);
 router.get("/api/admin/searchmovie", searchMovie);
 router.get("/api/article/sameday", searchForSameDay);
 router.post("/api/admin/article/aireply", getAiReply);
+router.post("/api/admin/article/mood", getMood);
 
 router.post("/api/admin/file/upload", uploadFile);
 router.post("/api/wx/file/upload", uploadFile);

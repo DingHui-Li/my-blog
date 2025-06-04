@@ -20,8 +20,17 @@
       </div>
     </div>
     <div class="content">
-      {{ data.textContent }}
+      <div style="border-bottom: 1px solid #eee;padding-bottom: 15px;">{{ data.textContent }}</div>
       <comReply :data="data.ai"></comReply>
+    </div>
+    <div class="mood" v-if="data.mood">
+      <div class="info">
+        <div class="item"><span>情绪：</span> {{ data.mood.sentiment }}</div>
+        <div class="item"><span>关键字：</span>{{ data.mood.keywords.join(',') }}</div>
+        <div class="item"><span>情绪描述：</span>{{ data.mood.desc }}</div>
+        <div class="item"><span>深层情绪：</span>{{ data.mood.implicit }}</div>
+      </div>
+      <div class="emoji">{{ data.mood.emoji }}</div>
     </div>
     <div class="movie" v-if="data.movie && data.movie.link" @click="openMovie">
       <img :src="data.movie.cover" referrerpolicy="no-referrer" />
@@ -179,6 +188,7 @@ function openMap() {
     color: #333;
     word-break: break-all;
     white-space: pre-wrap;
+    border-radius: 8px;
   }
 
   .movie {
@@ -278,6 +288,34 @@ function openMap() {
         }
       }
     }
+  }
+}
+
+.mood {
+  background-color: #fff;
+  padding: 10px;
+  font-size: 14px;
+  margin-top: 15px;
+  border-radius: 8px;
+  color: #333;
+  display: flex;
+  align-items: center;
+
+  .info {
+    flex: 1;
+    overflow: hidden;
+
+    .item {
+      padding: 2px 0;
+
+      span {
+        color: #888;
+      }
+    }
+  }
+
+  .emoji {
+    font-size: 60px;
   }
 }
 

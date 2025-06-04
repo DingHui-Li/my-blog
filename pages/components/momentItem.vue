@@ -34,7 +34,7 @@
           </div>
         </div>
         <div class="imgs" v-if="data.imgs.length">
-          <VImg :class="['img', data.imgs.length == 1 && 'single']" v-for="(item, index) in data.imgs"
+          <VImg :class="['img']" v-for="(item, index) in data.imgs"
             :style="`width:${data.imgs.length == 1 ? 100 : [2, 4].includes(data.imgs.length) ? 50 : 33.33}%;`"
             :src="item" :thumb='item + "?x-oss-process=image/resize,m_mfit,w_355"'
             :aspect-ratio="data.imgs.length == 1 ? 'auto' : 1">
@@ -61,6 +61,7 @@
           <span class="weather" v-if="data.weather" @click="openWeather"> {{ data.weather.text }} {{ data.weather.temp
             }}°C
           </span>
+          <span v-if="data.mood?.emoji" @click="router.push('/article/' + data._id)">{{ data.mood?.emoji }}</span>
         </div>
       </template>
       <comReply :data="data.ai"></comReply>

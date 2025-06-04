@@ -40,7 +40,10 @@ export async function getReply(article) {
     throw "ai助手未初始化"
   }
   let content = article.textContent
-  let time = new Date(article.createTime || '').toLocaleString()
+  let time = new Date(article?.createTime || '').toLocaleString()
+  if (!article?.createTime) {
+    time = new Date().toLocaleString()
+  }
   let imgDesc = (await describeImg(article.imgs))?.content
   let prompt = `以朋友身份评价以下内容，
   要求：不要忘记你依然是AI(不要强调这一点),
@@ -108,20 +111,32 @@ export async function getMood(article) {
   if (!aiInstance) {
     throw "ai助手未初始化"
   }
-  let time = new Date(article.createTime).toLocaleString()
-  let location = JSON.stringify(article.location.location)
+  let time = new Date(article?.createTime).toLocaleString()
+  if (!article?.createTime) {
+    time = new Date().toLocaleString()
+  }
+  let location = '未知地点'
+  if (article?.location?.location) {
+    location = JSON.stringify(article.location.location)
+  }
   let action = article.type == 'moment' ? '内容' : '文章'
   let str = `${time}在${location}发布了${action}：${article.movie?.title ? ('评价电影《' + article.movie.title + '》:') : ''}${article.title || article.textContent},包含${article.imgs?.length || 0}张图片，${article.sounds?.length || 0}段音频。当天天气:${article.weather?.text},${article.weather?.temp}摄氏度\n`
-  let prompt = `分析以下内容的心情并转换为JSON格式，包含字段：评分（1-10）、emoj、关键词、简短描述、情感分析（中性/积极/消极）、隐性情绪层。示例：
+  let prompt = `分析以下内容包含的情感，包含字段：评分（1-10）、emoj、关键词、简短描述、情感分析（中性/积极/消极）、隐性情绪层。
+  【待分析内容】
+  ${str}
+
+  【要求】
+  其中emoji为对应评分的描述或内容的描述,不局限于人物表情,但须为单个;
+  严格按照以下JSON格式输出：
   {
-    "score": "9",
+    "score": 9,
     "emoji": "😃",
     "keywords": ["遗憾", "回忆", "爱情"],
     "desc":"一周内情绪如落叶起伏",
     "sentiment": "消极",
     "implicit":""
-  },其中emoji为对应评分的描述;某些天数数据可能为空；
-  待分析内容：\n${str}`
+  }
+  `
   const model = getAiConfig()?.model
   console.log(prompt)
   const completion = await aiInstance.chat.completions.create({
@@ -129,9 +144,16 @@ export async function getMood(article) {
     model,
   });
   let res = completion.choices[0].message.content
-  return {
-    model,
-    content: res
+  try {
+    return {
+      model,
+      mood: JSON.parse(res.replace('```json', '').replace('```', ''))
+    }
+  } catch {
+    return {
+      model,
+      mood: null
+    }
   }
 }
 
@@ -190,7 +212,7 @@ export async function analyMoodByNearWeek() {
     "trend":"从阴郁的缅怀到节后的空茫，中期在电影世界暂避风雨，结尾以AI交互与生活探索完成轻柔反弹。昼夜温差达12℃的天气映射着心的剧烈震颤。",
     "trendData":[20,50,50,23,67,34,80],
     "implicit":""
-  },其中emoji为对应评分的描述;不要输出其他分析内容;
+  },其中emoji为对应评分的描述，不局限于人物表情，但须为单个;不要输出其他分析内容;
   待分析内容：\n${str}`
   const model = getAiConfig()?.model
   const completion = await aiInstance.chat.completions.create({

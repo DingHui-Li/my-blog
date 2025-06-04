@@ -131,3 +131,13 @@ export async function getAiResponse(article) {
     content: aiResponse.content
   }
 }
+
+export async function getMood(article) {
+  let res = {}
+  try {
+    res = await AiService.getMood(article)
+  } catch (err) {
+    console.log(err)
+  }
+  return res?.mood
+}

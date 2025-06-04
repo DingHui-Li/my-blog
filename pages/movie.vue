@@ -7,33 +7,41 @@
           <CloseBold />
         </el-icon>
       </div>
-      <img class="bg" v-if="list?.length && selected >= 0" :src="list[selected].movie.cover"
-        referrerpolicy="no-referrer">
-      <div class="content" v-if="list?.length && selected >= 0">
+      <img class="bg" v-if="list?.length && selected?._id" :src="selected.movie.cover" referrerpolicy="no-referrer">
+      <div class="content" v-if="list?.length && selected?._id">
         <div class="rate">
           <el-icon color="#FF9800" :size="20">
             <StarFilled />
           </el-icon>
-          {{ list[selected].movie.rate }}
+          {{ selected.movie.rate }}
           <div class="btn" @click="openMovie">豆瓣</div>
         </div>
-        <div class="title">{{ list[selected].movie.title }}</div>
-        <div class="desc">{{ list[selected].movie.meta }}</div>
-        <div class="time">{{ moment(list[selected].createTime).format('LLLL') }}</div>
-        <div class="text">{{ list[selected].textContent }}
-          <comReply :data="list[selected].ai" style="background-color: #999; margin-top: 15px;"></comReply>
+        <div class="title">{{ selected.movie.title }}</div>
+        <div class="desc">{{ selected.movie.meta }}</div>
+        <div class="time">{{ moment(selected.createTime).format('LLLL') }}</div>
+        <div class="text">{{ selected.textContent }}
+          <comReply :data="selected.ai" style="background-color: #999; margin-top: 15px;"></comReply>
         </div>
       </div>
     </div>
-    <div class="list">
-      <div class="item" v-for="(item, index) in list" @click="handleSelect(index)">
-        <img class="bg" :src="item.movie.cover" referrerpolicy="no-referrer">
-        <div class="content">
-          <div class="title">
-            {{ item.movie.title.split(' ')[0] }}
-            <!-- <div v-for="word in item.movie.title.split(' ')[0]">{{ word }}</div> -->
-          </div>
-          <div class="rate">{{ item.movie.rate.split('(')[0] }}
+    <div class="sort">
+      按
+      <div :class="['item', sort == 'date' && 'active']" @click="handleChooseSort('date')">日期</div>/
+      <div :class="['item', sort == 'mood' && 'active']" @click="handleChooseSort('mood')">喜好</div>
+      排序
+    </div>
+    <div class="group" v-for="key in group.keys()">
+      <div class="label">{{ key }}（{{ group.get(key)?.length }}）</div>
+      <div class="list">
+        <div class="item" v-for="(item, index) in group.get(key)" @click="handleSelect(item)">
+          <img class="bg" :src="item.movie.cover" referrerpolicy="no-referrer">
+          <div class="content">
+            <div class="title">
+              {{ item.movie.title.split(' ')[0] }}
+              <!-- <div v-for="word in item.movie.title.split(' ')[0]">{{ word }}</div> -->
+            </div>
+            <div class="rate">{{ item.movie.rate.split('(')[0] }}
+            </div>
           </div>
         </div>
       </div>
@@ -49,9 +57,51 @@ import moment from "moment";
 import comReply from "~/pages/components/reply.vue";
 
 let { pagination, list, getList } = useList<Article>("/api/article");
-pagination.value.size = 1000
-const selected = ref(0)
+pagination.value.size = 100000
+const selected = ref<Article | null>()
 const showInfo = ref(false)
+const sort = ref('date')//mood
+if (process.client) {
+  nextTick(() => {
+    sort.value = localStorage['movie-sort'] || "date"
+  })
+}
+
+const group = computed(() => {
+  let t: Map<string, Array<Article>> = new Map()
+  if (sort.value == 'date') {
+    list.value.forEach(item => {
+      let year = new Date(item.createTime).getFullYear()
+      if (t.get(year + "年")) {
+        t.get(year + "年")?.push(item)
+      } else {
+        t.set(year + "年", [item])
+      }
+    })
+  } else {
+    let level: Array<string> = ['导演，收下我的膝盖！', '好看，但羞于安利', '能看，但适合拆薯片', '能忍，但想给编剧寄刀片', '快跑！别回头！']
+    level.forEach(item => {
+      t.set(item, [])
+    })
+    list.value.forEach(item => {
+      if (item.mood?.score >= 9) {
+        t.get(level[0])?.push(item)
+      } else if (item.mood?.score >= 7) {
+        t.get(level[1])?.push(item)
+      }
+      else if (item.mood?.score >= 5) {
+        t.get(level[2])?.push(item)
+      }
+      else if (item.mood?.score >= 3) {
+        t.get(level[3])?.push(item)
+      }
+      else {
+        t.get(level[4])?.push(item)
+      }
+    })
+  }
+  return t
+})
 
 getList({
   type: "movie",
@@ -59,15 +109,19 @@ getList({
   size: pagination.value.size
 })
 
+function handleChooseSort(t: string) {
+  sort.value = t
+  localStorage['movie-sort'] = t
+}
 function openMovie() {
   if (list.value?.length) {
-    window.open(list.value[selected.value].movie.link, '_blank')
+    window.open(selected.value?.movie?.link, '_blank')
   }
 }
-function handleSelect(index: number) {
-  selected.value = -1
+function handleSelect(item: Article) {
+  selected.value = null
   nextTick(() => {
-    selected.value = index
+    selected.value = item
     showInfo.value = true
   })
 }
@@ -220,6 +274,42 @@ function handleSelect(index: number) {
     }
   }
 
+  .sort {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    color: #fff;
+    padding-top: 15px;
+    padding-right: 45px;
+    user-select: none;
+
+    .item {
+      color: #999;
+      cursor: pointer;
+      padding: 0 2px;
+
+      &:hover {
+        opacity: 0.7;
+      }
+
+      &.active {
+        color: var(--primary-color);
+        font-weight: bold;
+      }
+    }
+  }
+
+  .group {
+    .label {
+      font-size: 30px;
+      font-weight: bold;
+      color: #fff;
+      padding-left: 15px;
+      margin-top: 30px;
+    }
+  }
+
   .list {
     padding: 15px;
 
@@ -305,6 +395,13 @@ function handleSelect(index: number) {
 
     .content {
       padding: 15px !important;
+    }
+  }
+
+  .group {
+    .label {
+      margin: 0 auto;
+      text-align: center;
     }
   }
 

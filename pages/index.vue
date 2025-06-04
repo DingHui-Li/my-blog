@@ -25,7 +25,7 @@
       <div v-if="!date">
         <div class="item same-day" v-for="item in listOfSameDay" :key="item._id.toString()">
           <!-- <div class="year">{{ new Date(item.createTime).getFullYear() }}</div> -->
-          <div class="tag">{{ new Date(item.createTime).getFullYear() }}年的今天</div>
+          <div class="tag">{{ new Date().getFullYear() - new Date(item.createTime).getFullYear() }} 年前的今天</div>
           <comArticleItem v-if="item.type == 'article'" :data="item"></comArticleItem>
           <comMomentItem v-else :data="item"></comMomentItem>
         </div>
@@ -290,7 +290,7 @@ function getListOfSameDay() {
         color: #fff;
         padding: 8px 10px;
         padding-left: 15px;
-        border-radius: 30px 0 0 30px;
+        border-radius: 0 0 0 10px;
         pointer-events: none;
         font-size: 15px;
       }

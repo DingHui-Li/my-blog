@@ -62,6 +62,14 @@
       .actions
         el-icon.refresh(@click="getAiReply")
           Refresh
+    .ai-reply(v-if="form.mood" v-loading='mooding')
+      <div class="item"><span>情绪：</span> {{ form.mood.sentiment }} {{form.mood.emoji}}</div>
+      <div class="item"><span>关键字：</span>{{ form.mood.keywords.join(',') }}</div>
+      <div class="item"><span>情绪描述：</span>{{ form.mood.desc }}</div>
+      <div class="item"><span>深层情绪：</span>{{ form.mood.implicit }}</div>
+      .actions
+        el-icon.refresh(@click="getMood")
+          Refresh
 </template>
 <script setup>
 import moment from "moment";
@@ -93,6 +101,7 @@ let typeList = [
   },
 ]
 const aiReplying = ref(false)
+const mooding = ref(false)
 
 getTopicList();
 let timer
@@ -279,9 +288,22 @@ function getAiReply() {
   let payload = getPayload()
   aiReplying.value = true
   $http.post("/api/admin/article/aireply", payload).then(res => {
-    form.value.ai = res?.data
+    if (res?.data) {
+      form.value.ai = res?.data
+    }
   }).finally(() => {
     aiReplying.value = false
+  })
+}
+function getMood() {
+  let payload = getPayload()
+  mooding.value = true
+  $http.post("/api/admin/article/mood", payload).then(res => {
+    if (res?.data) {
+      form.value.mood = res?.data
+    }
+  }).finally(() => {
+    mooding.value = false
   })
 }
 
@@ -539,6 +561,16 @@ function getAiReply() {
       font-size: 13px;
       color: #333;
       font-weight: normal;
+    }
+
+    .item {
+      color: #333;
+      font-size: 14px;
+      padding: 2px 0;
+
+      span {
+        color: #888;
+      }
     }
 
     .actions {

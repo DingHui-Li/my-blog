@@ -36,6 +36,12 @@ const articleSchema = new Schema({
   movie: Object,
   onlySelf: Boolean,
   ai: Object,//{model,content}
+  mood: Object,//{ "score": "9",
+  // "emoji": "😃",
+  // "keywords": ["遗憾", "回忆", "爱情"],
+  // "desc":"一周内情绪如落叶起伏",
+  // "sentiment": "消极",
+  // "implicit":""}
 });
 articleSchema.index({ "$**": "text" });
 export default mongoose.model("Article", articleSchema);

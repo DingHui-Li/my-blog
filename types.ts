@@ -25,6 +25,7 @@ export type Article = {
   onlySelf: boolean;
   sounds: Array<Sound>;
   ai: AI;
+  mood: Mood;
 };
 
 export type Movie = {
@@ -49,6 +50,14 @@ export type Sound = {
 export type AI = {
   model: string;
   content: string;
+};
+export type Mood = {
+  score: number;
+  emoji: string;
+  keywords: Array<string>;
+  desc: string;
+  sentiment: string;
+  implicit: string;
 };
 
 type LngLat = {

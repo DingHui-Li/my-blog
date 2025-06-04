@@ -134,6 +134,7 @@ export let addArticle = defineEventHandler(async (event) => {
     desc: body.textContent?.slice(0, 50),
   }
   d['ai'] = await ArticleService.getAiResponse(d)
+  d['mood'] = await ArticleService.getMood(d)
   let res = await Article.create(d);
   return new BaseResponse({ data: res });
 });
@@ -162,6 +163,9 @@ export let editArticle = defineEventHandler(async (event) => {
     if (aiResponse?.content) {
       d['ai'] = aiResponse
     }
+  }
+  if (!d?.mood) {
+    d['mood'] = await ArticleService.getMood(d)
   }
   let res = await Article.updateOne(
     { _id: body._id },
@@ -229,5 +233,11 @@ export let searchForSameDay = defineEventHandler(async (event) => {
 export let getAiReply = defineEventHandler(async (event) => {
   let body = await readBody(event);
   const aiResponse = await ArticleService.getAiResponse(body)
+  return new BaseResponse({ data: aiResponse });
+});
+
+export let getMood = defineEventHandler(async (event) => {
+  let body = await readBody(event);
+  const aiResponse = await ArticleService.getMood(body)
   return new BaseResponse({ data: aiResponse });
 });

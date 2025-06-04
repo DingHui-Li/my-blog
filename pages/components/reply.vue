@@ -28,7 +28,7 @@ const props = defineProps({ data: Object })
     top: 8px;
     border: 8px solid transparent;
     border-right-color: #f5f5f5;
-    opacity: 0.6;
+    opacity: 0.8;
   }
 
   .model {
