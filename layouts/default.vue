@@ -64,7 +64,7 @@ $max-width: 1080px;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #dee0ed;
+  background: #0E0F24;
   overflow: hidden;
 
   // &::before {

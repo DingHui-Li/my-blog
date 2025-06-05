@@ -61,7 +61,8 @@
           <span class="weather" v-if="data.weather" @click="openWeather"> {{ data.weather.text }} {{ data.weather.temp
             }}°C
           </span>
-          <span v-if="data.mood?.emoji" @click="router.push('/article/' + data._id)">{{ data.mood?.emoji }}</span>
+          <span v-if="data.mood?.emoji" style="padding-left: 4px;" click="router.push('/article/' + data._id)">{{
+      data.mood?.emoji }}</span>
         </div>
       </template>
       <comReply :data="data.ai"></comReply>

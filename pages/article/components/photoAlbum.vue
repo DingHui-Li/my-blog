@@ -25,7 +25,7 @@
     </div>
     <div class="mood" v-if="data.mood">
       <div class="info">
-        <div class="item"><span>情绪：</span> {{ data.mood.sentiment }}</div>
+        <div class="item"><span>情绪：</span> {{ data.mood.score }} - {{ data.mood.sentiment }}</div>
         <div class="item"><span>关键字：</span>{{ data.mood.keywords.join(',') }}</div>
         <div class="item"><span>情绪描述：</span>{{ data.mood.desc }}</div>
         <div class="item"><span>深层情绪：</span>{{ data.mood.implicit }}</div>
@@ -294,7 +294,7 @@ function openMap() {
 .mood {
   background-color: #fff;
   padding: 10px;
-  font-size: 14px;
+  font-size: 13px;
   margin-top: 15px;
   border-radius: 8px;
   color: #333;
@@ -306,7 +306,7 @@ function openMap() {
     overflow: hidden;
 
     .item {
-      padding: 2px 0;
+      padding: 4px 0;
 
       span {
         color: #888;

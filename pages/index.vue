@@ -227,8 +227,9 @@ function getListOfSameDay() {
 }
 
 .date {
+  margin-top: 10px;
   font-size: 15px;
-  padding: 0 30px;
+  padding-left: 15px;
   color: var(--primary-color);
   font-weight: bold;
   display: flex;
@@ -293,6 +294,7 @@ function getListOfSameDay() {
         border-radius: 0 0 0 10px;
         pointer-events: none;
         font-size: 15px;
+        box-shadow: 0 0 20px 0px var(--primary-color);
       }
     }
   }

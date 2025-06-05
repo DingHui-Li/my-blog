@@ -33,7 +33,7 @@ function updateChart(data: Array<any>) {
   })
   console.log(data)
   const treemapOption = {
-    color: ["#6663FD", '#38CB89', '#BAC2DB', '#3B4767', '#E27245', '#FE3E3E'],
+    color: ['#212121', "#6663FD", '#38CB89', '#BAC2DB', '#3B4767', '#E27245', '#FE3E3E', '#009688', '#FFC107', '#E91E63', '#8BC34A', '#795548'],
     series: [
       {
         type: 'treemap',
@@ -48,7 +48,7 @@ function updateChart(data: Array<any>) {
         label: {
           show: true,
           formatter: (t: any) => {
-            return `${t.name}'${t.value}`
+            return `${t.name}(${t.value})`
           }
         },
         labelLayout(params: any) {
@@ -61,8 +61,8 @@ function updateChart(data: Array<any>) {
         // },
         itemStyle: {
           borderWidth: 1,
-          borderRadius: 50,
-          gapWidth: 5,
+          borderRadius: 8,
+          gapWidth: 2,
         },
         breadcrumb: {
           show: false
@@ -83,9 +83,8 @@ function updateChart(data: Array<any>) {
   overflow: auto;
 
   .chart {
-    margin-top: 100px;
     width: 100%;
-    aspect-ratio: 1;
+    height: 100%;
     position: relative;
     overflow: hidden;
   }

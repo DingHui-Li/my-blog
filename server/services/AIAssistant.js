@@ -127,6 +127,7 @@ export async function getMood(article) {
 
   【要求】
   其中emoji为对应评分的描述或内容的描述,不局限于人物表情,但须为单个;
+  注意score与sentiment及其他字段的关联性；
   严格按照以下JSON格式输出：
   {
     "score": 9,
