@@ -61,7 +61,7 @@
           <span class="weather" v-if="data.weather" @click="openWeather"> {{ data.weather.text }} {{ data.weather.temp
             }}°C
           </span>
-          <span v-if="data.mood?.emoji" style="padding-left: 4px;" click="router.push('/article/' + data._id)">{{
+          <span v-if="data.mood?.emoji" style="padding-left: 4px;" @click="router.push('/article/' + data._id)">{{
       data.mood?.emoji }}</span>
         </div>
       </template>
@@ -272,8 +272,9 @@ function openMap() {
         // display: flex;
         // align-items: center;
         font-size: 13px;
+        color: #888;
         opacity: 0.8;
-        color: var(--primary-color);
+        // color: var(--primary-color);
         cursor: pointer;
 
         .icon {

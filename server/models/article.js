@@ -41,7 +41,7 @@ const articleSchema = new Schema({
   // "keywords": ["遗憾", "回忆", "爱情"],
   // "desc":"一周内情绪如落叶起伏",
   // "sentiment": "消极",
-  // "implicit":""}
+  // "implicit":"",}
 });
 articleSchema.index({ "$**": "text" });
 export default mongoose.model("Article", articleSchema);

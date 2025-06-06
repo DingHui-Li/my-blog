@@ -26,9 +26,9 @@
     <div class="mood" v-if="data.mood">
       <div class="info">
         <div class="item"><span>情绪：</span> {{ data.mood.score }} - {{ data.mood.sentiment }}</div>
-        <div class="item"><span>关键字：</span>{{ data.mood.keywords.join(',') }}</div>
-        <div class="item"><span>情绪描述：</span>{{ data.mood.desc }}</div>
         <div class="item"><span>深层情绪：</span>{{ data.mood.implicit }}</div>
+        <div class="item"><span>关键字：</span>{{ data.mood.keywords.join(',') }}</div>
+        <div class="item"><span>内容描述：</span>{{ data.mood.desc }}</div>
       </div>
       <div class="emoji">{{ data.mood.emoji }}</div>
     </div>
@@ -45,7 +45,7 @@
         <div class="img">
           <VImg ref="imgsEl" :preview-teleported="true" :src="item"
             :thumb="item + '?x-oss-process=image/resize,m_mfit,w_800'"></VImg>
-          <div class="info" v-if="exifList[index]">
+          <div class="info" v-if="exifList[index]?.Make">
             <div class="text left">{{ exifList[index].Make || "" }} {{ exifList[index].Model || "" }}
               <div class="date">{{ moment(exifList[index].CreateDate || "").format('YYYY/MM/DD HH:mm') }}</div>
             </div>

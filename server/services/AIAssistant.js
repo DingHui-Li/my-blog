@@ -121,13 +121,14 @@ export async function getMood(article) {
   }
   let action = article.type == 'moment' ? '内容' : '文章'
   let str = `${time}在${location}发布了${action}：${article.movie?.title ? ('评价电影《' + article.movie.title + '》:') : ''}${article.title || article.textContent},包含${article.imgs?.length || 0}张图片，${article.sounds?.length || 0}段音频。当天天气:${article.weather?.text},${article.weather?.temp}摄氏度\n`
-  let prompt = `分析以下内容包含的情感，包含字段：评分（1-10）、emoj、关键词、简短描述、情感分析（中性/积极/消极）、隐性情绪层。
+  let prompt = `分析以下内容包含的情感，包含字段：评分（1-10,1为非常消极，10为非常积极）、emoj、关键词、简短描述、情感分析、隐性情绪层、内容分类。
   【待分析内容】
   ${str}
 
   【要求】
   其中emoji为对应评分的描述或内容的描述,不局限于人物表情,但须为单个;
-  注意score与sentiment及其他字段的关联性；
+  class：根据内容从[瞬时情绪,价值观沉淀,压力释放,群体记忆,文化共鸣,争议反思,技术赋能,娱乐技艺,生存智慧,地理脉搏,生态网络,气候韵律,人化自然界面,隐喻自然符号]中选择一个或多个；
+
   严格按照以下JSON格式输出：
   {
     "score": 9,
@@ -135,7 +136,8 @@ export async function getMood(article) {
     "keywords": ["遗憾", "回忆", "爱情"],
     "desc":"一周内情绪如落叶起伏",
     "sentiment": "消极",
-    "implicit":""
+    "implicit":"",
+    "class":[""]
   }
   `
   const model = getAiConfig()?.model
@@ -200,7 +202,7 @@ export async function analyMoodByNearWeek() {
     let action = item.type == 'moment' ? '内容' : '文章'
     str += `${time}在${location}发布了${action}：${item.movie?.title ? ('评价电影《' + item.movie.title + '》:') : ''}${item.title || item.textContent},包含${item.imgs?.length || 0}张图片，${item.sounds?.length || 0}段音频。当天天气:${item.weather?.text},${item.weather?.temp}摄氏度\n`
   })
-  let prompt = `分析以下近一周内容的心情并转换为JSON格式，包含字段：整体评分（1-100）、emoj、中性情绪占比、积极情绪占比、消极情绪占比、关键词、简短描述、情感分析（中性/积极/消极）、趋势、趋势数据(1-100)、隐性情绪层。示例：
+  let prompt = `分析以下近一周内容的心情并转换为JSON格式，包含字段：整体评分（1-100，情绪积极度）、emoj、中性情绪占比、积极情绪占比、消极情绪占比、关键词、简短描述、情感分析（中性/积极/消极）、趋势、趋势数据(1-100)、隐性情绪层。示例：
   {
     "score": 90,
     "emoji": 😃,

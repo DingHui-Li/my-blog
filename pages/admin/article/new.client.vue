@@ -64,9 +64,9 @@
           Refresh
     .ai-reply(v-if="form.mood" v-loading='mooding')
       <div class="item"><span>情绪：</span> {{ form.mood.score }} - {{ form.mood.sentiment }} - {{form.mood.emoji}}</div>
-      <div class="item"><span>关键字：</span>{{ form.mood.keywords.join(',') }}</div>
-      <div class="item"><span>情绪描述：</span>{{ form.mood.desc }}</div>
       <div class="item"><span>深层情绪：</span>{{ form.mood.implicit }}</div>
+        <div class="item"><span>关键字：</span>{{ form.mood.keywords.join(',') }}</div>
+        <div class="item"><span>内容描述：</span>{{ form.mood.desc }}</div>
       .actions
         el-icon.refresh(@click="getMood")
           Refresh
