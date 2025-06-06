@@ -25,7 +25,7 @@
         <div class="topics">
           <TopicTag v-for="item in data.topics" :data="item"></TopicTag>
         </div>
-        <div class="content" @click="router.push('/article/' + data._id)">
+        <div :class="['content', simple && 'simple']" @click="router.push('/article/' + data._id)">
           {{ data.textContent }}
         </div>
         <div class="sounds" v-if="data.sounds">
@@ -33,39 +33,41 @@
             <Sound :src="item.src" :duration="item.duration" />
           </div>
         </div>
-        <div class="imgs" v-if="data.imgs.length">
-          <VImg :class="['img']" v-for="(item, index) in data.imgs"
-            :style="`width:${data.imgs.length == 1 ? 100 : [2, 4].includes(data.imgs.length) ? 50 : 33.33}%;`"
-            :src="item" :thumb='item + "?x-oss-process=image/resize,m_mfit,w_355"'
-            :aspect-ratio="data.imgs.length == 1 ? 'auto' : 1">
-          </VImg>
-        </div>
-        <div class="movie" v-if="data.movie && data.movie.link" @click="openMovie">
-          <img :src="data.movie.cover" referrerpolicy="no-referrer" />
-          <div class="movie-info">
-            <div class="name">{{ data.movie.title }}</div>
-            <div class="rate">{{ data.movie.rate }}</div>
+        <template v-if="!simple">
+          <div class="imgs" v-if="data.imgs.length">
+            <VImg :class="['img']" v-for="(item, index) in data.imgs"
+              :style="`width:${data.imgs.length == 1 ? 100 : [2, 4].includes(data.imgs.length) ? 50 : 33.33}%;`"
+              :src="item" :thumb='item + "?x-oss-process=image/resize,m_mfit,w_355"'
+              :aspect-ratio="data.imgs.length == 1 ? 'auto' : 1">
+            </VImg>
           </div>
-        </div>
-        <div class="info">
-          <span class="time">{{ moment(data.createTime).fromNow() }}</span>
-          <span class="location" v-if="data.location" @click="openMap">
-            <!-- <el-icon class="icon">
+          <div class="movie" v-if="data.movie && data.movie.link" @click="openMovie">
+            <img :src="data.movie.cover" referrerpolicy="no-referrer" />
+            <div class="movie-info">
+              <div class="name">{{ data.movie.title }}</div>
+              <div class="rate">{{ data.movie.rate }}</div>
+            </div>
+          </div>
+          <div class="info">
+            <span class="time">{{ moment(data.createTime).fromNow() }}</span>
+            <span class="location" v-if="data.location" @click="openMap">
+              <!-- <el-icon class="icon">
               <Location></Location>
             </el-icon> -->
-            <span v-if="data.location.city">
-              {{ data.location.city }}·
+              <span v-if="data.location.city">
+                {{ data.location.city }}·
+              </span>
+              <span>{{ data.location.name || data.location }}</span>
             </span>
-            <span>{{ data.location.name || data.location }}</span>
-          </span>
-          <span class="weather" v-if="data.weather" @click="openWeather"> {{ data.weather.text }} {{ data.weather.temp
-            }}°C
-          </span>
-          <span v-if="data.mood?.emoji" style="padding-left: 4px;" @click="router.push('/article/' + data._id)">{{
+            <span class="weather" v-if="data.weather" @click="openWeather"> {{ data.weather.text }} {{ data.weather.temp
+              }}°C
+            </span>
+            <span v-if="data.mood?.emoji" style="padding-left: 4px;" @click="router.push('/article/' + data._id)">{{
       data.mood?.emoji }}</span>
-        </div>
+          </div>
+        </template>
       </template>
-      <comReply :data="data.ai"></comReply>
+      <comReply :data="data.ai" v-if="!simple"></comReply>
     </div>
   </div>
 </template>
@@ -80,7 +82,7 @@ import comArticleItem from './articleItem.vue'
 import VImg from '@/components/vimg/index.vue'
 
 const router = useRouter();
-const props = defineProps<{ data: Article }>();
+const props = defineProps<{ data: Article, simple?: boolean }>();
 const { globalSetting } = storeToRefs(useSysStore())
 const profile = computed(() => globalSetting.value.profile || {})
 
@@ -150,6 +152,13 @@ function openMap() {
       //   font-size: 30px;
       //   font-weight: bold;
       // }
+      &.simple {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        -webkit-line-clamp: 3;
+        text-overflow: ellipsis;
+      }
     }
 
     .topics {

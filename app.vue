@@ -1,7 +1,7 @@
 <template lang="pug">
 NuxtLayout(:name="layout")
   NuxtPage(v-if="route.name.includes('webview')")
-  NuxtPage(v-else :keepalive="{include:['index','adminArticleList'].join(',')}" style="position:absolute;width:100%;height:100%")
+  NuxtPage(v-else :keepalive="{include:['index','adminArticleList','statist'].join(',')}" style="position:absolute;width:100%;height:100%")
 </template>
 <script setup>
 import "./utils/momentCh.js";

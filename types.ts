@@ -58,6 +58,7 @@ export type Mood = {
   desc: string;
   sentiment: string;
   implicit: string;
+  food: string;
 };
 
 type LngLat = {

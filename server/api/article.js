@@ -48,11 +48,14 @@ export let getArticleList = defineEventHandler(async (event) => {
     .skip((pagination.page - 1) * pagination.size)
     .limit(pagination.size)
     .sort({ createTime: -1 })
-    .populate("topics");
+    .populate("topics")
+    .lean();
   let total = await Article.find(filter).count();
   if (!event.context.user) {
     res = ArticleService.handleOnleSelf(res)
   }
+
+  // await getMoods()
 
   return new BaseResponse({
     data: {
@@ -62,6 +65,23 @@ export let getArticleList = defineEventHandler(async (event) => {
     },
   });
 });
+
+//旧数据增加新字段
+async function getMoods() {
+  let res = await Article.find({ topics: { $in: ["65f048a608f4379bf6dd0c63"] } }).lean()
+  let num = 0
+  for (const item of res) {
+    num++
+    if (item?.mood) {
+      let mood = await ArticleService.getMood(item)
+      await Article.updateOne(
+        { _id: item._id },
+        { ...item, mood }
+      );
+    }
+    console.log(num / res.length * 100)
+  }
+}
 
 //查询详情
 export let getArticle = defineEventHandler(async (event) => {

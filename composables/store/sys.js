@@ -28,6 +28,11 @@ export const useSysStore = defineStore("sys", {
         key: "movie",
         path: "movie",
       },
+      {
+        label: "统计",
+        key: "statist",
+        path: "other/statist",
+      },
       // {
       //   label: "友链",
       //   key: "friend",

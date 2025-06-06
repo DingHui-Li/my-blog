@@ -55,13 +55,11 @@ export async function getReply(article) {
   包含:${article.imgs?.length}张图片：${JSON.stringify(imgDesc)},
   \n当前时间:${time};`
   const model = getAiConfig()?.model
-  console.log(prompt)
   const completion = await aiInstance.chat.completions.create({
     messages: [{ role: "user", content: prompt }],
     model,
   });
   let res = completion.choices[0].message.content
-  console.log(res)
   return {
     model,
     content: res
@@ -117,17 +115,17 @@ export async function getMood(article) {
   }
   let location = '未知地点'
   if (article?.location?.location) {
-    location = JSON.stringify(article.location.location)
+    location = article.location.city + article.location.name
   }
   let action = article.type == 'moment' ? '内容' : '文章'
   let str = `${time}在${location}发布了${action}：${article.movie?.title ? ('评价电影《' + article.movie.title + '》:') : ''}${article.title || article.textContent},包含${article.imgs?.length || 0}张图片，${article.sounds?.length || 0}段音频。当天天气:${article.weather?.text},${article.weather?.temp}摄氏度\n`
-  let prompt = `分析以下内容包含的情感，包含字段：评分（1-10,1为非常消极，10为非常积极）、emoj、关键词、简短描述、情感分析、隐性情绪层、内容分类。
+  let prompt = `分析以下内容包含的情感，包含字段：评分（1-10,1为非常消极，10为非常积极）、emoj、关键词、简短描述、情感分析、隐性情绪层、包含的食物名。
   【待分析内容】
   ${str}
 
   【要求】
-  其中emoji为对应评分的描述或内容的描述,不局限于人物表情,但须为单个;
-  class：根据内容从[瞬时情绪,价值观沉淀,压力释放,群体记忆,文化共鸣,争议反思,技术赋能,娱乐技艺,生存智慧,地理脉搏,生态网络,气候韵律,人化自然界面,隐喻自然符号]中选择一个或多个；
+  内容中没有食物或重点不是食物则忽略food,若有多种则概括成一种；
+  emoji匹配的优先级为food > 内容 > 情绪;
 
   严格按照以下JSON格式输出：
   {
@@ -137,11 +135,10 @@ export async function getMood(article) {
     "desc":"一周内情绪如落叶起伏",
     "sentiment": "消极",
     "implicit":"",
-    "class":[""]
+    "food":""
   }
   `
   const model = getAiConfig()?.model
-  console.log(prompt)
   const completion = await aiInstance.chat.completions.create({
     messages: [{ role: "user", content: prompt }],
     model,

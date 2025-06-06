@@ -133,7 +133,7 @@ function getListOfSameDay() {
 .home-page {
   height: 100%;
   overflow: auto;
-  scroll-behavior: smooth;
+  // scroll-behavior: smooth;
 }
 
 .cover {

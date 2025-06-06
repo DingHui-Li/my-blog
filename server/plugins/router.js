@@ -81,6 +81,7 @@ router.post("/api/log/push", LogApi.push);
 
 router.get("/api/st/contentNumByProvince", StApi.stContentNumByProvince);
 router.get("/api/st/findRegionOfCity", StApi.findRegionOfCity);
+router.get("/api/st/moodRankList", StApi.findRankListByMood);
 router.post("/api/st/findRegionOfDistrict", StApi.findRegionOfDistrict);
 
 router.get("/api/history4day", History4dayApi.searchByDate);
