@@ -45,11 +45,15 @@ export async function getReply(article) {
     time = new Date().toLocaleString()
   }
   let imgDesc = (await describeImg(article.imgs))?.content
-  let prompt = `以朋友身份评价以下内容，
-  要求：不要忘记你依然是AI(不要强调这一点),
+  let prompt = `
+  以朋友身份简短评论以下内容；
+
+  【要求】：
+  不要忘记你依然是AI(但不要强调这一点),
   不要评价数据库中没有的电影，
   不要在回答中添加图片；
-  以下是内容：\n
+
+  【内容】：
   ${article.movie?.title ? ('看完电影《' + article.movie?.title + '》后说：\n') : ""}
   ${content};\n
   包含:${article.imgs?.length}张图片：${JSON.stringify(imgDesc)},
@@ -119,7 +123,7 @@ export async function getMood(article) {
   }
   let action = article.type == 'moment' ? '内容' : '文章'
   let str = `${time}在${location}发布了${action}：${article.movie?.title ? ('评价电影《' + article.movie.title + '》:') : ''}${article.title || article.textContent},包含${article.imgs?.length || 0}张图片，${article.sounds?.length || 0}段音频。当天天气:${article.weather?.text},${article.weather?.temp}摄氏度\n`
-  let prompt = `分析以下内容包含的情感，包含字段：评分（1-10,1为非常消极，10为非常积极）、emoj、关键词、简短描述、情感分析、隐性情绪层、包含的食物名。
+  let prompt = `分析以下内容包含的情感，包含字段：评分（1-10,1为非常消极，10为非常积极）、emoj、关键词、简短描述、情感分析、隐性情绪层、描述的食物。
   【待分析内容】
   ${str}
 

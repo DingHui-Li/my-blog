@@ -115,7 +115,7 @@ function onScroll(e: any) {
 }
 
 function handleToTop() {
-  pageEl.value?.scrollTo(0, 0)
+  pageEl.value?.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
 }
 
 function onChoosedDate(e: string) {
@@ -255,8 +255,8 @@ function getListOfSameDay() {
   .item {
     position: relative;
     padding: 15px;
-    opacity: 0;
-    animation: fadeIn .3s forwards;
+    // opacity: 0;
+    // animation: fadeIn .3s forwards;
     // border-bottom: 10px solid #f0f0f0;
     background-color: rgba(255, 255, 255, 1);
     // backdrop-filter: blur(10px);

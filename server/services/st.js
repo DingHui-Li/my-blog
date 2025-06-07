@@ -66,14 +66,14 @@ function findDistrictByCitycode(code) {
 export function findRankListByMood() {
   return new Promise(async resolve => {
     //积极情绪前10
-    let top10 = await Article.find({ type: "moment", mood: { $exists: true } })
+    let top10 = await Article.find({ type: "moment", mood: { $exists: true }, 'movie.link': { $exists: false } })
       .select({ htmlContent: 0 })
       .limit(10)
       .sort({ "mood.score": -1 })
       .populate("topics")
       .lean();
     //消极情绪前10
-    let bottom10 = await Article.find({ type: "moment", mood: { $exists: true } })
+    let bottom10 = await Article.find({ type: "moment", mood: { $exists: true }, 'movie.link': { $exists: false } })
       .select({ htmlContent: 0 })
       .limit(10)
       .sort({ "mood.score": 1 })

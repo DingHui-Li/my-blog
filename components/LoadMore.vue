@@ -1,5 +1,5 @@
 <template lang="pug">
-.load-more(@click="loadMore") {{ loading?'加载中':hasMore?"点击加载更多":"没有更多了" }}
+.load-more(ref='loadingEl' @click="loadMore") {{ loading?'加载中':hasMore?"点击加载更多":"没有更多了" }}
 </template>
 <script setup>
 const props = defineProps({
@@ -12,7 +12,17 @@ const props = defineProps({
         default: false
     }
 })
+const loadingEl = ref(null)
 const emits = defineEmits(['loadMore'])
+
+onMounted(() => {
+    const observer = new IntersectionObserver(entries => {
+        if (entries[0].intersectionRatio > 0) {
+            loadMore()
+        }
+    })
+    observer.observe(loadingEl.value)
+})
 
 function loadMore() {
     if (!props.loading && props.hasMore) {

@@ -1,5 +1,5 @@
 <template lang="pug">
-.topic
+.topic(@scroll="onScroll" ref="pageEl")
   .cover
     img(v-if='topicDetail.cover' :src='topicDetail.cover')
     .imgs(v-else)
@@ -11,8 +11,11 @@
       Content(@dataChange="onDataChange")
 </template>
 <script setup>
+defineOptions({ name: 'topic' })
 import Content from "./components/content.vue";
 import $http from "@/utils/http.js";
+
+const pageEl = ref(null)
 
 const route = useRoute();
 const totalCount = ref(0)
@@ -51,6 +54,14 @@ function getTopic() {
 function onDataChange({ total, imgs }) {
   totalCount.value = total
   coverImgs.value = imgs.slice(0, 40)
+}
+
+onActivated(() => {
+  pageEl.value?.scrollTo(0, sessionStorage['topic-page-scroll-top'])
+})
+
+function onScroll(e) {
+  sessionStorage['topic-page-scroll-top'] = e.target.scrollTop
 }
 </script>
 <style lang="scss" scoped>
