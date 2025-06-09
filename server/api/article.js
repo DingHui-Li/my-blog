@@ -33,7 +33,7 @@ export let getArticleList = defineEventHandler(async (event) => {
     delete filter.content
   }
   if (filter.date) {
-    let date = new Date(filter.date)
+    let date = new Date(`${filter.date} 00:00:00`)
     let start = date.getTime()
     let end = new Date(`${filter.date} 23:59:59`).getTime()
     filter.createTime = { $gte: start, $lte: end }
