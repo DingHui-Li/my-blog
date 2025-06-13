@@ -15,28 +15,52 @@
       </div>
     </div> -->
     <comPublishCount v-if="type != 'photo'" :type='type' @choosedDate="onChoosedDate" />
-    <div class="date" v-if="date">
-      已筛选 {{ new Date(date).format('yyyy年M月d日') }} 的内容
-      <el-icon class="icon" @click="onChoosedDate('')">
-        <CircleCloseFilled />
-      </el-icon>
+    <div class="actions">
+      <div class="date" v-if="date">
+        已筛选 {{ new Date(date).format('yyyy年M月d日') }} 的内容
+        <el-icon class="icon" @click="onChoosedDate('')">
+          <CircleCloseFilled />
+        </el-icon>
+      </div>
+      <div v-else></div>
+      <el-switch v-model="isTimeline" size="large" active-text="时间线" inactive-text="内容" inline-prompt>
+        <template #active-action>
+          <el-icon>
+            <Clock />
+          </el-icon>
+        </template>
+        <template #inactive-action>
+          <el-icon>
+            <Memo />
+          </el-icon>
+        </template>
+      </el-switch>
     </div>
     <div class="home">
-      <div v-if="!date">
-        <div class="item same-day" v-for="item in listOfSameDay" :key="item._id.toString()">
-          <!-- <div class="year">{{ new Date(item.createTime).getFullYear() }}</div> -->
-          <div class="tag">{{ new Date().getFullYear() - new Date(item.createTime).getFullYear() }} 年前的今天</div>
-          <comArticleItem v-if="item.type == 'article'" :data="item"></comArticleItem>
+      <div class="timelines" v-show="isTimeline">
+        <div v-for="(item, index) in  _list " :key="item._id.toString()">
+          <comTimelineItem :data="item"
+            :oneDay="index != 0 && new Date(item.createTime).format('yyyy-MM-dd') == new Date(list[index - 1].createTime).format('yyyy-MM-dd')" />
+        </div>
+      </div>
+      <div v-show="!isTimeline">
+        <div v-if="!date">
+          <div class="item same-day" v-for=" item  in  listOfSameDay " :key="item._id.toString()">
+            <div class="year">{{ new Date(item.createTime).getFullYear() }}</div>
+            <!-- <div class="tag">{{ new Date().getFullYear() - new Date(item.createTime).getFullYear() }} 年前的今天</div> -->
+            <comArticleItem v-if="item.type == 'article'" :data="item"></comArticleItem>
+            <comMomentItem v-else :data="item"></comMomentItem>
+          </div>
+        </div>
+        <div :class="['item type']" v-for="( item, index ) in  _list " :key="item._id.toString()"
+          :style="`animation-delay:${index % 10 * 100}ms`">
+          <comAlbumItem v-if="type == 'photo'" :data="item"></comAlbumItem>
+          <comArticleItem v-else-if="item.type == 'article'" :data="item"></comArticleItem>
           <comMomentItem v-else :data="item"></comMomentItem>
         </div>
       </div>
-      <div :class="['item type']" v-for="(item, index) in _list" :key="item._id.toString()"
-        :style="`animation-delay:${index % 10 * 100}ms`">
-        <comAlbumItem v-if="type == 'photo'" :data="item"></comAlbumItem>
-        <comArticleItem v-else-if="item.type == 'article'" :data="item"></comArticleItem>
-        <comMomentItem v-else :data="item"></comMomentItem>
-      </div>
-      <LoadMore :loading="pagination.loading" :has-more="pagination.hasMore" @load-more="loadMore(searchFilter)">
+      <LoadMore style="margin: 50px 0" :loading="pagination.loading" :has-more="pagination.hasMore"
+        @load-more="loadMore(searchFilter)">
       </LoadMore>
     </div>
     <div class="toTop" @click="handleToTop" v-if="scrollTop > 500">
@@ -53,11 +77,12 @@ import $http from "@/utils/http.js";
 import { storeToRefs } from 'pinia'
 import comArticleItem from './components/articleItem.vue'
 import comMomentItem from './components/momentItem.vue'
+import comTimelineItem from './components/timelineItem.vue'
 import comAlbumItem from './components/albumItem.vue'
 import comPublishCount from './components/publishCount.vue'
 import { type Article } from "~/types";
 import useList from '~/hooks/useList';
-import { CircleCloseFilled, CaretTop } from '@element-plus/icons-vue'
+import { CircleCloseFilled, CaretTop, Clock, Memo } from '@element-plus/icons-vue'
 
 const pageEl = ref<any>(null)
 const { globalSetting, analyMyBlog } = storeToRefs(useSysStore())
@@ -70,7 +95,11 @@ let date = ref<string>('')
 let { pagination, list, getList, loadMore } = useList<Article>("/api/article");
 const listOfSameDay = ref<Array<Article>>()
 const scrollTop = ref(0)
+const isTimeline = ref(false)
 
+onMounted(() => {
+  isTimeline.value = localStorage['home-is-timeline'] == 'true'
+})
 
 const searchFilter = computed(() => {
   return { type: type.value || "moment", date: date.value }
@@ -81,6 +110,9 @@ watch(() => route.hash, (hash: any) => {
   initList()
 }, {
   immediate: true
+})
+watch(isTimeline, v => {
+  localStorage['home-is-timeline'] = v
 })
 
 onActivated(() => {
@@ -226,20 +258,33 @@ function getListOfSameDay() {
   }
 }
 
-.date {
-  margin-top: 10px;
-  font-size: 15px;
-  padding-left: 15px;
-  color: var(--primary-color);
-  font-weight: bold;
+.actions {
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  margin-top: 10px;
+  padding: 0 15px;
 
-  .icon {
-    color: #D32F2F;
-    font-size: 18px;
-    margin-left: 10px;
-    cursor: pointer;
+  &:deep(.el-switch) {
+    height: 30px;
+  }
+
+  .date {
+    flex: 1;
+    overflow: hidden;
+    font-size: 15px;
+    color: var(--primary-color);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+
+    .icon {
+      color: #D32F2F;
+      font-size: 18px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
   }
 }
 
@@ -251,6 +296,20 @@ function getListOfSameDay() {
   padding: 15px;
   padding-top: 10px;
   padding-bottom: 60px;
+
+  .timelines {
+
+    .year {
+      position: sticky;
+      z-index: 9;
+      // background-color: #fff;
+      backdrop-filter: blur(20px);
+      color: #fff;
+      top: 0;
+      font-size: 30px;
+      padding: 0 15px;
+    }
+  }
 
   .item {
     position: relative;
@@ -273,14 +332,15 @@ function getListOfSameDay() {
     &.same-day {
       .year {
         position: absolute;
-        top: 0;
-        left: 0;
+        top: -12px;
+        right: 0;
         font-size: 100px;
         line-height: 100px;
         color: #000;
-        opacity: 0.04;
+        opacity: 0.2;
         font-weight: bold;
         pointer-events: none;
+        color: var(--primary-color);
       }
 
       .tag {

@@ -23,7 +23,7 @@
             </div>
             <div :class="['day', data[day.date] && 'active', new Date(day.date).getMonth() % 2 == 0 && 'stripe']"
               v-for="day in week" :data-tip="`${new Date(day.date).format('yyyy年M月d日')}有 ${data[day.date]} 条内容`">
-              <div class="box" :style="`opacity:${1 - (3 - data[day.date]) / 10}`" :data-date="day.date"></div>
+              <div class="box" :style="`opacity:${1 - (3 - data[day.date]) / 10 * 3}`" :data-date="day.date"></div>
             </div>
           </div>
         </div>
@@ -192,7 +192,7 @@ function handleClick(e: any) {
           z-index: 1;
           width: 100%;
           height: 100%;
-          background-color: #e0e0e0;
+          background-color: #e0e0e090;
           border-radius: 2px;
         }
 
