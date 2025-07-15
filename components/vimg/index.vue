@@ -1,6 +1,7 @@
 <template>
   <div class="v-img-com" ref="vimgEl">
-    <img class="thumb-img" :src="thumb || src" :origin-src='src' @click="openCarousel">
+    <img class="thumb-img" :src="thumb || src" :origin-src='src' @click="openCarousel"
+      :style="`border-radius:${borderRadius}px`" />
     <teleport to="body" v-if="showCarousel">
       <div class="mask" ref="vimgCarouselBgEl"></div>
       <div v-show="showUI">
@@ -46,7 +47,7 @@ const {
   mouseEnd,
   mousecancel,
 } = useCarousel()
-const props = withDefaults(defineProps<{ src: string, thumb?: string, duration?: number }>(), { duration: 400 })
+const props = withDefaults(defineProps<{ src: string, thumb?: string, duration?: number, borderRadius?: number }>(), { duration: 400 })
 
 carouselController.afterOpen = afterCarouselOpen
 carouselController.beforeClose = beforeCarouselClose

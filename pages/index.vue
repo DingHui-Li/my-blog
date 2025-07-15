@@ -14,6 +14,7 @@
         </div>
       </div>
     </div> -->
+    <comTimeProgress v-show="type == ''" />
     <comPublishCount v-if="type != 'photo'" :type='type' @choosedDate="onChoosedDate" />
     <div class="actions">
       <div class="date" v-if="date">
@@ -80,6 +81,7 @@ import comMomentItem from './components/momentItem.vue'
 import comTimelineItem from './components/timelineItem.vue'
 import comAlbumItem from './components/albumItem.vue'
 import comPublishCount from './components/publishCount.vue'
+import comTimeProgress from './components/timeProgress.vue'
 import { type Article } from "~/types";
 import useList from '~/hooks/useList';
 import { CircleCloseFilled, CaretTop, Clock, Memo } from '@element-plus/icons-vue'
@@ -317,7 +319,7 @@ function getListOfSameDay() {
     // opacity: 0;
     // animation: fadeIn .3s forwards;
     // border-bottom: 10px solid #f0f0f0;
-    background-color: rgba(255, 255, 255, 1);
+    background-color: rgba(255, 255, 255, 0.9);
     // backdrop-filter: blur(10px);
     border-radius: 8px;
     overflow: hidden;

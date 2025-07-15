@@ -37,7 +37,7 @@
           <div class="imgs" v-if="data.imgs.length">
             <VImg :class="['img']" v-for="(item, index) in data.imgs"
               :style="`width:${data.imgs.length == 1 ? 100 : [2, 4].includes(data.imgs.length) ? 50 : 33.33}%;`"
-              :src="item" :thumb='item + "?x-oss-process=image/resize,m_mfit,w_355"'
+              :src="item" :thumb='item + "?x-oss-process=image/resize,m_mfit,w_355"' :border-radius="8"
               :aspect-ratio="data.imgs.length == 1 ? 'auto' : 1">
             </VImg>
           </div>
@@ -113,6 +113,7 @@ function openMap() {
 .moment-item {
   display: flex;
   position: relative;
+  z-index: 9;
 
   .only-self {
     position: absolute;

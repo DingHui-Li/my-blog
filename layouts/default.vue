@@ -45,14 +45,17 @@ import SmokeBg from './smokeBg'
 
 const router = useRouter();
 const route = useRoute();
-const { globalSetting, beian, theme } = storeToRefs(useSysStore())
+const sysStore = useSysStore();
+const { globalSetting, beian, theme } = storeToRefs(sysStore)
 const website = computed(() => globalSetting.value.website || {})
 
 let showSideMenu = ref(false)
 let type = ref('')
 onMounted(() => {
   type.value = route.hash?.split('#').filter(item => Boolean(item))[0]
-  new SmokeBg('smoke-bg')
+  if (!sysStore.isMobile()) {
+    new SmokeBg('smoke-bg')
+  }
 })
 </script>
 <style lang="scss" scoped>
