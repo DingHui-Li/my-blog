@@ -13,10 +13,22 @@ const router = useRouter();
 
 const list = [
   {
-    name: "人生",
+    name: "浮生",
     icon: "life-solid",
     color: "#4CAF50",
     path: "/other/life",
+  },
+  {
+    name: "榜单",
+    icon: "bangdan",
+    color: "#FFEB3B",
+    path: "/other/statist",
+  },
+  {
+    name: "所有话题",
+    icon: "topic",
+    color: "#3F51B5",
+    path: "/topic",
   },
   // {
   //   name: "访客",
@@ -27,14 +39,8 @@ const list = [
   {
     name: "后台管理",
     icon: "manage",
-    color: "#5D4037",
+    color: "#607D8B",
     path: "/admin",
-  },
-  {
-    name: "所有话题",
-    icon: "topic",
-    color: "#3F51B5",
-    path: "/topic",
   },
   {
     name: "关于",

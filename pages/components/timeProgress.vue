@@ -1,7 +1,9 @@
 <template>
   <div class="time-progress">
     <div class="text">
-      「年程余 {{ ((1 - today / days) * 100).toFixed(0) }}% · 今日余 {{ ((1 - daySecond / 86400) * 100).toFixed(4) }}%」
+      「年程余 {{ ((1 - today / days) * 100).toFixed(0) }}% · 今日余 {{ (86400 - daySecond).toFixed(0) }}秒（{{ ((1 - daySecond /
+        86400) *
+        100).toFixed(4) }}%）」
     </div>
     <div class="year">
       <div class="progress" :style="`width:${today / days * 100}%`"></div>
@@ -29,8 +31,8 @@
 </template>
 <script setup lang="ts">
 
-const days = ref(0)//今年过了多少天
-const today = ref()//今年一共多少天
+const days = ref(0)//今年一共多少天
+const today = ref()//今年过了多少天
 const daySecond = ref(0)//今天过了多少秒
 
 for (let i = 1; i <= 12; i++) {
@@ -78,6 +80,7 @@ function getDateLengthOfMonth(year: number, month: number) {
       height: 100%;
       background-color: var(--primary-color);
       opacity: 0.5;
+      transition: all .3s;
     }
 
     .icon-box {
@@ -100,18 +103,17 @@ function getDateLengthOfMonth(year: number, month: number) {
     background-color: #eeeeee10;
     overflow: hidden;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
 
     .hour {
       position: relative;
+      flex: 1;
       z-index: 2;
-      width: 1px;
       height: 100%;
-      background-color: #ffffff50;
-      font-size: 0;
+      border-right: 1px solid #ffffff50;
 
       &.num {
-        width: 3px;
+        border-right-width: 3px;
       }
     }
 
@@ -120,6 +122,7 @@ function getDateLengthOfMonth(year: number, month: number) {
       left: 0;
       height: 100%;
       background-color: var(--primary-color);
+      transition: all .3s;
     }
 
     .pulse-box {
