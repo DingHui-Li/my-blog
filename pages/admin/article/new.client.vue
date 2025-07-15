@@ -330,6 +330,7 @@ function getMood() {
     box-sizing: border-box;
 
     .time {
+      flex: 1;
       color: #999;
       font-size: 12px;
     }
