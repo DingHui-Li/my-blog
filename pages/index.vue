@@ -53,9 +53,11 @@
             <comMomentItem v-else :data="item"></comMomentItem>
           </div>
         </div>
-        <div :class="['item type']" v-for="( item, index ) in  _list " :key="item._id.toString()"
+        <div :class="['item type', type]" v-for="( item, index ) in  _list " :key="item._id.toString()"
           :style="`animation-delay:${index % 10 * 100}ms`">
-          <comAlbumItem v-if="type == 'photo'" :data="item"></comAlbumItem>
+          <comAlbumItem v-if="type == 'photo'" :data="item"
+            :oneDay="index != 0 && new Date(item.createTime).format('yyyy-MM-dd') == new Date(list[index - 1].createTime).format('yyyy-MM-dd')">
+          </comAlbumItem>
           <comArticleItem v-else-if="item.type == 'article'" :data="item"></comArticleItem>
           <comMomentItem v-else :data="item"></comMomentItem>
         </div>
@@ -329,6 +331,7 @@ function getListOfSameDay() {
       padding-bottom: 0;
       margin-bottom: 0;
       border: none;
+      background-color: transparent;
     }
 
     &.same-day {

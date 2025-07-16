@@ -6,11 +6,14 @@
       <!-- <div class="month"><span v-if="showMonth">{{ createTime.getMonth() + 1 }}月</span>
       </div> -->
       <div class="date">
-        <div>
+        <div v-if="!oneDay">
           {{ createTime.format('dd') }}
           <div class="month">{{ createTime.getMonth() + 1 }}月</div>
         </div>
-        <div class="year">{{ createTime.getFullYear() }}</div>
+        <div v-else style="font-size: 10px;">
+          ↓
+        </div>
+        <div class="year" v-if="currentYear != createTime.getFullYear()">{{ createTime.getFullYear() }}</div>
         <div class="location" v-if="data?.location">
           <span v-if="data.location.city">
             {{ data.location.city }} ·
@@ -19,12 +22,12 @@
         </div>
       </div>
       <div class="right">
-        <div class="topics">
+        <!-- <div class="topics">
           <TopicTag v-for="item in data.topics" :data="item"></TopicTag>
-        </div>
+        </div> -->
         <div class="imgs" @click="router.push('/article/' + data._id + '#photo')">
           <div class="img" v-for="(item, index) in data.imgs"><img
-              :src="item + '?x-oss-process=image/resize,m_mfit,w_400'" /></div>
+              :src="item + '?x-oss-process=image/resize,m_mfit,w_100'" /></div>
         </div>
       </div>
     </div>
@@ -37,10 +40,11 @@ import TopicTag from "./topicTag.vue";
 import { Article } from "~/types";
 
 const router = useRouter();
-const props = defineProps<{ data: Article }>();
+const props = defineProps<{ data: Article, oneDay?: boolean }>();
 const { globalSetting } = storeToRefs(useSysStore())
 const profile = computed(() => globalSetting.value.profile || {})
 let createTime = computed(() => new Date(Number(props.data.createTime)))
+const currentYear = new Date().getFullYear()
 
 </script>
 <style lang='scss' scoped>
@@ -49,9 +53,10 @@ let createTime = computed(() => new Date(Number(props.data.createTime)))
   display: flex;
 
   .date {
-    width: 100px;
+    width: 60px;
     font-size: 25px;
     font-weight: bold;
+    color: #fff;
 
     .month {
       position: relative;
@@ -63,6 +68,7 @@ let createTime = computed(() => new Date(Number(props.data.createTime)))
 
     .year {
       font-size: 22px;
+      font-weight: normal;
     }
 
     .location {
@@ -76,11 +82,12 @@ let createTime = computed(() => new Date(Number(props.data.createTime)))
   .right {
     flex: 1;
     overflow: hidden;
+    margin-left: 10px;
 
     .imgs {
       position: relative;
       margin-top: 10px;
-      padding-bottom: 30px;
+      padding-bottom: 10px;
       cursor: pointer;
       font-size: 0;
 
@@ -93,7 +100,7 @@ let createTime = computed(() => new Date(Number(props.data.createTime)))
       .img {
         top: 0;
         width: calc(50% - 1px);
-        max-width: 150px;
+        max-width: 70px;
         aspect-ratio: 1;
         // border-radius: 8px;
         overflow: hidden;
