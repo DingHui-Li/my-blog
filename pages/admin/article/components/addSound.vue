@@ -30,6 +30,9 @@
             <div v-if="mediaUrl" class="btn" @click="handleCancel">取消</div>
             <div v-if="mediaUrl" class="btn" @click="handleConfirm">确定</div>
           </div>
+          <div class="upload-btn">添加音频文件
+            <input type="file" accept="audio/*" @change="onChooseAudio">
+          </div>
         </div>
       </div>
     </el-drawer>
@@ -38,6 +41,8 @@
 <script setup>
 import { AVMedia } from 'vue-audio-visual'
 import { Microphone, ArrowRight, Close } from '@element-plus/icons-vue'
+import { ElMessage } from "element-plus";
+
 const emits = defineEmits(['update:modelValue'])
 const props = defineProps({
   'modelValue': Array
@@ -162,6 +167,16 @@ function handleConfirm() {
   emits("update:modelValue", props.modelValue)
   handleCancel()
 }
+async function onChooseAudio(e) {
+  const file = e.target.files[0];
+  if (file?.size / 1024 / 1024 <= 20) {
+    mediaUrl.value = window.URL.createObjectURL(file)
+    handleConfirm()
+  } else {
+    ElMessage.warning("文件最大体积为20Mb");
+  }
+  e.target.value = ''
+}
 </script>
 <style lang="scss" scoped>
 .choose-sound {
@@ -255,6 +270,32 @@ function handleConfirm() {
       &:active {
         background-color: #33333320;
       }
+    }
+  }
+
+  .upload-btn {
+    position: relative;
+    padding: 15px;
+    background-color: var(--primary-color);
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    opacity: 0.6;
+    cursor: pointer;
+    user-select: none;
+
+    &:active {
+      opacity: 0.8;
+    }
+
+    input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      opacity: 0;
     }
   }
 

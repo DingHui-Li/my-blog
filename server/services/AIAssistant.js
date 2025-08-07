@@ -50,9 +50,10 @@ export async function getReply(article) {
 
   【要求】：
   不要忘记你依然是AI;
-  不要评价数据库中没有的电影，
+  不要评价数据库中没有的电影，内容中没有电影则不要提及电影；
   不要在回答中添加图片；
   不要输出说明文字;
+  不超过100字；
 
   【内容】：
   ${article.movie?.title ? ('看完电影《' + article.movie?.title + '》后说：\n') : ""}

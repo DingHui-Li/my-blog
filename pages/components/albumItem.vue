@@ -53,7 +53,7 @@ const currentYear = new Date().getFullYear()
   display: flex;
 
   .date {
-    width: 60px;
+    width: 65px;
     font-size: 25px;
     font-weight: bold;
     color: #fff;
@@ -67,7 +67,7 @@ const currentYear = new Date().getFullYear()
     }
 
     .year {
-      font-size: 22px;
+      font-size: 15px;
       font-weight: normal;
     }
 

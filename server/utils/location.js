@@ -32,26 +32,63 @@ export function getWeather(location = {}) {
                 return resolve({})
             }
             // let latlon = await getGeocode(location)
-            let chunks = []
-            let res = request(`https://devapi.qweather.com/v7/weather/now?location=${location.lng},${location.lat}&key=${config.qweather.key}`)
-            res.on('data', chunk => {
-                chunks.push(chunk)
-            })
-            res.on('end', () => {
-                let buffer = Buffer.concat(chunks);
-                zlib.gunzip(buffer, (err, d) => {
+
+            // let chunks = []
+            // let res = request(`https://devapi.qweather.com/v7/weather/now?location=${location.lng},${location.lat}&key=${config.qweather.key}`)
+            // res.on('data', chunk => {
+            //     chunks.push(chunk)
+            // })
+            // res.on('end', () => {
+            //     let buffer = Buffer.concat(chunks);
+            //     zlib.gunzip(buffer, (err, d) => {
+            //         try {
+            //             let data = JSON.parse(d.toString())
+            //             resolve({
+            //                 fxLink: data?.fxLink,
+            //                 text: data.now?.text,
+            //                 temp: data.now?.temp,
+            //             })
+            //         } catch (err) {
+            //             throw err
+            //         }
+            //     })
+            // })
+
+            request({ url: `https://api.caiyunapp.com/v2.6/${config.caiyunapp.token}/${location.lng},${location.lat}/realtime` },
+                async (err, res, body) => {
                     try {
-                        let data = JSON.parse(d.toString())
+                        body = JSON.parse(body)
                         resolve({
-                            fxLink: data?.fxLink,
-                            text: data.now?.text,
-                            temp: data.now?.temp,
+                            fxLink: `https://caiyunai.com/map/#${location.lng},${location.lat}`,
+                            text: {
+                                CLEAR_DAY: "晴",
+                                CLEAR_NIGHT: "晴",
+                                PARTLY_CLOUDY_DAY: "多云",
+                                PARTLY_CLOUDY_NIGHT: "多云",
+                                CLOUDY: "阴",
+                                LIGHT_HAZE: "轻度雾霾",
+                                MODERATE_HAZE: "中度雾霾",
+                                HEAVY_HAZE: "重度雾霾",
+                                LIGHT_RAIN: "小雨",
+                                MODERATE_RAIN: "中雨",
+                                HEAVY_RAIN: "大雨",
+                                STORM_RAIN: "暴雨",
+                                FOG: "雾",
+                                LIGHT_SNOW: "小雪",
+                                MODERATE_SNOW: "中雪",
+                                HEAVY_SNOW: "大雪",
+                                STORM_SNOW: "暴雪",
+                                DUST: "浮尘",
+                                SAND: "沙尘",
+                                WIND: "大风"
+                            }[body?.result.realtime.skycon],
+                            temp: body?.result.realtime.temperature,
                         })
                     } catch (err) {
                         throw err
                     }
-                })
-            })
+                }
+            )
         } catch (err) {
             resolve({})
         }

@@ -13,6 +13,9 @@
 	"qweather":{
 		"key":""
 	},
+	"caiyunapp":{
+    "token":""
+  },
 	"TOTP":{
 		"user":"lidinghui@outlook.com",
 		"service":"My Blog", 

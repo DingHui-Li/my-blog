@@ -35,7 +35,7 @@
     comSound(v-model="form.sounds")
     .sounds(v-if="form.sounds")
       el-tag(v-for='(item,index) in form.sounds' size="large" effect="dark"
-        :style='`display:block;margin-bottom:5px;`' :key="item.src" color="red"
+        :style='`display:block;margin-bottom:5px;`' :key="item.src"
         closable @close="form.sounds.splice(index,1)")
         .sound(:style='`min-width:250px;height:30px;width:${(item.duration / 30) * 100}%`')
           Sound(:src='item.src' :duration='item.duration')
