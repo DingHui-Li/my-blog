@@ -2,9 +2,9 @@
   <div class="statist" @scroll="onScroll" ref="pageEl">
     <div class="rank-list">
       <div class="list">
-        <div class="title">最人间值得</div>
+        <div class="title">拒绝EMO</div>
         <div :class="['item']" v-for="(item, index) in top10List" :key="item._id.toString()">
-          <div class="emoji">{{ item.mood.emoji }}</div>
+          <div class="emoji">{{ item.mood?.emoji }}</div>
           <div class="content">
             <comMomentItem :data="item" simple></comMomentItem>
             <div class="info">
@@ -25,7 +25,7 @@
       <div class="list dark">
         <div class="title">最扎心现实</div>
         <div :class="['item']" v-for="(item, index) in bottom10List" :key="item._id.toString()">
-          <div class="emoji">{{ item.mood.emoji }}</div>
+          <div class="emoji">{{ item.mood?.emoji }}</div>
           <div class="content">
             <comMomentItem :data="item" simple></comMomentItem>
             <div class="info">
@@ -47,7 +47,7 @@
         <div class="title">最人间美味</div>
         <div :class="['item']" v-for="(item, index) in good10List" :key="item._id.toString()"
           @click="router.push('/article/' + item._id)">
-          <div class="emoji">{{ item.mood.emoji }}</div>
+          <div class="emoji">{{ item.mood?.emoji }}</div>
           <div class="content">
             <div class="food">{{ item.mood.food }}</div>
             <div class="info">
@@ -69,7 +69,7 @@
         <div class="title">最难以下咽</div>
         <div :class="['item']" v-for="(item, index) in bad10List" :key="item._id.toString()"
           @click="router.push('/article/' + item._id)">
-          <div class="emoji">{{ item.mood.emoji }}</div>
+          <div class="emoji">{{ item.mood?.emoji }}</div>
           <div class="content">
             <div class="food">{{ item.mood.food }}</div>
             <div class="info">

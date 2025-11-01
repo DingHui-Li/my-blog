@@ -1,11 +1,11 @@
 <template>
-  <div class="moment-item">
+  <div :class="['moment-item']">
     <!-- <div class="avatar">
       <img :src='profile?.avatar + "?x-oss-process=image/resize,m_mfit,w_100"' />
     </div> -->
     <el-tooltip v-if="data.onlySelf" content="仅博主可见" placement="left">
-      <el-icon class="only-self">
-        <View />
+      <el-icon class="only-self-icon">
+        <Lock />
       </el-icon>
     </el-tooltip>
     <div class="right">
@@ -63,7 +63,7 @@
               }}°C
             </span>
             <span v-if="data.mood?.emoji" style="padding-left: 4px;" @click="router.push('/article/' + data._id)">{{
-      data.mood?.emoji }}</span>
+    data.mood?.emoji }}</span>
           </div>
         </template>
       </template>
@@ -76,7 +76,7 @@ import { storeToRefs } from 'pinia'
 import moment from "moment";
 import TopicTag from "./topicTag.vue";
 import comReply from "./reply.vue";
-import { Location, Clock, View } from '@element-plus/icons-vue'
+import { Location, Clock, Lock } from '@element-plus/icons-vue'
 import { Article } from '~/types';
 import comArticleItem from './articleItem.vue'
 import VImg from '@/components/vimg/index.vue'
@@ -115,10 +115,10 @@ function openMap() {
   position: relative;
   z-index: 9;
 
-  .only-self {
+  .only-self-icon {
     position: absolute;
-    right: 5px;
-    top: -15px;
+    right: 0;
+    top: 0;
   }
 
   .avatar {

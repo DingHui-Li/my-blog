@@ -6,10 +6,14 @@ import * as FileService from '../services/file'
 export let uploadFile = defineEventHandler(async (event) => {
   const rawBody = await readMultipartFormData(event);
   let file = rawBody?.find((item) => item.name == "image" || item.name == "sound");
+  let useFileHash = rawBody?.find((item) => item.name == "useFileHash")?.data;
   let imgType = file.type.substring(file.type.indexOf("/") + 1);
   // let filename = new Date().getTime() + "." + imgType;
   let dir = getDir(rawBody);
   let filename = FileService.getFileHash(file.data) + "." + imgType;
+  if (useFileHash == false) {
+    filename = `${file.name}.${imgType}`
+  }
   let url = await FileService.uploadImg(dir + filename, file.data)
   return new BaseResponse({ data: url });
 });

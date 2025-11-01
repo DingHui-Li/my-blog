@@ -13,20 +13,21 @@
         </div>
         <div v-if="currentIndex != 0" class="pagination-btn prev" @click="carouselController.prev()">
           <slot name="prev"></slot>
-          <div class="prev-btn-default" v-if="!slots.prev"> 《 </div>
+          <div class="prev-btn-default" v-if="!slots.prev">
+            < </div>
+          </div>
+          <div v-if="currentIndex < imgList.length - 1" class="pagination-btn next" @click="carouselController.next()">
+            <slot name="next"></slot>
+            <div class="next-btn-default" v-if="!slots.next"> > </div>
+          </div>
         </div>
-        <div v-if="currentIndex < imgList.length - 1" class="pagination-btn next" @click="carouselController.next()">
-          <slot name="next"></slot>
-          <div class="next-btn-default" v-if="!slots.next"> 》 </div>
+        <div class="v-img-carousel" ref="vimgCarouselEl" @mousedown="mouseStart" @touchstart="mouseStart"
+          @mousemove="mouseMove" @touchmove="mouseMove" @mouseup="mouseEnd" @touchend="mouseEnd"
+          @mouseover="mousecancel" @touchcancel="mousecancel">
+          <comImgItem v-for="(item, index) in imgList" :index="index" :active="currentIndex" :total="imgList.length"
+            :carouselController="carouselController" :src="item.src" :thumb="item.thumb" v-model:showUI="showUI">
+          </comImgItem>
         </div>
-      </div>
-      <div class="v-img-carousel" ref="vimgCarouselEl" @mousedown="mouseStart" @touchstart="mouseStart"
-        @mousemove="mouseMove" @touchmove="mouseMove" @mouseup="mouseEnd" @touchend="mouseEnd" @mouseover="mousecancel"
-        @touchcancel="mousecancel">
-        <comImgItem v-for="(item, index) in imgList" :index="index" :active="currentIndex" :total="imgList.length"
-          :carouselController="carouselController" :src="item.src" :thumb="item.thumb" v-model:showUI="showUI">
-        </comImgItem>
-      </div>
     </teleport>
   </div>
 </template>
@@ -109,7 +110,7 @@ function afterCarouselOpen() {
 function beforeCarouselClose() {
   return new Promise<any>((resolve) => {
     setTimeout(() => {
-      imgList.value.forEach((item) => {
+      imgList.value.forEach((item, index) => {
         anime({
           targets: item.el,
           opacity: 1,
@@ -142,7 +143,7 @@ function beforeCarouselClose() {
           translateX: ['-50%', 0],
           translateY: ['-50%', 0],
           easing: "easeOutSine",
-          duration: props.duration,
+          duration: props.duration
         })
         animation.finished.then(() => {
           setTimeout(() => {
@@ -214,7 +215,7 @@ function findImgList() {
   font-size: 16px;
 
   span {
-    font-size: 24px;
+    font-size: 50px;
   }
 }
 
@@ -254,12 +255,18 @@ function findImgList() {
   .prev-btn-default,
   .next-btn-default {
     margin: 10px;
+    color: #fff;
+    font-size: 50px;
   }
 }
 
 @media screen and (max-width:750px) {
   .close {
     font-size: 30px;
+  }
+
+  .pagination-btn {
+    display: none;
   }
 }
 </style>

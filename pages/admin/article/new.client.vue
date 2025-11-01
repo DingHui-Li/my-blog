@@ -45,13 +45,14 @@
       div(v-if='form.type=="article"')
         RichEditor(ref="richEditorEl" :value="form.htmlContent")
       textarea.textarea(v-if='form.type=="moment"' v-model='form.htmlContent' placeholder="内容" maxlength='800')
-    .imgs(v-if='form.type!="article"')
-      .item(v-for='(item,index) in form.imgs')
+    VueDraggable.imgs(v-if='form.type!="article"' v-model="form.imgs")
+      .item(v-for='(item,index) in form.imgs' :key='item')
         .loading(v-if="item.loading" v-loading='item.loading')
         el-image(v-if='item.url' :preview-teleported='true' :initial-index="index" style="width: 100%; height: 100%" fit='cover'  :src='(item.url)' :preview-src-list='form.imgs.map(item=>item.url||(item+"?x-oss-process=image/resize,m_mfit,w_400"))')
         el-image(v-else :preview-teleported='true' :initial-index="index" style="width: 100%; height: 100%" fit='cover'  :src='item+"?x-oss-process=image/resize,m_mfit,w_400"' :preview-src-list='form.imgs.map(item=>item.url||(item+"?x-oss-process=image/resize,m_mfit,w_400"))')
         el-icon.clear(:size="30" v-if='item' @click.stop="form.imgs.splice(index,1)")
           CircleCloseFilled
+    .imgs
       .item(v-if="form.imgs.length<maxImgs")
         input.input(type='file' multiple accept="image/*" @change="onChooseImg")
         el-icon(size='20')
@@ -81,6 +82,7 @@ import comAddTopic from '../__com__/addTopic'
 import comLocation from './components/location.vue'
 import comSound from './components/addSound.vue'
 import { movieName, movieList, searchMovie, searching, onMovieInput, Form } from './create.js'
+import { VueDraggable } from 'vue-draggable-plus'
 
 const route = useRoute();
 const router = useRouter();
