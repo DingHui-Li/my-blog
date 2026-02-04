@@ -31,64 +31,63 @@ export function getWeather(location = {}) {
             if (!location?.lat) {
                 return resolve({})
             }
-            // let latlon = await getGeocode(location)
 
-            // let chunks = []
-            // let res = request(`https://devapi.qweather.com/v7/weather/now?location=${location.lng},${location.lat}&key=${config.qweather.key}`)
-            // res.on('data', chunk => {
-            //     chunks.push(chunk)
-            // })
-            // res.on('end', () => {
-            //     let buffer = Buffer.concat(chunks);
-            //     zlib.gunzip(buffer, (err, d) => {
-            //         try {
-            //             let data = JSON.parse(d.toString())
-            //             resolve({
-            //                 fxLink: data?.fxLink,
-            //                 text: data.now?.text,
-            //                 temp: data.now?.temp,
-            //             })
-            //         } catch (err) {
-            //             throw err
-            //         }
-            //     })
-            // })
-
-            request({ url: `https://api.caiyunapp.com/v2.6/${config.caiyunapp.token}/${location.lng},${location.lat}/realtime` },
-                async (err, res, body) => {
+            let chunks = []
+            let res = request(`https://devapi.qweather.com/v7/weather/now?location=${location.lng},${location.lat}&key=${config.qweather.key}`)
+            res.on('data', chunk => {
+                chunks.push(chunk)
+            })
+            res.on('end', () => {
+                let buffer = Buffer.concat(chunks);
+                zlib.gunzip(buffer, (err, d) => {
                     try {
-                        body = JSON.parse(body)
+                        let data = JSON.parse(d.toString())
                         resolve({
-                            fxLink: `https://caiyunai.com/map/#${location.lng},${location.lat}`,
-                            text: {
-                                CLEAR_DAY: "晴",
-                                CLEAR_NIGHT: "晴",
-                                PARTLY_CLOUDY_DAY: "多云",
-                                PARTLY_CLOUDY_NIGHT: "多云",
-                                CLOUDY: "阴",
-                                LIGHT_HAZE: "轻度雾霾",
-                                MODERATE_HAZE: "中度雾霾",
-                                HEAVY_HAZE: "重度雾霾",
-                                LIGHT_RAIN: "小雨",
-                                MODERATE_RAIN: "中雨",
-                                HEAVY_RAIN: "大雨",
-                                STORM_RAIN: "暴雨",
-                                FOG: "雾",
-                                LIGHT_SNOW: "小雪",
-                                MODERATE_SNOW: "中雪",
-                                HEAVY_SNOW: "大雪",
-                                STORM_SNOW: "暴雪",
-                                DUST: "浮尘",
-                                SAND: "沙尘",
-                                WIND: "大风"
-                            }[body?.result.realtime.skycon],
-                            temp: body?.result.realtime.temperature,
+                            fxLink: data?.fxLink,
+                            text: data.now?.text,
+                            temp: data.now?.temp,
                         })
                     } catch (err) {
                         throw err
                     }
-                }
-            )
+                })
+            })
+
+            // request({ url: `https://api.caiyunapp.com/v2.6/${config.caiyunapp.token}/${location.lng},${location.lat}/realtime` },
+            //     async (err, res, body) => {
+            //         try {
+            //             body = JSON.parse(body)
+            //             resolve({
+            //                 fxLink: `https://caiyunai.com/map/#${location.lng},${location.lat}`,
+            //                 text: {
+            //                     CLEAR_DAY: "晴",
+            //                     CLEAR_NIGHT: "晴",
+            //                     PARTLY_CLOUDY_DAY: "多云",
+            //                     PARTLY_CLOUDY_NIGHT: "多云",
+            //                     CLOUDY: "阴",
+            //                     LIGHT_HAZE: "轻度雾霾",
+            //                     MODERATE_HAZE: "中度雾霾",
+            //                     HEAVY_HAZE: "重度雾霾",
+            //                     LIGHT_RAIN: "小雨",
+            //                     MODERATE_RAIN: "中雨",
+            //                     HEAVY_RAIN: "大雨",
+            //                     STORM_RAIN: "暴雨",
+            //                     FOG: "雾",
+            //                     LIGHT_SNOW: "小雪",
+            //                     MODERATE_SNOW: "中雪",
+            //                     HEAVY_SNOW: "大雪",
+            //                     STORM_SNOW: "暴雪",
+            //                     DUST: "浮尘",
+            //                     SAND: "沙尘",
+            //                     WIND: "大风"
+            //                 }[body?.result.realtime.skycon],
+            //                 temp: body?.result.realtime.temperature,
+            //             })
+            //         } catch (err) {
+            //             throw err
+            //         }
+            //     }
+            // )
         } catch (err) {
             resolve({})
         }
@@ -139,11 +138,14 @@ export function getGeocode(address) {
 function parseName(name) {
     //去除可能影响搜索位置的字
     const replaceWords = ['CNNIC', '腾讯云', '阿里云', '华为云', '移动', '联通', '电信', 'BGP多线', '德克萨斯', '格拉沃利讷', '伊利诺斯', '南卡罗来纳', '皮斯卡特维', '马哈拉施特拉', '赫恩登', '博尔德', '伊利诺斯西', '辛辛那提', '德克萨斯', '伊利诺斯', '弗吉尼亚', '考克斯', '南本德', '俄勒冈', '纽瓦克', '亚利桑那', '阿什本']
-    if (!name) {
+    if (!name || name == '') {
         return ''
     }
     name = replaceWords.reduce((t, word) => {
-        return t.replace(word, '')
+        if (t) {
+            return t.replace(word, '')
+        }
+        return ''
     }, name)
     return name
 }
