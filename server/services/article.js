@@ -11,12 +11,15 @@ export function saveNetworkImg(url = "") {
     if (url?.includes('blog465467.oss-cn-guangzhou.aliyuncs.com')) {
       return resolve(url)
     }
+    console.log(url)
     url = url.replace('img2.doubanio.com', 'img3.doubanio.com')
     let req = request({
       url,
       method: "GET",
       headers: {
-        "response-type": "blob"
+        "response-type": "blob",
+        "referer": "https://www.douban.com/search?cat=1002",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36"
       }
     })
     let chunks = []

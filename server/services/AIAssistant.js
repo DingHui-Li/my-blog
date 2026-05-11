@@ -13,7 +13,7 @@ function getAiConfig() {
       baseURL: "https://api.siliconflow.cn/v1",
       apiKey: aiConfig["SiliconFlow"]?.key,
       model: "deepseek-ai/DeepSeek-V3",
-      visionModel: "Qwen/Qwen2-VL-72B-Instruct"
+      visionModel: "Qwen/Qwen3.6-35B-A3B"
     }
   }[aiProvider]
 }
