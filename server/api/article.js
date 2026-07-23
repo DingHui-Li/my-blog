@@ -86,8 +86,8 @@ async function getMoods() {
 //查询详情
 export let getArticle = defineEventHandler(async (event) => {
   let params = getRouterParams(event);
-  let res = await Article.findOne({ _id: params.id }).populate("topics");
-  if (!event.context.user && res.onlySelf) {
+  let res = await Article.findOne({ _id: params.id }).populate("topics").lean();
+  if (!event.context.user) {
     res = ArticleService.handleOnleSelf([res])[0]
   }
   return new BaseResponse({ data: res });
@@ -104,7 +104,11 @@ export let getSameArticleList = defineEventHandler(async (event) => {
     topics: { $in: topics.concat(topics.map(i => new ObjectId(i))) },
   })
     .limit(3)
-    .populate("topics");
+    .populate("topics")
+    .lean();
+  if (!event.context.user) {
+    res = ArticleService.handleOnleSelf(res)
+  }
   return new BaseResponse({ data: res });
 });
 
@@ -123,7 +127,11 @@ export let searchArticleList = defineEventHandler(async (event) => {
     .select({ htmlContent: 0, textContent: 0 })
     .skip((pagination.page - 1) * pagination.size)
     .limit(pagination.size)
-    .populate("topics");
+    .populate("topics")
+    .lean();
+  if (!event.context.user) {
+    res = ArticleService.handleOnleSelf(res)
+  }
   return new BaseResponse({ data: res });
 });
 

@@ -5,8 +5,7 @@
   .title-box
     .subtitle
       TopicTag(v-for="topic in data.topics" :data='topic')
-      .date(style="margin-right:30px") 发布于{{ moment(data.createTime).calendar() }}
-      .date(v-if="data.createTime!=data.updateTime") {{moment(data.updateTime).fromNow()}}更新
+      .date 发布于{{ moment(data.createTime).calendar() }}
     h1.title {{data.title}}
   .container(:class="data.cover&&'has-cover'")
     //- .content(v-html='data.htmlContent')

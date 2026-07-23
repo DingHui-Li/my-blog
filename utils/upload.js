@@ -1,6 +1,10 @@
 import $http from "@/utils/http.js";
+import { compressImage } from "@/utils/image.js";
 
-export function uploadImage(file, dir) {
+export async function uploadImage(file, dir, needCompress = true) {
+  if (needCompress) {
+    file = await compressImage(file);
+  }
   let formData = new FormData();
   formData.append("image", file);
   formData.append("dir", dir);

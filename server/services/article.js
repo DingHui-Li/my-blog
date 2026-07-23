@@ -85,7 +85,7 @@ export async function stByDate({ year, type } = {}) {
 export async function getContentById(ids = []) {
   let t = []
   for (const id of ids) {
-    let content = await Article.find({ _id: id }).select({ htmlContent: 0 }).populate("topics")
+    let content = await Article.find({ _id: id }).select({ htmlContent: 0 }).populate("topics").lean()
     t.push(content[0])
   }
   return t
@@ -105,15 +105,23 @@ export function searchForSameDay(day = `${new Date().getMonth() + 1}-${new Date(
         createTime: { $gte: item[0], $lte: item[1] }
       }
     })
-  }).select({ htmlContent: 0 }).populate("topics")
+  }).select({ htmlContent: 0 }).populate("topics").lean()
 }
 
 export function handleOnleSelf(list = []) {
+  const SENSITIVE_TOPIC_ID = '6880e1ab376a4142048db73c';
   return list.map(item => {
-    if (item.onlySelf) {
+    const isSensitiveTopic = item.topics?.some(topic => {
+      const id = topic._id ? topic._id.toString() : topic.toString();
+      return id === SENSITIVE_TOPIC_ID;
+    });
+    if (item.onlySelf || isSensitiveTopic) {
       item.imgs = []
-      item.textContent = item.textContent.replace(/./g, '*')
-      item.desc = item.desc.replace(/./g, '*')
+      if (item.textContent) item.textContent = item.textContent.replace(/[\s\S]/g, '*')
+      if (item.htmlContent) item.htmlContent = item.htmlContent.replace(/[\s\S]/g, '*')
+      if (item.desc) item.desc = item.desc.replace(/[\s\S]/g, '*')
+      if (item.ai?.content) item.ai.content = item.ai.content.replace(/[\s\S]/g, '*')
+      if (item.mood?.desc) item.mood.desc = item.mood.desc.replace(/[\s\S]/g, '*')
     }
     return item
   })
